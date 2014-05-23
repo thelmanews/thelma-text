@@ -16,6 +16,9 @@
         background: url('/images/link-icon.png') 10px 20px no-repeat;
         background-color: rgba(0,0,0,.8);
         color: white;
+        max-height: 200px;
+        display: block;
+        overflow-y: scroll;
         width: 100%;
         z-index: 500;
         box-sizing: border-box;
@@ -34,6 +37,7 @@
         padding: 1px;
         text-align: center;
         cursor: pointer;
+        -webkit-animation: nav_blink 1s linear 0s 30 alternate;
       }
 
       .th-transition-show {
