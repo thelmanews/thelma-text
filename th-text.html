@@ -1,0 +1,55 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="thelma_core.html">
+
+
+<polymer-element name="th-text" extends="th-animated" attributes="type color">
+  <template>
+      <style>
+        :host {
+          display: block;
+          position: relative;
+          width: 100%;
+          height: 100%;
+        }
+
+        .top-line, .bottom-line {
+          font-size: 1.12em;
+          line-height: 1.4em;
+          font-weight: 400;
+        }
+
+        .bottom-line {
+          /* how to vertically bottom align with margin? */
+        }
+
+        .header {
+          position: relative;
+          margin-top: 65%; /* will this work? */
+          font-size: 1.4em;
+          padding: 5px;
+          line-height: 1.4em;
+        }
+
+      </style>
+      <div id="container">
+        <content></content>
+      </div>
+  </template>
+  <script>
+
+      Polymer('th-text', {
+        type: "header",  // options: top-line, bottom-line, header
+        color: "white",
+        ready: function() {
+          this.init();
+        },
+        init: function(){
+          var that = this;
+          var container = that.$.container;
+          container.className = that.type;
+          container.style.color = that.color;
+        }
+      });
+
+  </script>
+</polymer-element>
