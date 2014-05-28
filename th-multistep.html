@@ -2,7 +2,7 @@
 <link rel="import" href="thelma_core.html">
 
 
-<polymer-element name="th-multistep" extends="th-animated" attributes="transition duration">
+<polymer-element name="th-multistep" extends="th-animated" attributes="transition duration showFirst">
   <template>
       <style>
         :host {
@@ -52,6 +52,7 @@
   
       Polymer('th-multistep', {
         stepCounter: 0,
+        showFirst: true,
         ready: function() {
 
           this.init();
@@ -59,24 +60,33 @@
         },
         init: function() {
 
-          console.log(this);
+          var that = this;
+          this.stepCounter = this.showFirst ? 1 : 0;
+
           this.steps = this.querySelectorAll('th-step');
 
           console.log(this.steps);
-          [].forEach.call(this.steps, function(step) {
-              step.classList.add('th-transition-slide-before');
+          [].forEach.call(this.steps, function(step, i) {
+              if(!(that.showFirst && i==0)) {
+                step.classList.add('th-transition-slide-before');
+              }
           });
           //this.$.container
 
         },
         reset: function() {
-          [].forEach.call(this.steps, function(step) {
-              step.classList.add('th-transition-slide-before');
+          var that = this;
+          [].forEach.call(this.steps, function(step, i) {
+              if(!(that.showFirst && i==0)) {
+                step.classList.add('th-transition-slide-before');
+              }
               step.classList.remove('th-transition-slide-show');
               step.classList.remove('th-transition-slide-after');
-              step.classList.remove('hidden');
+              setTimeout(function() {
+                 step.classList.remove('hidden');
+              },500)
           });
-          this.stepCounter = 0;
+          this.stepCounter = this.showFirst ? 1 : 0;
         },
         
         animate: function() {
