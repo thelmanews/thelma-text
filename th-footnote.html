@@ -27,14 +27,20 @@
            -moz-transition: all 0.3s ease;
              -o-transition: all 0.3s ease;
       }
+
+      #container::-webkit-scrollbar, #container::-webkit-scrollbar-track, #container::-webkit-scrollbar-thumb {
+         background-color: black;
+      }
+
+
       #info {
         border-radius: 50%;
         background-color: rgba(0,0,0,0.5);
         color: white;
-        width: 23px;
-        height: 23px;
+        width: 20px;
+        height: 20px;
         display: inline-block;
-        padding: 1px;
+        padding: 2px;
         text-align: center;
         cursor: pointer;
         -webkit-animation: nav_blink 1s linear 0s 30 alternate;
@@ -55,7 +61,7 @@
       visible: false,
       domReady: function(){
         this.$container = this.$.container;
-        var height = this.$container.offsetHeight - 10; // remove the padding (why 10? it was 30 before!!)
+        var height = this.$container.offsetHeight; // remove the padding (why 10? it was 30 before!!)
         this.$container.style.bottom = -height +'px';
       },
       toggle: function(){
