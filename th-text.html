@@ -13,28 +13,29 @@
           padding: 5px;
         }
 
-        .header {
+        .th-header {
           position: relative; 
           font-size: 1.4em;
           line-height: 1.4em;
         }
 
-        .header2 {
+        .th-header2 {
           font-size: 1.15em;
           line-height: 1.4em;
         }
 
-        .main {
-          font-size: 1em;
-          line-height: 1.4em;
+        .th-main {
+          font-size: 1.12em;
+          font-weight: 400;
+          line-height: 1.38em;
         }
 
-        .small {
+        .th-small {
           font-size: 0.7em;
           line-height: 1.3em;
         }
 
-        .chartInfo {
+        .th-chartInfo {
           font-size: 0.7em;
           line-height: 1.3em;
           text-transform: uppercase;
@@ -42,23 +43,19 @@
         }
 
       </style>
-      <div id="container">
+      <div id="container" class="th-{{type}}">
         <content></content>
       </div>
   </template>
   <script>
 
       Polymer('th-text', {
-        type: "main",  // options: header, main, small
-        color: "white",
+        type: "main",  // options: header, main, small, chartInfo
         ready: function() {
           this.init();
         },
         init: function(){
           var that = this;
-          var container = that.$.container;
-          container.className = that.type;
-          container.style.color = that.color;
         }
       });
 
