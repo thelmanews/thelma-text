@@ -3,16 +3,17 @@
 
 <polymer-element name="th-quote-box" attributes="qTitle qDetails qImage bgColor borderColor accentColor" noscript>
   <template>
+      <core-style ref="theme"></core-style>
       <style>
           .quote-box {
             width: 85%;
             padding: 2% 3%;
             margin: 10px auto 30px auto;
-            border: 2px solid {{borderColor}};
+            /*border: 2px solid {{borderColor}};*/
             /*font-size: 1.125em;  //18px*/
             font-weight:300;
             position: relative;
-            background-color {{bgColor}};
+            /*background-color {{bgColor}};*/
 
           } 
           .quote-box:after, .quote-box:before {
@@ -27,25 +28,25 @@
             margin-bottom: 6%;
           }
           
-          .quote-box:after {
+/*          .quote-box:after {
             border-color: rgba(0, 0, 0, 0);
-            border-top-color: {{bgColor}};
+            border-top-color: black;
             border-width: 20px;
             margin-left: -20px;
           }
           .quote-box:before {
             border-color: rgba(255, 255, 255, 0);
-            border-top-color: {{borderColor}};
+            border-top-color: blue;
             border-width: 23px;
             margin-left: -23px;
-          }
+          }*/
            
           .person-info {
             text-align: center;
             margin: 0 auto;
           }
           .person-info .title {
-              font-size: 0.875em; //14px
+              font-size: 0.875em; 
               width: 90%;
               margin: 0 auto;
           }
@@ -56,7 +57,7 @@
             margin: 3px auto;
             border-radius: 50px;
             background-size: cover;
-            border: 4px solid {{accentColor}};
+            /*border: 4px solid {{accentColor}};*/
           }
           
       </style>
