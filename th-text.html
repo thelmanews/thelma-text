@@ -14,16 +14,10 @@
           padding: 5px;
         }
 
-        #container {
-          display: block;
-        }
-
         .th-heading {
           position: relative; 
           font-size: 1.4em;
           line-height: 1.4em;
-          text-transform: uppercase;
-
         }
 
         .th-subheading {
@@ -50,9 +44,7 @@
         }
 
       </style>
-      <div id="markdown" part="markdown" class="th-{{type}}">
-        
-      </div>
+      <div id="container" part="markdown" class="th-{{type}}"> </div>
   </template>
   <script>
 
@@ -60,21 +52,17 @@
         type: "subheading",  // options: heading, subheading, mainpoint, subpoint, caps, chart, label
         markdown: true,
         ready: function() {
-          if this.markdown {
+          if (this.markdown) {
             this.text = this.trim(this.textContent);
+          } else {
+            this.$.container.innerHTML = this.textContent;
           }
-          this.init();
         },
         textChanged: function() {
-          if (this.markdown){
-            this.$.markdown.innerHTML = marked(this.text);
-          }
+          this.$.container.innerHTML = this.markdown ? marked(this.text) : this.textContent;
         },
         trim: function(str) { 
           return str.replace(/^[^\S\n]+/gm,'');
-        },
-        init: function(){
-          var that = this;
         }
       });
 
