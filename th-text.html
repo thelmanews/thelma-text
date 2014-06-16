@@ -2,40 +2,47 @@
 <link rel="import" href="thelma_core.html">
 
 
-<polymer-element name="th-text" extends="th-animated" attributes="type color">
+<polymer-element name="th-text" extends="th-animated" attributes="type color markdown">
   <template>
+     
       <style>
         :host {
-          display: inline-block;
+          display: block;
           position: relative;
           width: 100%;
           height: 100%;
           padding: 5px;
         }
 
-        .th-header {
+        #container {
+          display: block;
+        }
+
+        .th-heading {
           position: relative; 
           font-size: 1.4em;
           line-height: 1.4em;
+          text-transform: uppercase;
+
         }
 
-        .th-header2 {
+        .th-subheading {
           font-size: 1.15em;
           line-height: 1.4em;
         }
 
-        .th-main {
+        .th-mainpoint {
           font-size: 1.12em;
           font-weight: 400;
           line-height: 1.38em;
         }
 
-        .th-small {
+        .th-subpoint {
           font-size: 0.7em;
           line-height: 1.3em;
         }
 
-        .th-chartInfo {
+        .th-chart {
           font-size: 9pt;
           line-height: 1.3;
           text-transform: uppercase;
@@ -43,16 +50,42 @@
         }
 
       </style>
-      <div id="container" class="th-{{type}}">
-        <content></content>
+      <div id="markdown" part="markdown" class="th-{{type}}">
+        
       </div>
   </template>
   <script>
 
       Polymer('th-text', {
-        type: "main",  // options: heading, subheading, mainpoint, subpoint, caps, chart, label
+        type: "subheading",  // options: heading, subheading, mainpoint, subpoint, caps, chart, label
+        markdown: true,
         ready: function() {
-          this.init();
+          
+          this.text = this.trim(this.textContent);
+          // var parsed = markdown.toHTML(content);
+          // this.$.markdown.innerHTML = parsed;
+          console.log("@@@@@@@@@");
+          
+
+          var link = /\[(.*?)\]\s\((.*?)\)/;
+          var results = link.exec(this.text);
+          if (results) {
+           
+        
+        if (results[1] && results[2]) {
+          console.log(this.$.markdown.innerHTML);
+          this.$.markdown.innerHTML = "<a href='"+ results[1]+"'>"+results[2]+" <a/>"
+          console.log(this.$.markdown.innerHTML);
+        }
+        }
+          // this.init();
+        },
+        textChanged: function() {
+          // this.$.markdown.innerHTML = marked(this.text);
+          this.$.markdown.innerHTML = this.text;
+        },
+        trim: function(str) { 
+          return str.replace(/^[^\S\n]+/gm,'');
         },
         init: function(){
           var that = this;
