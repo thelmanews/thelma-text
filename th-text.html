@@ -4,7 +4,7 @@
 
 <polymer-element name="th-text" extends="th-animated" attributes="type color markdown">
   <template>
-     
+     <core-style ref="theme"></core-style>
       <style>
         :host {
           display: block;
@@ -60,29 +60,15 @@
         type: "subheading",  // options: heading, subheading, mainpoint, subpoint, caps, chart, label
         markdown: true,
         ready: function() {
-          
-          this.text = this.trim(this.textContent);
-          // var parsed = markdown.toHTML(content);
-          // this.$.markdown.innerHTML = parsed;
-          console.log("@@@@@@@@@");
-          
-
-          var link = /\[(.*?)\]\s\((.*?)\)/;
-          var results = link.exec(this.text);
-          if (results) {
-           
-        
-        if (results[1] && results[2]) {
-          console.log(this.$.markdown.innerHTML);
-          this.$.markdown.innerHTML = "<a href='"+ results[1]+"'>"+results[2]+" <a/>"
-          console.log(this.$.markdown.innerHTML);
-        }
-        }
-          // this.init();
+          if this.markdown {
+            this.text = this.trim(this.textContent);
+          }
+          this.init();
         },
         textChanged: function() {
-          // this.$.markdown.innerHTML = marked(this.text);
-          this.$.markdown.innerHTML = this.text;
+          if (this.markdown){
+            this.$.markdown.innerHTML = marked(this.text);
+          }
         },
         trim: function(str) { 
           return str.replace(/^[^\S\n]+/gm,'');
