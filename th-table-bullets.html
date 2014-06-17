@@ -29,10 +29,10 @@
         }
 
         tr {
-          transition: all 0.3s ease;
-          -webkit-transition: all 0.3s ease;
-          -moz-transition: all 0.3s ease;
-          -o-transition: all 0.3s ease;
+          transition: all 1s ease;
+          -webkit-transition: all 1s ease;
+          -moz-transition: all 1s ease;
+          -o-transition: all 1s ease;
         }
 
       </style>
@@ -51,27 +51,33 @@
           var self = this;
           var data = self.tableData;
           var table = this.$.container;
+          var row, image, bullet;
+
           
           for (var i=0; i<data.length; i++){
-            var row = table.appendChild(document.createElement('tr'));
-            var image = data[i].image;
-            var bullet = data[i].bullet;
-            row.className = 'th-slide';
-             // row.className = "th-slide-show";
-            
-            setTimeout(function() {
-              if (image) {
-                row.innerHTML = "<td><img src='"+ data[i].image +"'></td><td>"+ data[i].text +"</td>";
-              } else if (bullet) {
-                row.innerHTML = "<td>"+ data[i].bullet +"</td><td>"+ data[i].text +"</td>";
-              } else { 
-                row.innerHTML = "<td>\u25CF</td><td>"+ data[i].text +"</td>";
-              }
-             row.className = "th-slide-show";
-            }, 500);
+            row = table.appendChild(document.createElement('tr'));
+            image = data[i].image;
+            bullet = data[i].bullet;
+            row.className = 'th-slide';       
 
+            if (image) {
+              row.innerHTML = "<td><img src='"+ data[i].image +"'></td><td>"+ data[i].text +"</td>";
+            } else if (bullet) {
+              row.innerHTML = "<td>"+ data[i].bullet +"</td><td>"+ data[i].text +"</td>";
+            } else { 
+              row.innerHTML = "<td>\u25CF</td><td>"+ data[i].text +"</td>";
+            }
           }
 
+        },
+        animate: function(){
+          var self = this;
+          var rows = this.$.container.children
+          for (var i=0; i<rows.length; i++){
+            // setTimeout(function(rows, i){
+            rows.children[i].className = 'th-slide-show';
+            // }, 500, i);
+          }
         }
       });
 
