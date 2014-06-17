@@ -1,0 +1,79 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="thelma_core.html">
+
+
+<polymer-element name="th-table-bullets" extends="th-animated" attributes="tableData">
+  <template>
+     <core-style ref="theme"></core-style>
+      <style>
+        :host {
+          display: block;
+          position: relative;
+        }
+
+        #container img {
+          max-height: 50px;
+          max-width: 50px;
+        }
+
+        .th-slide {
+           transform: translateX(500%);
+           -moz-transform: translateX(500%);
+           -webkit-transform: translateX(500%);
+        }
+
+        .th-slide-show {
+           transform: translateX(0%);
+           -moz-transform: translateX(0%);
+           -webkit-transform: translateX(0%);
+        }
+
+        tr {
+          transition: all 0.3s ease;
+          -webkit-transition: all 0.3s ease;
+          -moz-transition: all 0.3s ease;
+          -o-transition: all 0.3s ease;
+        }
+
+      </style>
+      <table id="container"> </table>
+  </template>
+  <script>
+
+      Polymer('th-table-bullets', { 
+        tableData: [ // image and bullet(unicode) are optional
+          { bullet: '\u25CF', text: 'This is the first bullet.'},
+          { text: 'This is the second bullet.'},
+          { bullet: '\u25CF', text: 'This is the third bullet.'}
+          // {image: 'images/frieden.png', bullet: '\u25CF', text: 'This is the third bullet.'}
+         ],
+        init: function() {
+          var self = this;
+          var data = self.tableData;
+          var table = this.$.container;
+          
+          for (var i=0; i<data.length; i++){
+            var row = table.appendChild(document.createElement('tr'));
+            var image = data[i].image;
+            var bullet = data[i].bullet;
+            row.className = 'th-slide';
+             // row.className = "th-slide-show";
+            
+            setTimeout(function() {
+              if (image) {
+                row.innerHTML = "<td><img src='"+ data[i].image +"'></td><td>"+ data[i].text +"</td>";
+              } else if (bullet) {
+                row.innerHTML = "<td>"+ data[i].bullet +"</td><td>"+ data[i].text +"</td>";
+              } else { 
+                row.innerHTML = "<td>\u25CF</td><td>"+ data[i].text +"</td>";
+              }
+             row.className = "th-slide-show";
+            }, 500);
+
+          }
+
+        }
+      });
+
+  </script>
+</polymer-element>
