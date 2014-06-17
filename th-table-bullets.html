@@ -43,9 +43,9 @@
       Polymer('th-table-bullets', { 
         tableData: [ // image and bullet(unicode) are optional
           { bullet: '\u25CF', text: 'This is the first bullet.'},
-          { text: 'This is the second bullet.'},
-          { bullet: '\u25CF', text: 'This is the third bullet.'}
-          // {image: 'images/frieden.png', bullet: '\u25CF', text: 'This is the third bullet.'}
+          { bullet: '\u25CF', text: 'This is the second bullet.'},
+          { bullet: '\u25CF', text: 'This is the third bullet.'},
+          {image: 'images/frieden.png', bullet: '\u25CF', text: 'This is the third bullet.'}
          ],
         init: function() {
           var self = this;
@@ -53,7 +53,6 @@
           var table = this.$.container;
           var row, image, bullet;
 
-          
           for (var i=0; i<data.length; i++){
             row = table.appendChild(document.createElement('tr'));
             image = data[i].image;
@@ -71,12 +70,16 @@
 
         },
         animate: function(){
-          var self = this;
-          var rows = this.$.container.children
-          for (var i=0; i<rows.length; i++){
-            // setTimeout(function(rows, i){
-            rows.children[i].className = 'th-slide-show';
-            // }, 500, i);
+          var self = this,
+              rows = this.$.container.children;
+          
+          function doSetTimeout(rows, i) {
+            setTimeout(function() { 
+              rows[i].className = 'th-slide-show';
+            }, 500*i);
+          }
+          for (var i=0; i<rows.length; i++){            
+            doSetTimeout(rows, i);
           }
         }
       });
