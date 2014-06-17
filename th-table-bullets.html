@@ -12,8 +12,9 @@
         }
 
         #container img {
-          max-height: 50px;
-          max-width: 50px;
+          max-height: 35px;
+          max-width: 35px;
+
         }
 
         .th-slide {
@@ -35,6 +36,10 @@
           -o-transition: all 1s ease;
         }
 
+        td {
+          padding: 3px;
+        }
+
       </style>
       <table id="container"> </table>
   </template>
@@ -44,8 +49,8 @@
         tableData: [ // image and bullet(unicode) are optional
           { bullet: '\u25CF', text: 'This is the first bullet.'},
           { bullet: '\u25CF', text: 'This is the second bullet.'},
-          { bullet: '\u25CF', text: 'This is the third bullet.'},
-          {image: 'images/frieden.png', bullet: '\u25CF', text: 'This is the third bullet.'}
+          { bullet: '\u25CF', text: 'This is the third bullet.'}
+          
          ],
         init: function() {
           var self = this;
