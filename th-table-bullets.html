@@ -12,9 +12,8 @@
         }
 
         #container img {
-          max-height: 35px;
+          max-height: 35px; /* We can adjust this if need be */
           max-width: 35px;
-
         }
 
         .th-slide {
@@ -46,11 +45,11 @@
   <script>
 
       Polymer('th-table-bullets', { 
-        tableData: [ // image and bullet(unicode) are optional
+        tableData: [ // image and bullet(any unicode symbol) are optional
+        // User should be given a dropdown of unicode symbols to choose from to avoid typos.
           { bullet: '\u25CF', text: 'This is the first bullet.'},
           { bullet: '\u25CF', text: 'This is the second bullet.'},
           { bullet: '\u25CF', text: 'This is the third bullet.'}
-          
          ],
         init: function() {
           var self = this;
@@ -60,10 +59,10 @@
 
           for (var i=0; i<data.length; i++){
             row = table.appendChild(document.createElement('tr'));
+            row.className = 'th-slide';       
             image = data[i].image;
             bullet = data[i].bullet;
-            row.className = 'th-slide';       
-
+            
             if (image) {
               row.innerHTML = "<td><img src='"+ data[i].image +"'></td><td>"+ data[i].text +"</td>";
             } else if (bullet) {
@@ -72,17 +71,17 @@
               row.innerHTML = "<td>\u25CF</td><td>"+ data[i].text +"</td>";
             }
           }
-
         },
         animate: function(){
           var self = this,
-              rows = this.$.container.children;
+              rows = self.$.container.children;
           
           function doSetTimeout(rows, i) {
             setTimeout(function() { 
               rows[i].className = 'th-slide-show';
             }, 500*i);
           }
+
           for (var i=0; i<rows.length; i++){            
             doSetTimeout(rows, i);
           }
