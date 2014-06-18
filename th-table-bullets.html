@@ -72,13 +72,22 @@
             }
           }
         },
+        reset: function() {
+          var self = this;
+          var rows = self.$.container.children;
+          console.log(rows);
+          [].forEach.call(rows, function(row) {
+            row.classList.remove('th-slide-show');
+          });
+
+        },
         animate: function(){
           var self = this,
               rows = self.$.container.children;
           
           function doSetTimeout(rows, i) {
             setTimeout(function() { 
-              rows[i].className = 'th-slide-show';
+              rows[i].classList.add('th-slide-show');
             }, 500*i);
           }
 
