@@ -21,7 +21,7 @@
           }
         },
         textChanged: function() {
-          this.$.container.innerHTML = this.markdown ? marked(this.text) : this.textContent;
+          this.$.container.innerHTML = this.markdown ? marked(this.text.toString()) : this.textContent;
         },
         trim: function(str) { 
           return str.replace(/^[^\S\n]+/gm,'');
