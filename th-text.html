@@ -2,11 +2,13 @@
 <link rel="import" href="thelma_core.html">
 
 
-<polymer-element name="th-text" extends="th-animated" attributes="type markdown">
+<polymer-element name="th-text" extends="th-animated" attributes="type markdown text">
   <template>
     <core-style ref="theme"></core-style>
     <div id="container" class="{{type}}"><content></content></div>
   </template>
+  <script src="../bower_components/marked/lib/marked.js"></script>
+
   <script>
 
       Polymer('th-text', {
@@ -19,7 +21,7 @@
           }
         },
         textChanged: function() {
-          this.$.container.innerHTML = this.markdown ? marked(this.text) : this.textContent;
+          this.$.container.innerHTML = this.text;//this.markdown ? marked(this.text) : this.textContent;
         },
         trim: function(str) { 
           return str.replace(/^[^\S\n]+/gm,'');
