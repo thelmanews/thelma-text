@@ -53,13 +53,13 @@
         },
         
         animate: function() {
-          var that = this;
+          var self = this;
           setTimeout(function() {
-            that.$.container.classList.remove('th-transition-slide');
-            that.$.container.classList.add('th-transition-slide-show');
-            that.$.container.addEventListener('transitionend', function(){
-              //that.completed();
-              that.asyncFire('completed',{element: that});
+            self.$.container.classList.remove('th-transition-slide');
+            self.$.container.classList.add('th-transition-slide-show');
+            self.$.container.addEventListener('transitionend', function(){
+              //self.completed();
+              self.asyncFire('completed',{element: self});
             })
           },500);
         }

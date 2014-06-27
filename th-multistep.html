@@ -60,13 +60,13 @@
         },
         init: function() {
 
-          var that = this;
+          var self = this;
           this.stepCounter = this.showFirst ? 1 : 0;
 
           this.steps = this.querySelectorAll('th-step');
 
           [].forEach.call(this.steps, function(step, i) {
-              if(!(that.showFirst && i==0)) {
+              if(!(self.showFirst && i==0)) {
                 step.classList.add('th-transition-slide-before');
               }
           });
@@ -74,9 +74,9 @@
 
         },
         reset: function() {
-          var that = this;
+          var self = this;
           [].forEach.call(this.steps, function(step, i) {
-              if(!(that.showFirst && i==0)) {
+              if(!(self.showFirst && i==0)) {
                 step.classList.add('th-transition-slide-before');
               }
               step.classList.remove('th-transition-slide-show');
@@ -89,14 +89,14 @@
         },
         
         animate: function() {
-          var that = this;
+          var self = this;
           var stepCounter = this.stepCounter;
           if(stepCounter<this.steps.length) {
             if(stepCounter>0) {
-              that.steps[stepCounter-1].classList.remove('th-transition-slide-show');
-              that.steps[stepCounter-1].classList.add('th-transition-slide-after');
+              self.steps[stepCounter-1].classList.remove('th-transition-slide-show');
+              self.steps[stepCounter-1].classList.add('th-transition-slide-after');
               setTimeout(function() {
-                that.steps[stepCounter-1].classList.add('hidden');
+                self.steps[stepCounter-1].classList.add('hidden');
               },50);
 
             }
@@ -104,23 +104,23 @@
             //TODO use transitionend instead of settimeout
             setTimeout(function() {
 
-              that.steps[stepCounter].classList.remove('th-transition-slide-before');
-              that.steps[stepCounter].classList.add('th-transition-slide-show');
-              that.steps[stepCounter].addEventListener('transitionend', function(){
+              self.steps[stepCounter].classList.remove('th-transition-slide-before');
+              self.steps[stepCounter].classList.add('th-transition-slide-show');
+              self.steps[stepCounter].addEventListener('transitionend', function(){
                 
-                that.asyncFire('step-completed',{element: that});
-                if(stepCounter=that.steps.length-1) {  // last one
+                self.asyncFire('step-completed',{element: self});
+                if(stepCounter=self.steps.length-1) {  // last one
 
-                  that.asyncFire('completed',{element: that});
+                  self.asyncFire('completed',{element: self});
 
                 }
               });
 
-              that.stepCounter++;
+              self.stepCounter++;
             }, 300);
           }
           else {
-            that.reset();
+            self.reset();
           }
         }
       });
