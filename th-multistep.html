@@ -65,7 +65,6 @@
 
           this.steps = this.querySelectorAll('th-step');
 
-          console.log(this.steps);
           [].forEach.call(this.steps, function(step, i) {
               if(!(that.showFirst && i==0)) {
                 step.classList.add('th-transition-slide-before');
@@ -90,7 +89,6 @@
         },
         
         animate: function() {
-          console.log('multistep animate');
           var that = this;
           var stepCounter = this.stepCounter;
           if(stepCounter<this.steps.length) {
