@@ -5,7 +5,7 @@
   <template>
       <core-style ref="theme"></core-style>
       <style>
-          .quote-box {
+          .quotebox {
             padding: 10px 10px 0px 10px;
             -webkit-box-sizing: border-box;
             -moz-box-sizing: border-box;
@@ -15,7 +15,7 @@
             width: {{qWidth}};      
           } 
 
-          .person-info {
+          .personinfo {
             text-align: center;
             margin: 0px auto;
             margin-top: 15px;
@@ -52,15 +52,15 @@
           
       </style>
       <div class="quote">
-          <div class="quote-box subpoint">
+          <div class="quotebox subpoint">
           <content></content>
-            <div class="person-info">
+            <div class="personinfo">
                 <div>
                     <template if="{{qTitle}}">
                       <div class="name subpoint">{{qTitle}}</div>
                     </template>
                     <template if="{{qDetails}}">
-                      <div class="title label">{{qDetails}}</div>
+                      <div class="label">{{qDetails}}</div>
                     </template>
                 </div>
                 <template if="{{qImage}}">
