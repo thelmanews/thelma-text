@@ -5,27 +5,32 @@
   <template>
       <core-style ref="theme"></core-style>
       <style>
-          .quote-box {
+          .quotebox {
             padding: 10px 10px 0px 10px;
-            box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;            
             margin: 0 auto;
             position: relative;
             width: {{qWidth}};      
           } 
 
-          .person-info {
+          .personinfo {
             text-align: center;
             margin: 0px auto;
             margin-top: 15px;
           }
 
           .img-container {
-            border-top: 2px solid white;
             height: 0px;
             width: {{qWidth}};
             margin-left: -12px;
             position: relative;
             margin-top: 55px;
+            padding: 0px 10px;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
           }
 
           .img {
@@ -37,6 +42,8 @@
             border-radius: 50px;
             background-size: cover;
             padding: 10px;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
             box-sizing: border-box;
             -webkit-box-shadow: 0px 0px 0px 10px {{bgColor}}; /* If user changes card background, this variable should match */
             -moz-box-shadow:    0px 0px 0px 10px {{bgColor}};
@@ -45,15 +52,15 @@
           
       </style>
       <div class="quote">
-          <div class="quote-box subpoint">
+          <div class="quotebox subpoint">
           <content></content>
-            <div class="person-info">
+            <div class="personinfo">
                 <div>
                     <template if="{{qTitle}}">
                       <div class="name subpoint">{{qTitle}}</div>
                     </template>
                     <template if="{{qDetails}}">
-                      <div class="title label">{{qDetails}}</div>
+                      <div class="label">{{qDetails}}</div>
                     </template>
                 </div>
                 <template if="{{qImage}}">
