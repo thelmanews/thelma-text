@@ -1,0 +1,69 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="thelma_core.html">
+
+
+<polymer-element name="th-reveal" extends="th-animated" attributes="transition duration">
+  <template>
+      <style>
+        :host {
+          display: inline-block;
+          position: relative;
+        }
+
+        .th-transition-slide {
+           transform: translateX(500%);
+           -moz-transform: translateX(500%);
+           -webkit-transform: translateX(500%);
+        }
+
+        .th-transition-slide-show {
+           transform: translateX(0%);
+           -moz-transform: translateX(0%);
+           -webkit-transform: translateX(0%);
+        }
+
+        #container {
+            transition: all 0.3s ease;
+            -webkit-transition: all 0.3s ease;
+            -moz-transition: all 0.3s ease;
+            -o-transition: all 0.3s ease;
+        }
+        
+      </style>
+      <div id="container">
+        <content></content>
+      </div>
+  </template>
+  <script>
+
+      Polymer('th-reveal', {
+        ready: function() {
+
+          this.init();
+
+        },
+        init: function() {
+
+          this.$.container.classList.add('th-transition-slide');
+
+        },
+        reset: function() {
+          this.$.container.classList.remove('th-transition-slide-show');
+          this.$.container.classList.add('th-transition-slide');
+        },
+        
+        animate: function() {
+          var self = this;
+          setTimeout(function() {
+            self.$.container.classList.remove('th-transition-slide');
+            self.$.container.classList.add('th-transition-slide-show');
+            self.$.container.addEventListener('transitionend', function(){
+              //self.completed();
+              self.asyncFire('completed',{element: self});
+            })
+          },500);
+        }
+      });
+
+  </script>
+</polymer-element>

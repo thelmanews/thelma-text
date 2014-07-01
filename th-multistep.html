@@ -1,0 +1,129 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="thelma_core.html">
+
+
+<polymer-element name="th-multistep" extends="th-animated" attributes="transition duration showFirst">
+  <template>
+      <style>
+        :host {
+          display: inline-block;
+          position: relative;
+        }
+
+        .th-transition-slide-before {
+           transform: translateX(500%);
+           -moz-transform: translateX(500%);
+           -webkit-transform: translateX(500%);
+        }
+
+        .th-transition-slide-show {
+           transform: translateX(0%);
+           -moz-transform: translateX(0%);
+           -webkit-transform: translateX(0%);
+        }
+
+        .th-transition-slide-after {
+           transform: translateX(-500%);
+           -moz-transform: translateX(-500%);
+           -webkit-transform: translateX(-500%);
+          
+        }
+
+        .hidden {
+          display: none;
+        }
+
+        th-step {
+
+            display: block;
+            transition: all 0.3s ease;
+            -webkit-transition: all 0.3s ease;
+            -moz-transition: all 0.3s ease;
+            -o-transition: all 0.3s ease;
+        }
+        
+      </style>
+      <div id="container">
+        <content></content>
+      </div>
+  </template>
+  <script>
+
+  
+      Polymer('th-multistep', {
+        stepCounter: 0,
+        showFirst: true,
+        ready: function() {
+
+          this.init();
+
+        },
+        init: function() {
+
+          var self = this;
+          this.stepCounter = this.showFirst ? 1 : 0;
+
+          this.steps = this.querySelectorAll('th-step');
+
+          [].forEach.call(this.steps, function(step, i) {
+              if(!(self.showFirst && i==0)) {
+                step.classList.add('th-transition-slide-before');
+              }
+          });
+          //this.$.container
+
+        },
+        reset: function() {
+          var self = this;
+          [].forEach.call(this.steps, function(step, i) {
+              if(!(self.showFirst && i==0)) {
+                step.classList.add('th-transition-slide-before');
+              }
+              step.classList.remove('th-transition-slide-show');
+              step.classList.remove('th-transition-slide-after');
+              setTimeout(function() {
+                 step.classList.remove('hidden');
+              },500)
+          });
+          this.stepCounter = this.showFirst ? 1 : 0;
+        },
+        
+        animate: function() {
+          var self = this;
+          var stepCounter = this.stepCounter;
+          if(stepCounter<this.steps.length) {
+            if(stepCounter>0) {
+              self.steps[stepCounter-1].classList.remove('th-transition-slide-show');
+              self.steps[stepCounter-1].classList.add('th-transition-slide-after');
+              setTimeout(function() {
+                self.steps[stepCounter-1].classList.add('hidden');
+              },50);
+
+            }
+            // wait for hide transition to complete 
+            //TODO use transitionend instead of settimeout
+            setTimeout(function() {
+
+              self.steps[stepCounter].classList.remove('th-transition-slide-before');
+              self.steps[stepCounter].classList.add('th-transition-slide-show');
+              self.steps[stepCounter].addEventListener('transitionend', function(){
+                
+                self.asyncFire('step-completed',{element: self});
+                if(stepCounter=self.steps.length-1) {  // last one
+
+                  self.asyncFire('completed',{element: self});
+
+                }
+              });
+
+              self.stepCounter++;
+            }, 300);
+          }
+          else {
+            self.reset();
+          }
+        }
+      });
+
+  </script>
+</polymer-element>

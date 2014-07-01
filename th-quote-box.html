@@ -1,0 +1,76 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="thelma_core.html">
+
+<polymer-element name="th-quote-box" attributes="qWidth qTitle qDetails qImage bgColor" noscript>
+  <template>
+      <core-style ref="theme"></core-style>
+      <style>
+          .quotebox {
+            padding: 10px 10px 0px 10px;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;            
+            margin: 0 auto;
+            position: relative;
+            width: {{qWidth}};      
+          } 
+
+          .personinfo {
+            text-align: center;
+            margin: 0px auto;
+            margin-top: 15px;
+          }
+
+          .img-container {
+            height: 0px;
+            width: {{qWidth}};
+            margin-left: -12px;
+            position: relative;
+            margin-top: 55px;
+            padding: 0px 10px;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+          }
+
+          .img {
+            height: 90px;
+            width: 90px;
+            position: relative;
+            margin-top: -45px;
+            display: inline-block;
+            border-radius: 50px;
+            background-size: cover;
+            padding: 10px;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+            -webkit-box-shadow: 0px 0px 0px 10px {{bgColor}}; /* If user changes card background, this variable should match */
+            -moz-box-shadow:    0px 0px 0px 10px {{bgColor}};
+            box-shadow:         0px 0px 0px 10px {{bgColor}};
+          }
+          
+      </style>
+      <div class="quote">
+          <div class="quotebox subpoint">
+          <content></content>
+            <div class="personinfo">
+                <div>
+                    <template if="{{qTitle}}">
+                      <div class="name subpoint">{{qTitle}}</div>
+                    </template>
+                    <template if="{{qDetails}}">
+                      <div class="label">{{qDetails}}</div>
+                    </template>
+                </div>
+                <template if="{{qImage}}">
+                  <div class="img-container">
+                    <div class="img" style="background-image: url('{{qImage}}'); left: {{imageMargin}}"></div>
+                  </div>
+                </template>
+            </div>
+          </div>
+      </div>
+    
+  </template>
+</polymer-element>
