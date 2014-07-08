@@ -1,7 +1,7 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="thelma_core.html">
 
-<polymer-element name="th-quote-box" attributes="qWidth qTitle qDetails qImage bgColor" noscript>
+<polymer-element name="th-quote-box" attributes="width title details image bgColor" noscript>
   <template>
       <core-style ref="theme"></core-style>
       <style>
@@ -12,7 +12,7 @@
             box-sizing: border-box;            
             margin: 0 auto;
             position: relative;
-            width: {{qWidth}};      
+            width: {{width}};      
           } 
 
           .personinfo {
@@ -23,7 +23,7 @@
 
           .img-container {
             height: 0px;
-            width: {{qWidth}};
+            width: {{width}};
             margin-left: -12px;
             position: relative;
             margin-top: 55px;
