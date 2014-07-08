@@ -5,6 +5,11 @@
 <polymer-element name="th-text" extends="th-animated" attributes="type markdown text width">
   <template>
     <core-style ref="theme"></core-style>
+    <style>
+      :host {
+        width: {{width}};
+      }
+    </style>
     <div id="container" class="{{type}}"><content></content></div>
   </template>
   <script src="../marked/lib/marked.js"></script>
