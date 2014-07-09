@@ -2,12 +2,13 @@
 <link rel="import" href="thelma_core.html">
 
 
-<polymer-element name="th-text" extends="th-animated" attributes="type markdown text width">
+<polymer-element name="th-text" extends="th-animated" attributes="type markdown text width color">
   <template>
     <core-style ref="theme"></core-style>
     <style>
       :host {
         width: {{width}};
+        color:{{color}};
       }
     </style>
     <div id="container" class="{{type}}"><content></content></div>
