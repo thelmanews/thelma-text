@@ -1,0 +1,65 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="thelma_core.html">
+
+
+<polymer-element name="th-tweet" attributes="width tweet twitterHandle image" noscript>
+  <template>
+      <core-style ref="theme"></core-style>
+
+      <style>
+          .tweetbox {
+            padding: 10px;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;            
+            margin: 0 auto;
+            position: relative;
+            width: {{width}};      
+          } 
+
+          .personinfo {
+            text-align: center;
+            margin: 20px auto;
+            
+          }
+
+          .img {
+            height: 90px;
+            width: 90px;
+            margin: 0 auto;
+            border-radius: 50px;
+            background-size: cover;
+            padding: 10px;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+          }
+          
+      </style>
+      <template if="{{image}}">
+          <div class="img" style="background-image: url('{{image}}');"></div>
+      </template>
+
+      <template if="{{twitterHandle}}">
+          <div class="personinfo name subpoint">{{twitterHandle}}</div>
+      </template>
+
+      <div class="quote">
+        <div class="tweetbox subpoint"> {{tweet}} </div>
+        <div class="img-container"> 
+          <div class="icon-background"><img class="icon" src="images/twitter-white.png"> </div>
+        </div>
+      </div>
+    
+  </template>
+
+  <script>
+      Polymer('th-tweet', {
+        init: function(){
+
+        }
+
+      });
+
+  </script>
+</polymer-element>
