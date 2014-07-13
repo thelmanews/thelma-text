@@ -11,6 +11,7 @@
             margin: 0 auto;
             border-radius: 50px;
             background-size: cover;
+            margin-bottom: 12px;
         }
         .personinfo {
           text-align: center;
@@ -49,10 +50,8 @@
       Polymer('th-tweet', {
         ready: function(){
           this.foreground = window.CoreStyle.g.theme.foreground2;
-          if (this.twitterHandle){
-            if (this.twitterHandle[0] != '@'){
-              this.twitterHandle = "@" + this.twitterHandle;
-            }
+          if (this.twitterHandle && !/^@/.test(this.twitterHandle)){
+            this.twitterHandle = "@" + this.twitterHandle;
           }
         }
       });
