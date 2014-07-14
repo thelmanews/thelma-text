@@ -1,0 +1,59 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="thelma_core.html">
+
+<polymer-element name="th-countdown-reveal" extends="th-animated" attributes="startFrom color width height" >
+
+  <template>
+      <core-style ref="theme"></core-style>
+      <style>
+        :host {
+          width: {{width}};
+          height: {{height}};
+        }
+
+        #content {
+          opacity: 0.1;
+          position: absolute;
+          display: table-cell;
+          vertical-align: middle;
+          margin-top: 10px;
+        }
+
+        #countdown {
+          position: absolute;
+          top: 0;
+          text-align: center;
+          font-size: {{height}};  
+        }
+
+      </style>
+      <div id="container" class="mainpoint"> <span id="countdown">{{startFrom}}</span><div id="content"><content></content></div></div>
+  </template>
+
+  <script>
+
+      Polymer('th-countdown-reveal', {
+        startFrom: 3,
+        width: '150px',
+        height: '250px',
+        color: '',
+        init: function() {
+
+          var container = this.$.container;
+          var countdown = this.$.countdown;
+          console.log(countdown.innerHTML);
+          
+        },
+        reset: function() {
+          
+        },
+        animate: function() {
+          
+
+        }
+      });
+
+  </script>
+
+
+</polymer-element>
