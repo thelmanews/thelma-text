@@ -12,7 +12,6 @@
         }
 
         #content {
-          opacity: 0.1;
           position: absolute;
           display: table-cell;
           vertical-align: middle;
@@ -24,10 +23,37 @@
           top: 0;
           text-align: center;
           font-size: {{height}};  
+          color: {{color}};
+        }
+
+        .hidden {
+          opacity: 0;
+        }
+
+        .fadeout {
+          -webkit-opacity: 0;
+          -moz-opacity: 0;
+          opacity: 0;
+          -webkit-transition: all 1s ease;
+          -moz-transition: all 1s ease;
+          -ms-transition: all 1s ease;
+          -o-transition: all 1s ease;
+          transition: all 1s ease;
+        }
+
+        .fadein {
+          -webkit-opacity: 1;
+          -moz-opacity: 1;
+          opacity: 1;
+          -webkit-transition: all 3s ease;
+          -moz-transition: all 3s ease;
+          -ms-transition: all 3s ease;
+          -o-transition: all 3s ease;
+          transition: all 3s ease;
         }
 
       </style>
-      <div id="container" class="mainpoint"> <span id="countdown">{{startFrom}}</span><div id="content"><content></content></div></div>
+      <div id="container" class="mainpoint"> <span id="countdown">{{startFrom}}</span><div id="content" class="hidden"><content></content></div></div>
   </template>
 
   <script>
@@ -38,18 +64,26 @@
         height: '250px',
         color: '',
         init: function() {
-
-          var container = this.$.container;
-          var countdown = this.$.countdown;
-          console.log(countdown.innerHTML);
-          
+          var self = this;
+          self.content = this.$.content;
+          self.countdown = this.$.countdown;
+                        
         },
         reset: function() {
           
         },
         animate: function() {
-          
+          var self = this;
 
+          setInterval(function(){
+            if (self.startFrom > 1){
+              self.startFrom--;
+            } else {
+              self.countdown.className = 'fadeout';
+              self.content.className = 'fadein';
+              clearInterval();
+            }
+          }, 1000)
         }
       });
 
