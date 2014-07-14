@@ -48,9 +48,9 @@
       Polymer('th-table-bullets', { 
         tableData: [ // image and bullet(any unicode symbol) are optional
         // User should be given a dropdown of unicode symbols to choose from to avoid typos.
-          { bullet: '\u25CF', text: 'This is the first bullet.'},
-          { bullet: '\u25CF', text: 'This is the second bullet.'},
-          { bullet: '\u25CF', text: 'This is the third bullet.'}
+          { bullet: '\u25CF', text: 'This is the first bullet.', color:''},
+          { bullet: '\u25CF', text: 'This is the second bullet.', color:''},
+          { bullet: '\u25CF', text: 'This is the third bullet.', color:''}
          ],
         init: function() {
           var self = this;
@@ -61,6 +61,7 @@
           for (var i=0; i<data.length; i++){
             row = table.appendChild(document.createElement('tr'));
             row.className = 'th-slide';       
+            row.style.color = data[i].color;
             image = data[i].image;
             bullet = data[i].bullet;
             

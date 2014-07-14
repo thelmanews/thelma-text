@@ -2,7 +2,7 @@
 <link rel="import" href="thelma_core.html">
 <link rel="import" href="th-text.html">
 
-<polymer-element name="th-countup-num" extends="th-animated" attributes="startFrom startFromSameNumberOfDigit duration numberSize type width" >
+<polymer-element name="th-countup-num" extends="th-animated" attributes="startFrom startFromSameNumberOfDigit duration numberSize type width color" >
   <template>
       <core-style ref="theme"></core-style>
       <style>
@@ -19,6 +19,7 @@
 
         #num, #unit_before, #unit_after {
           font-size: {{numberSize}};
+          color: {{color}};
         }
       </style>
       <div id="container">
