@@ -2,7 +2,9 @@
 <link rel="import" href="thelma_core.html">
 <link rel="import" href="th-text.html">
 
+
 <polymer-element name="th-countup-num" extends="th-animated" attributes="startFrom startFromSameNumberOfDigit duration numberSize type width color" >
+
   <template>
       <core-style ref="theme"></core-style>
       <style>
@@ -11,7 +13,7 @@
           position: relative;
           width: {{width}};
         }
-        
+
         span {
           padding:0;
           margin: 0;
@@ -21,16 +23,18 @@
           font-size: {{numberSize}};
           color: {{color}};
         }
+
       </style>
       <div id="container">
-        <th-text markdown="false" type="{{type}}">  
-          <span id="before_num"></span><span id="unit_before"></span><span id="num"></span><span id="unit_after"></span><span id="after_num"></span>
+        <th-text markdown="false" type="{{type}}">
+          <span id="before_num"></span><span id="unit_before"></span><span style="font-size: {{numberSize}};" id="num"></span><span id="unit_after"></span><span id="after_num"></span>
         </th-text>
       </div>
   </template>
-  <script src="../countUp.js/countUp.js"></script> 
+
+  <script src="../countUp.js/countUp.js"></script>
   <script>
- 
+
       Polymer('th-countup-num', {
         startFrom: -1,
         startFromSameNumberOfDigit: true,  // to make sure span with remains the same
@@ -45,10 +49,10 @@
           //TODO validation
           var number = content.match(/\d+/g) || 40; //This gets called three times, on the 3rd, the content is false.
           var digits = number.toString().length;
-          
+
 
           var beforeAfter = content.split(/\d+/,2);
-          
+
           var container = this.$.container;
           var beforeEl = this.$.before_num;
           var numEl = this.$.num;
@@ -59,7 +63,7 @@
           // container.className = this.type; // don't need this with text component included
 
           if(beforeAfter && beforeAfter.length>0) {
-            var splitUnitsBefore = beforeAfter[0].match(/(.*)(#|%|\$)$/); // matches 1) everything else 2) symbol at the end of the line 
+            var splitUnitsBefore = beforeAfter[0].match(/(.*)(#|%|\$)$/); // matches 1) everything else 2) symbol at the end of the line
             if (splitUnitsBefore) {
               beforeEl.innerText = splitUnitsBefore[1];
               unitBefore.innerText = splitUnitsBefore[2];
@@ -77,10 +81,10 @@
               afterEl.innerText = beforeAfter[1];
             }
           }
-          
+
 
           var start = (Boolean(this.startFromSameNumberOfDigit) && this.startFrom<0) ? Math.pow(10,digits-1) : this.startFrom;
-          
+
 
           this.cnt = new countUp(numEl, start, number[0], 0, this.duration);
 
