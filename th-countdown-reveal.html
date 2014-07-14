@@ -53,7 +53,7 @@
         }
 
       </style>
-      <div id="container" class="mainpoint"> <span id="countdown">{{startFrom}}</span><div id="content" class="hidden"><content></content></div></div>
+      <div id="container" class="mainpoint"> <span id="countdown">{{number}}</span><div id="content" class="hidden"><content></content></div></div>
   </template>
 
   <script>
@@ -63,27 +63,35 @@
         width: '150px',
         height: '250px',
         color: '',
+        animationSpeed : 1, 
         init: function() {
           var self = this;
+          
+          self.number = self.startFrom;
           self.content = this.$.content;
           self.countdown = this.$.countdown;
                         
         },
         reset: function() {
-          
+          var self = this;
+
+          self.number = self.startFrom;
+          self.countdown.className = 'fadein';
+          self.content.className = 'fadeout';
+
         },
         animate: function() {
           var self = this;
 
-          setInterval(function(){
-            if (self.startFrom > 1){
-              self.startFrom--;
+          var countdown = setInterval(function(){
+            if (self.number > 1){
+              self.number--;
             } else {
               self.countdown.className = 'fadeout';
               self.content.className = 'fadein';
-              clearInterval();
+              clearInterval(countdown);
             }
-          }, 1000)
+          }, self.animationSpeed * 1000)
         }
       });
 
