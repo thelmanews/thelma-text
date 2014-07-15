@@ -11,19 +11,40 @@
           height: {{height}};
         }
 
+        #container {
+          height: 100%;
+          width: 100%;
+          /*overflow: hidden;*/
+          display: table;
+        }
+
         #content {
-          position: absolute;
-          display: table-cell;
-          vertical-align: middle;
-          margin-top: 10px;
+         display: table-cell; 
+         vertical-align: middle; 
         }
 
         #countdown {
           position: absolute;
           top: 0;
+          width: 100%;
           text-align: center;
-          font-size: {{height}};  
+          font-size: {{fontSize}};  
           color: {{color}};
+          -webkit-transition: opacity 0.4s ease;  
+          -moz-transition:    opacity 0.4s ease;
+          -ms-transition:     opacity 0.4s ease; 
+          -o-transition:      opacity 0.4s ease;
+        }
+
+         #countdown.animate {
+          -webkit-animation: animate 1s ease-out;
+          -webkit-animation-iteration-count: infinite; 
+        }
+
+        @-webkit-keyframes animate {
+           0% {-webkit-transform: scale(0, 0); opacity: 0.0;}
+           50% {opacity: 1.0;}
+           100% {-webkit-transform: scale(1, 1); opacity: 0.0;}
         }
 
         .hidden {
@@ -52,40 +73,42 @@
           transition: all 3s ease;
         }
 
+       
+
       </style>
-      <div id="container" class="mainpoint"> <span id="countdown">{{number}}</span><div id="content" class="hidden"><content></content></div></div>
+      <div id="container" class="headline"> 
+        <span id="countdown" class="animate">{{number}}</span>
+        <div id="content" class="hidden"><content></content></div>
+      </div>
   </template>
 
   <script>
 
       Polymer('th-countdown-reveal', {
         startFrom: 3,
-        width: '150px',
-        height: '250px',
         color: '',
-        animationSpeed : 1, 
+        animationSpeed: 1, // if this changes, need to change the css keyframes animation speed too
         init: function() {
           var self = this;
-          
+          self.fontSize = (parseInt(this.height)*0.87).toString() + "px"; // 0.87 is the magic number to make the font size the same as the height of the element
           self.number = self.startFrom;
-          self.content = this.$.content;
-          self.countdown = this.$.countdown;
-                        
+          self.content = self.$.content;
+          self.countdown = self.$.countdown;              
         },
         reset: function() {
           var self = this;
-
           self.number = self.startFrom;
-          self.countdown.className = 'fadein';
+          self.countdown.className = 'animate';
           self.content.className = 'fadeout';
-
         },
         animate: function() {
           var self = this;
 
           var countdown = setInterval(function(){
             if (self.number > 1){
+              self.countdown.className = 'animate';
               self.number--;
+
             } else {
               self.countdown.className = 'fadeout';
               self.content.className = 'fadein';
