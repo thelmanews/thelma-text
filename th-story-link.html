@@ -23,6 +23,7 @@
           -o-background-size: cover;
           background-size: cover;
           color: {{color}};
+          border-bottom: 2px solid {{bordercolor}};
          }
 
         .layer {
@@ -89,6 +90,7 @@
           // Set styles based on light or dark theme
           self.color = self.theme == "light" ? "black" : "white";
           self.bgcolor = self.theme == "light" ? "rgba(255,255,255,0.5)" : "rgba(0,0,0,0.5)";
+          self.bordercolor = self.theme == "light" ? "rgba(0,0,0,0.5)" : "rgba(255,255,255,0.5)";
         },
         handleResponse: function(event, r) {
           var self = this,
