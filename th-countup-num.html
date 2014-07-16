@@ -3,7 +3,7 @@
 <link rel="import" href="th-text.html">
 
 
-<polymer-element name="th-countup-num" extends="th-animated" attributes="startFrom startFromSameNumberOfDigit duration numberSize type width" >
+<polymer-element name="th-countup-num" extends="th-animated" attributes="startFrom startFromSameNumberOfDigit duration numberSize type width growNumber" >
 
   <template>
       <core-style ref="theme"></core-style>
@@ -24,7 +24,7 @@
         }
 
         #num, #unit_before, #unit_after {
-          font-size: {{numberSize}};
+          font-size: {{numberSizeCurrent}};
           color: {{color}};
         }
 
@@ -97,8 +97,22 @@
           this.cnt.reset();
         },
         animate: function() {
-          this.cnt.start();
+          var self = this;
+          
+          self.cnt.start();
+          self.numberSizeCurrent = self.growNumber ? "" : self.numberSize + "px";
 
+          if (self.growNumber){
+            self.fontsize = 12;
+            var count = setInterval(function(){               
+               if (self.fontsize < self.numberSize){
+                 self.fontsize++;
+                 self.numberSizeCurrent = self.fontsize + "px";
+               } else {
+                 clearInterval(count);
+               }
+             }, self.duration)
+            }
         }
       });
 
