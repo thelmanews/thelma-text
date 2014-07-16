@@ -33,6 +33,18 @@
             box-sizing: border-box;
           }
 
+          .border-bottom {
+            height: 0px;
+            width: {{width}};
+            margin-left: -12px;
+            position: relative;
+            margin-top: 10px;
+            padding: 0px 10px;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+          }
+
           .img {
             height: 90px;
             width: 90px;
@@ -63,10 +75,15 @@
                       <div class="label">{{details}}</div>
                     </template>
                 </div>
+                
                 <template if="{{image}}">
                   <div class="img-container">
                     <div class="img img-shadow" style="background-image: url('{{image}}'); left: {{imageMargin}}"></div>
                   </div>
+                </template>
+                
+                <template if="{{!image}}">
+                  <div class="border-bottom"></div>
                 </template>
             </div>
           </div>
