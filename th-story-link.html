@@ -2,7 +2,7 @@
 <link rel="import" href="thelma_core.html">
 <link rel="import" href="../core-ajax/core-ajax.html">
 
-<polymer-element name="th-link" attributes="width url theme">
+<polymer-element name="th-story-link" attributes="width url theme">
   <template>
       <core-style ref="theme"></core-style>
       <style>
@@ -78,7 +78,7 @@
   </template>
 
   <script>
-      Polymer('th-link', {
+      Polymer('th-story-link', {
         ready: function(){
           var self = this;
           self.requestUrl = self.url.replace(/(ftp|http|https):\/\//,'http://www.corsproxy.com/');
