@@ -1,7 +1,7 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="thelma_core.html">
 
-<polymer-element name="th-countdown-reveal" extends="th-animated" attributes="startFrom color width height" >
+<polymer-element name="th-countdown-reveal" extends="th-animated" attributes="startFrom color width height animationSpeed" >
 
   <template>
       <core-style ref="theme"></core-style>
@@ -36,7 +36,9 @@
         }
 
          #countdown.animate {
-          -webkit-animation: animate 1s ease-out;
+          -webkit-animation-name: animate;
+          -webkit-animation-duration: {{animationSpeed + "s"}};
+          -webkit-animation-timing-function: ease-out; 
           -webkit-animation-iteration-count: infinite; 
         }
 
@@ -85,7 +87,7 @@
       Polymer('th-countdown-reveal', {
         startFrom: 3,
         color: '',
-        animationSpeed: 1, // if this changes, need to change the css keyframes animation speed too
+        animationSpeed: 2, 
         init: function() {
           var self = this;
           self.fontSize = (parseInt(this.height)*0.87).toString() + "px"; // 0.87 is the magic number to make the font size the same as the height of the element
