@@ -31,7 +31,7 @@
       </style>
       <div id="container">
         <th-text markdown="false" type="{{type}}">
-          <span id="before_num"></span><span id="unit_before"></span><span style="font-size: {{numberSize}};" id="num"></span><span id="unit_after"></span><span id="after_num"></span>
+          <span id="before_num"></span><span id="unit_before"></span><span style="font-size: {{numberSizeCurrent}};" id="num"></span><span id="unit_after"></span><span id="after_num"></span>
         </th-text>
       </div>
   </template>
@@ -86,9 +86,7 @@
             }
           }
 
-
           var start = (Boolean(this.startFromSameNumberOfDigit) && this.startFrom<0) ? Math.pow(10,digits-1) : this.startFrom;
-
 
           this.cnt = new countUp(numEl, start, number[0], 0, this.duration);
 
@@ -100,12 +98,12 @@
           var self = this;
           
           self.cnt.start();
-          self.numberSizeCurrent = self.growNumber ? "" : self.numberSize + "px";
-
+          self.numberSizeCurrent = self.growNumber ? "" : self.numberSize;
+          
           if (self.growNumber){
             self.fontsize = 12;
             var count = setInterval(function(){               
-               if (self.fontsize < self.numberSize){
+               if (self.fontsize < parseInt(self.numberSize)){
                  self.fontsize++;
                  self.numberSizeCurrent = self.fontsize + "px";
                } else {
