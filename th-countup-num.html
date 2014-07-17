@@ -98,9 +98,9 @@
           var self = this;
           
           self.cnt.start();
-          self.numberSizeCurrent = self.growNumber ? "" : self.numberSize;
+          self.numberSizeCurrent = self.growNumber == "true" ? "" : self.numberSize;
           
-          if (self.growNumber){
+          if (self.growNumber == "true"){
             self.fontsize = 12;
             var count = setInterval(function(){               
                if (self.fontsize < parseInt(self.numberSize)){
