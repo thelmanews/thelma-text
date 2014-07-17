@@ -1,0 +1,32 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="thelma_core.html">
+<link rel="import" href="th-story-link.html">
+
+<polymer-element name="th-stories" attributes="width links theme" noscript>
+  <template>
+      <core-style ref="theme"></core-style>
+      <style>
+        ul {
+          -webkit-column-count: 1;
+             -moz-column-count: 1;
+                  column-count: 1;
+          width: {{width}};
+        }
+      </style>
+      <ul>
+         <template repeat="{{ link in links }}">
+            <th-story-link url="{{link.url}}" theme="{{theme}}">{{link.headline}}</th-story-link>
+        </template>
+      </ul>
+  </template>
+
+  <script>
+    Polymer('th-stories', {
+      links: [
+        {headline: 'Want to learn more about smoking in America?', url: 'http://online.wsj.com/articles/americas-smokers-still-40-million-strong-1405468491?mod=WSJ_hp_RightTopStories'}, 
+        {headline: "What's happening in tech?", url: 'http://online.wsj.com/articles/apple-ibm-in-deal-to-create-apps-sell-phones-1405456933?mod=WSJ_hpp_MIDDLENexttoWhatsNewsThird'}, 
+        {headline: '', url: 'http://www.buzzfeed.com/richardhjames/stunning-images-that-show-how-the-tide-transforms-the-bri'}
+      ]
+    });
+  </script>
+</polymer-element>
