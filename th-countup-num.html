@@ -102,8 +102,9 @@
           
           if (self.growNumber == "true"){
             self.fontsize = 12;
+            self.numberSize = parseInt(self.numberSize);
             var count = setInterval(function(){               
-               if (self.fontsize < parseInt(self.numberSize)){
+               if (self.fontsize < self.numberSize){
                  self.fontsize++;
                  self.numberSizeCurrent = self.fontsize + "px";
                } else {
