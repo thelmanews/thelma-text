@@ -1,0 +1,124 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="thelma_core.html">
+
+<polymer-element name="th-countdown-reveal" extends="th-animated" attributes="startFrom color width height animationSpeed" >
+
+  <template>
+      <core-style ref="theme"></core-style>
+      <style>
+        :host {
+          width: {{width}};
+          height: {{height}};
+        }
+
+        #container {
+          height: 100%;
+          width: 100%;
+          display: table;
+        }
+
+        #content {
+         display: table-cell; 
+         vertical-align: middle; 
+        }
+
+        #countdown {
+          position: absolute;
+          top: 0;
+          width: 100%;
+          text-align: center;
+          font-size: {{fontSize}};  
+          color: {{color}};
+          -webkit-transition: opacity 0.4s ease;  
+          -moz-transition:    opacity 0.4s ease;
+          -ms-transition:     opacity 0.4s ease; 
+          -o-transition:      opacity 0.4s ease;
+        }
+
+         #countdown.animate {
+          -webkit-animation-name: animate;
+          -webkit-animation-duration: {{animationSpeed + "s"}};
+          -webkit-animation-timing-function: ease-out; 
+          -webkit-animation-iteration-count: infinite; 
+        }
+
+        @-webkit-keyframes animate {
+           0% {-webkit-transform: scale(0, 0); opacity: 0.0;}
+           50% {opacity: 1.0;}
+           100% {-webkit-transform: scale(1, 1); opacity: 0.0;}
+        }
+
+        .hidden {
+          opacity: 0;
+        }
+
+        .fadeout {
+          -webkit-opacity: 0;
+          -moz-opacity: 0;
+          opacity: 0;
+          -webkit-transition: all 1s ease;
+          -moz-transition: all 1s ease;
+          -ms-transition: all 1s ease;
+          -o-transition: all 1s ease;
+          transition: all 1s ease;
+        }
+
+        .fadein {
+          -webkit-opacity: 1;
+          -moz-opacity: 1;
+          opacity: 1;
+          -webkit-transition: all 3s ease;
+          -moz-transition: all 3s ease;
+          -ms-transition: all 3s ease;
+          -o-transition: all 3s ease;
+          transition: all 3s ease;
+        }
+      </style>
+
+      <div id="container" class="headline"> 
+        <span id="countdown" class="animate">{{number}}</span>
+        <div id="content" class="hidden"><content></content></div>
+      </div>
+
+  </template>
+
+  <script>
+
+      Polymer('th-countdown-reveal', {
+        startFrom: 3,
+        color: '',
+        animationSpeed: 2, 
+        init: function() {
+          var self = this;
+          self.fontSize = (parseInt(this.height)*0.87).toString() + "px"; // 0.87 is the magic number to make the font size the same as the height of the element
+          self.number = self.startFrom;
+          self.content = self.$.content;
+          self.countdown = self.$.countdown;              
+        },
+        reset: function() {
+          var self = this;
+          self.number = self.startFrom;
+          self.countdown.className = 'animate';
+          self.content.className = 'fadeout';
+        },
+        animate: function() {
+          var self = this;
+
+          var countdown = setInterval(function(){
+            if (self.number > 1){
+              self.countdown.className = 'animate';
+              self.number--;
+
+            } else {
+              self.countdown.className = 'fadeout';
+              self.content.className = 'fadein';
+              clearInterval(countdown);
+            }
+          }, self.animationSpeed * 1000)
+        }
+      });
+
+  </script>
+
+
+</polymer-element>
