@@ -2,7 +2,7 @@
 <link rel="import" href="thelma_core.html">
 <link rel="import" href="../core-ajax/core-ajax.html">
 
-<polymer-element name="th-story-link" attributes="width url title image theme">
+<polymer-element name="th-story-link" attributes="width url storytitle image theme">
   <template>
       <core-style ref="theme"></core-style>
       <style>
@@ -64,29 +64,18 @@
         on-core-response="{{parseResponse}}">
       </core-ajax>
 
-      <core-ajax id="load"
-        url={{loadUrl}}
-        handleAs="json"  
-        on-core-response="{{loadResponse}}">
-      </core-ajax>
-
-      <core-ajax id="save"
-        url={{saveUrl}}
-        handleAs="json"  
-        method="POST"
-        on-core-response="{{saveResponse}}">
-      </core-ajax>
+      <th-firebase id="firebase" directory="stories/"></th-firebase>
 
       <!-- DON'T KNOW WHY BUT IF THIS IS NOT HERE, IT BREAKS -->
       <div style="display:none;">{{image}}</div>
       <!-- -->
 
-      <template if="{{title}}">
+      <template if="{{storytitle}}">
         <a href={{url}} target="_blank">
           <li style="background: url({{image}}) center center no-repeat; background-size: cover;"> 
             <div class="layer">
               <content></content>
-              <p class="title headline">{{title}}</p>
+              <p class="title headline">{{storytitle}}</p>
               <template if={{thelma}}> <span class="favicon"></span> </template>
             </div>
           </li>
@@ -99,7 +88,20 @@
         ready: function(){
           var self = this;
           self.requestUrl = self.url.replace(/(ftp|http|https):\/\//,'http://www.corsproxy.com/');
-          
+          self.firebase = this.$.firebase;
+          self.requests = 0;
+          console.log(self.storytitle);
+          console.log(self.storytitle);
+          // Create unique hash for each URL as a reference to saved object
+          self.hash = 0;
+          var i, chr, len;
+            if (self.url.length == 0) return self.hash;
+            for (i = 0, len = self.url.length; i < len; i++) {
+              chr   = self.url.charCodeAt(i);
+              self.hash  = ((self.hash << 5) - self.hash) + chr;
+              self.hash |= 0; // Convert to 32bit integer
+            }
+         
           // Check if it's a thelma story for favicon
           self.thelma = /.*thelma.*/.test(self.url);
 
@@ -108,21 +110,43 @@
           self.bgcolor = self.theme == "light" ? "rgba(255,255,255,0.5)" : "rgba(0,0,0,0.5)";
           self.bordercolor = self.theme == "light" ? "rgba(0,0,0,0.5)" : "rgba(255,255,255,0.5)";
 
-          self.init();
           
-        },
-        init: function(){
-          var self = this;
+          // Set up listeners for data events from firebase
+          self.firebase.addEventListener('th-data-ready', function(response) {
+            console.log("data received, now loading");
+            self.loadData(response.detail);
+          });
+          self.firebase.addEventListener('th-data-error', function(response) {
+            console.log(response.detail);
+            self.parseData();
+          });
          
-          self.$.parse.go();
-         
-          // If there is no title or image for the url, load it from the DB
-          if(!self.title || !self.image){
-            // self.loadData();
+          // If there is no title or image specified for the url, request data from firebase
+          if(!self.storytitle || !self.image){
+            self.requestData();
           }
-
-          
+  
         },
+        // Request data from firebase, which will trigger either a data-ready or data-error event
+        requestData: function(){
+          var self = this;
+          self.firebase.load(self.hash); 
+          console.log("data requested");
+        },
+        // After data is received, set the component's attributes
+        loadData: function(d){
+          var self = this;
+          self.storytitle = d.storytitle; // TODO: add validation
+          self.image = d.image; // TODO: add validation
+          console.log("data loaded");
+        },
+        // If no data is received, send an ajax request to parse the html
+        parseData: function(){
+          var self = this;
+          self.$.parse.go();
+          console.log("data parsed");
+        },
+        // Parse the ajax response for title and image
         parseResponse: function(event, r) {
           var self = this,
               response = r.response,
@@ -130,53 +154,30 @@
               titleMatch = response.match(/"twitter:title"\s*content=\s*"(.*)"/) || response.match(/"og:title"\s*content=\s*"(.*)"/), 
               imgMatch = response.match(/"twitter:image"\s*content=\s*"(.*)"/) || response.match(/"og:image"\s*content=\s*"(.*)"/);
               // descMatch = response.match(/"twitter:description"\s*content=\s*"(.*)"/) || response.match(/"og:description"\s*content=\s*"(.*)"/),
-          
-          self.title = titleMatch ? titleMatch[1] : "";
+          console.log(event);
+          console.log(r);
+          self.storytitle = titleMatch ? titleMatch[1] : "";
           self.image = imgMatch ? imgMatch[1] : "";
           // self.description = descMatch ? descMatch[1] : "";
 
-          if(self.title && self.image){
+          if(self.storytitle && self.image){
             self.saveData();
+          } else if (r.response == ""){
+            while(self.requests < 100){
+              self.parseData();
+              console.log(self.requests);
+              self.requests++;
+            } 
           }
+          // TODO: Create a loop to try again a few times if an error is received? 
+                  // If it is still not found, throw an error to enter data in manually
+                  // If data is entered manually, save it to firebase.
         },
-        requestLoad: function(){
+        // After parsing html, saved the data to firebase with unique reference of the hash
+        saveData: function(){
           var self = this;
-          self.asyncFire('th-request-link-data', self.url);
-          // composer should set event listener for this, fetch the data with the url, and then pass it back by calling loadData 
-
-        },
-        loadData: function(data){
-          var self = this;
-          if (data){
-            self.title = data.title;
-            self.image = data.image;
-          } else {
-            self.$.parse.go();
-          }
-        
-          
-          // need to pass in self.url as params...
-          // this.$.load.go();
-        },
-        saveData: function(d){
-          var self = this;
-          self.saveUrl = saveUrl;
-
-          // need to pass in self.url as params...
-          this.$.save.go();
-        },
-        loadResponse: function(event, r){
-          var self = this;
-          
-          if(r){
-            self.title = r.title;
-            self.image = r.image;
-          } else {
-            self.$.parse.go();
-          }
-        },
-        saveResponse: function(){
-          // 
+          self.firebase.save({'url': self.url, 'storytitle': self.storytitle, 'image':self.image}, self.hash );
+          console.log("data saved");
         }
       });
 
