@@ -1,0 +1,284 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<link rel="import" href="thelma_core.html">
+<link rel="import" href="th-theme.html">
+
+<!--
+Element providing a 3D carousel for either text or images.
+
+##### Example
+
+    <th-carousel>
+      <div>First Slide</div>
+      <div>Second Slide</div>
+      <div>Third Slide</div>
+      <div>Fourth Slide</div>
+      <div>Fifth Slide</div>
+      <div>Sixth Slide</div>
+    </th-carousel>
+
+@element th-carousel
+@blurb Element providing a 3D carousel for either text or images.
+@status alpha
+@homepage http://aendrew.github.io/th-carousel
+-->
+<polymer-element name="th-carousel" extends="th-animated" attributes="isHorizontal backfaces width fontSize">
+
+  <template>
+
+    <core-style ref="theme"></core-style>
+
+    <style type="text/css">
+      :host section.container {
+        width: 210px;
+        height: 140px;
+        position: relative;
+        margin: 0 auto 40px;
+       /* border: 1px solid #CCC;*/
+        display: block;
+        -webkit-perspective: 1100px;
+           -moz-perspective: 1100px;
+             -o-perspective: 1100px;
+                perspective: 1100px;
+      }
+
+
+      :host #carousel {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        -webkit-transform-style: preserve-3d;
+           -moz-transform-style: preserve-3d;
+             -o-transform-style: preserve-3d;
+                transform-style: preserve-3d;
+      }
+
+      :host #carousel.ready {
+        -webkit-transition: -webkit-transform 1s;
+           -moz-transition: -moz-transform 1s;
+             -o-transition: -o-transform 1s;
+                transition: transform 1s;
+      }
+
+      #carousel.panels-backface-invisible ::content > * {
+        -webkit-backface-visibility: hidden;
+           -moz-backface-visibility: hidden;
+             -o-backface-visibility: hidden;
+                backface-visibility: hidden;
+      }
+
+      ::content > * {
+        display: block;
+        position: absolute;
+        width: 186px;
+        height: 116px;
+        left: 10px;
+        top: 10px;
+        vertical-align: middle;
+        font-size: {{fontSize}};
+        
+        
+        text-align: center;
+        margin: 0;
+      }
+
+       ::content > * {
+        -webkit-transition: opacity 1s, -webkit-transform 1s;
+           -moz-transition: opacity 1s, -moz-transform 1s;
+             -o-transition: opacity 1s, -o-transform 1s;
+                transition: opacity 1s, transform 1s;
+      }
+
+    </style>
+
+    <section class="container">
+      <div id="carousel">
+        <content></content>
+      </div>
+    </section>
+
+
+  </template>
+
+  <link rel="import" href="dependencies/modernizr_dep.html">
+
+
+  <script>
+
+    Polymer('th-carousel', {
+      /**
+       * The `isHorizontal` attribute chooses orientation.
+       *
+       * @attribute isHorizontal
+       * @type boolean
+       */
+      isHorizontal: true,
+
+      /**
+       * The `backfaces` attribute triggers backface visibility.
+       *
+       * @property backfaces
+       * @type bool
+       */
+      backfaces: false,
+
+      /**
+       * The `rotation` property stores the current rotation angle.
+       *
+       * @property rotation
+       * @type string
+       */
+      rotation: 0,
+
+      /**
+       * The `radius` property stores radius of the carousel.
+       *
+       * @property radius
+       * @type string
+       */
+      radius: 0,
+
+      /**
+       * The `panelCount` property specifies the current panel.
+       *
+       * @attribute panelCount
+       * @type integer
+       */
+      panelCount: 0,
+
+      /**
+       * The `width` property specifies width of the component.
+       *
+       * @attribute width
+       * @type css width
+       */
+      width: '300px',
+
+      /**
+       * The `fontSize` property specifies fontSize.
+       *
+       * @attribute fontSize
+       * @type css fontSize
+       */
+      fontSize: '18px',
+
+      /**
+       * The `totalPanelCount` property specifies the total number of panels.
+       *
+       * @attribute totalPanelCount
+       * @type integer
+       */
+      totalPanelCount: 0,
+
+      /**
+       * The `theta` property specifies the interior angle of the panels.
+       *
+       * @property theta
+       * @type integer
+       */
+      theta: 0,
+
+      /**
+       * The `transformProp` property returns the browser's CSS transform property.
+       *
+       * @property transformProp
+       * @type string
+       */
+      transformProp: Modernizr.prefixed('transform'),
+
+      ready: function() {
+        var element = this;
+            carousel = this.shadowRoot.getElementById('carousel'),
+            axisButton = this.shadowRoot.getElementById('toggle-axis'),
+            navButtons = this.shadowRoot.querySelectorAll('#navigation button'),
+
+            onNavButtonClick = function( event ){
+              var increment = parseInt( event.target.getAttribute('data-increment') );
+              element.rotation += element.theta * increment * -1;
+              element.transform();
+            };
+
+        this.totalPanelCount = this.children;
+
+        if(!element.backfaces) {
+          carousel.classList.add('panels-backface-invisible');
+        }
+
+        // populate on startup
+        this.panelCount = this.children.length;
+        this.modify();
+
+
+        setTimeout( function(){
+          carousel.classList.add('ready');
+        }, 0);
+      },
+
+      /**
+       * The `modify` method reconfigures the carousel.
+       *
+       * @method modify
+       * @return {Object} Returns undefined.
+       */
+      modify: function() {
+        
+        var element = this,
+            panel, angle, i;
+        carousel = this.shadowRoot.getElementById('carousel'),
+        this.panelSize = carousel[ this.isHorizontal ? 'offsetWidth' : 'offsetHeight' ];
+        this.rotateFn = this.isHorizontal ? 'rotateY' : 'rotateX';
+        this.theta = 360 / this.panelCount;
+
+        // do some trig to figure out how big the carousel
+        // is in 3D space
+        this.radius = Math.round( ( this.panelSize / 2) / Math.tan( Math.PI / this.panelCount ) * 0.9 );
+        var elements = this.children;
+
+        for ( i = 0; i < this.panelCount; i++ ) {
+          panel = elements[i];
+          panel.addEventListener('click' ,function() {
+            element.animate();
+          });
+
+          angle = this.theta * i;
+          panel.style.opacity = 1;
+          panel.classList.add('border');
+          //panel.style.backgroundColor = 'hsla(' + angle + ', 100%, 50%, 0.8)';
+          // rotate panel, then push it out in 3D space
+          panel.style[ this.transformProp ] = this.rotateFn + '(' + angle + 'deg) translateZ(' + this.radius + 'px)';
+        }
+
+        // hide other panels
+        for (  ; i < this.totalPanelCount; i++ ) {
+          panel = elements[i];
+          panel.style.opacity = 0;
+          panel.style[ this.transformProp ] = 'none';
+        }
+
+        // adjust rotation so panels are always flat
+        this.rotation = Math.round( this.rotation / this.theta ) * this.theta;
+
+        this.transform();
+      },
+
+      /**
+       * The `transform` method pushes the carousel back in 3D space and rotates it.
+       *
+       * @method transform
+       * @return {Object} Returns undefined.
+       */
+      transform: function() {
+        this.shadowRoot.getElementById('carousel').style[ this.transformProp ] = 'translateZ(-' + this.radius + 'px) ' + this.rotateFn + '(' + this.rotation + 'deg)';
+      },
+
+      animate: function() {
+          this.rotation -= this.theta;
+          this.transform();
+
+      }
+
+    });
+
+  </script>
+
+</polymer-element>
