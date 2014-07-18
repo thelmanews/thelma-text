@@ -2,7 +2,7 @@
 <link rel="import" href="thelma_core.html">
 <link rel="import" href="../core-ajax/core-ajax.html">
 
-<polymer-element name="th-story-link" attributes="width url theme">
+<polymer-element name="th-story-link" attributes="width url title image theme">
   <template>
       <core-style ref="theme"></core-style>
       <style>
@@ -58,12 +58,28 @@
         }
 
       </style>
-      <core-ajax
-        auto
+      <core-ajax id="parse"
         url={{requestUrl}}
         handleAs="text"  
-        on-core-response="{{handleResponse}}">
+        on-core-response="{{parseResponse}}">
       </core-ajax>
+
+      <core-ajax id="load"
+        url={{loadUrl}}
+        handleAs="json"  
+        on-core-response="{{loadResponse}}">
+      </core-ajax>
+
+      <core-ajax id="save"
+        url={{saveUrl}}
+        handleAs="json"  
+        method="POST"
+        on-core-response="{{saveResponse}}">
+      </core-ajax>
+
+      <!-- DON'T KNOW WHY BUT IF THIS IS NOT HERE, IT BREAKS -->
+      <div style="display:none;">{{image}}</div>
+      <!-- -->
 
       <template if="{{title}}">
         <a href={{url}} target="_blank">
@@ -91,18 +107,76 @@
           self.color = self.theme == "light" ? "black" : "white";
           self.bgcolor = self.theme == "light" ? "rgba(255,255,255,0.5)" : "rgba(0,0,0,0.5)";
           self.bordercolor = self.theme == "light" ? "rgba(0,0,0,0.5)" : "rgba(255,255,255,0.5)";
+
+          self.init();
+          
         },
-        handleResponse: function(event, r) {
+        init: function(){
+          var self = this;
+         
+          self.$.parse.go();
+         
+          // If there is no title or image for the url, load it from the DB
+          if(!self.title || !self.image){
+            // self.loadData();
+          }
+
+          
+        },
+        parseResponse: function(event, r) {
           var self = this,
               response = r.response,
               // These matches work when content is listed after the name in the meta tag only.
               titleMatch = response.match(/"twitter:title"\s*content=\s*"(.*)"/) || response.match(/"og:title"\s*content=\s*"(.*)"/), 
-              descMatch = response.match(/"twitter:description"\s*content=\s*"(.*)"/) || response.match(/"og:description"\s*content=\s*"(.*)"/),
               imgMatch = response.match(/"twitter:image"\s*content=\s*"(.*)"/) || response.match(/"og:image"\s*content=\s*"(.*)"/);
+              // descMatch = response.match(/"twitter:description"\s*content=\s*"(.*)"/) || response.match(/"og:description"\s*content=\s*"(.*)"/),
           
           self.title = titleMatch ? titleMatch[1] : "";
-          self.description = descMatch ? descMatch[1] : "";
           self.image = imgMatch ? imgMatch[1] : "";
+          // self.description = descMatch ? descMatch[1] : "";
+
+          if(self.title && self.image){
+            self.saveData();
+          }
+        },
+        requestLoad: function(){
+          var self = this;
+          self.asyncFire('th-request-link-data', self.url);
+          // composer should set event listener for this, fetch the data with the url, and then pass it back by calling loadData 
+
+        },
+        loadData: function(data){
+          var self = this;
+          if (data){
+            self.title = data.title;
+            self.image = data.image;
+          } else {
+            self.$.parse.go();
+          }
+        
+          
+          // need to pass in self.url as params...
+          // this.$.load.go();
+        },
+        saveData: function(d){
+          var self = this;
+          self.saveUrl = saveUrl;
+
+          // need to pass in self.url as params...
+          this.$.save.go();
+        },
+        loadResponse: function(event, r){
+          var self = this;
+          
+          if(r){
+            self.title = r.title;
+            self.image = r.image;
+          } else {
+            self.$.parse.go();
+          }
+        },
+        saveResponse: function(){
+          // 
         }
       });
 
