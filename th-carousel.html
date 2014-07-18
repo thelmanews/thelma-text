@@ -186,7 +186,7 @@ Element providing a 3D carousel for either text or images.
        */
       transformProp: Modernizr.prefixed('transform'),
 
-      ready: function() {
+      init: function() {
         var element = this;
             carousel = this.shadowRoot.getElementById('carousel'),
             axisButton = this.shadowRoot.getElementById('toggle-axis'),
