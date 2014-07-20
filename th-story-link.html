@@ -45,8 +45,8 @@
         .favicon {
           display: inline-block;
           position: absolute;
-          bottom: 3px;
-          right: 3px;
+          bottom: 7px;
+          right: 5px;
           width: 16px;
           height: 16px;
           border-radius: 8px;
@@ -104,6 +104,7 @@
          
           // Check if it's a thelma story for favicon
           self.thelma = /.*thelma.*/.test(self.url);
+          console.log(self.thelma);
 
           // Set styles based on light or dark theme
           self.color = self.theme == "light" ? "black" : "white";
