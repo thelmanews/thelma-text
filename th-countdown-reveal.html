@@ -1,7 +1,7 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="thelma_core.html">
 
-<polymer-element name="th-countdown-reveal" extends="th-animated" attributes="startFrom color width height animationSpeed" >
+<polymer-element name="th-countdown-reveal" extends="th-animated" attributes="startFrom color width height animationSpeed image" >
 
   <template>
       <core-style ref="theme"></core-style>
@@ -73,11 +73,19 @@
           -o-transition: all 3s ease;
           transition: all 3s ease;
         }
+
+        #countdownImg {
+          width: 100%;
+          height: 100%;
+          display: table;
+        }
       </style>
 
       <div id="container" class="headline"> 
         <span id="countdown" class="animate">{{number}}</span>
-        <div id="content" class="hidden"><content></content></div>
+        <div id="countdownImg" class="hidden" style="background: url({{image}}) center center no-repeat; background-size: cover;">
+          <div id="content" class="hidden"><content></content></div>
+        </div>
       </div>
 
   </template>
@@ -93,13 +101,15 @@
           self.fontSize = (parseInt(this.height)*0.87).toString() + "px"; // 0.87 is the magic number to make the font size the same as the height of the element
           self.number = self.startFrom;
           self.content = self.$.content;
-          self.countdown = self.$.countdown;              
+          self.countdown = self.$.countdown; 
+          self.img = self.$.countdownImg;              
         },
         reset: function() {
           var self = this;
           self.number = self.startFrom;
           self.countdown.className = 'animate';
           self.content.className = 'fadeout';
+          self.img.className = 'fadeout';
         },
         animate: function() {
           var self = this;
@@ -111,7 +121,9 @@
 
             } else {
               self.countdown.className = 'fadeout';
+              self.img.className = 'fadein';
               self.content.className = 'fadein';
+              
               clearInterval(countdown);
             }
           }, self.animationSpeed * 1000)
