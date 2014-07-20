@@ -2,7 +2,7 @@
 <link rel="import" href="thelma_core.html">
 <link rel="import" href="../core-ajax/core-ajax.html">
 
-<polymer-element name="th-story-link" attributes="width url storytitle image theme">
+<polymer-element name="th-story-link" attributes="width url storytitle image themecolor">
   <template>
       <core-style ref="theme"></core-style>
       <style>
@@ -107,9 +107,9 @@
           console.log(self.thelma);
 
           // Set styles based on light or dark theme
-          self.color = self.theme == "light" ? "black" : "white";
-          self.bgcolor = self.theme == "light" ? "rgba(255,255,255,0.5)" : "rgba(0,0,0,0.4)";
-          self.bordercolor = self.theme == "light" ? "rgba(0,0,0,0.4)" : "rgba(255,255,255,0.5)";
+          self.color = self.themecolor == "light" ? "black" : "white";
+          self.bgcolor = self.themecolor == "light" ? "rgba(255,255,255,0.5)" : "rgba(0,0,0,0.4)";
+          self.bordercolor = self.themecolor == "light" ? "rgba(0,0,0,0.4)" : "rgba(255,255,255,0.5)";
 
           // Set up listeners for data events from firebase
           self.firebase.addEventListener('th-data-ready', function(response) {

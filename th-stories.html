@@ -2,7 +2,7 @@
 <link rel="import" href="thelma_core.html">
 <link rel="import" href="th-story-link.html">
 
-<polymer-element name="th-stories" attributes="width links theme">
+<polymer-element name="th-stories" attributes="width links themecolor">
   <template>
       <core-style ref="theme"></core-style>
       <style>
@@ -17,7 +17,7 @@
       </style>
       <ul>
          <template repeat="{{ link in links }}">
-            <th-story-link class="story" url="{{link.url}}" theme="{{theme}}" storyTitle="{{link.title}}" image="{{link.image}}" width="{{width}}">    
+            <th-story-link class="story" url="{{link.url}}" themecolor="{{themecolor}}" storyTitle="{{link.title}}" image="{{link.image}}" width="{{width}}">    
               {{link.leadIn}}
             </th-story-link>
         </template>
