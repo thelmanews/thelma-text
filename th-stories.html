@@ -15,7 +15,8 @@
       </style>
       <ul>
          <template repeat="{{ link in links }}">
-            <th-story-link url="{{link.url}}" theme="{{theme}}" storyTitle="{{link.title}}" image="{{link.image}}">    {{link.headline}}
+            <th-story-link class="story" url="{{link.url}}" theme="{{theme}}" storyTitle="{{link.title}}" image="{{link.image}}" width="{{width}}">    
+              {{link.leadIn}}
             </th-story-link>
         </template>
       </ul>
@@ -24,15 +25,11 @@
   <script>
     Polymer('th-stories', {
       links: [
-        {headline: 'Want to learn more about smoking in America?', url: 'http://online.wsj.com/articles/americas-smokers-still-40-million-strong-1405468491?mod=WSJ_hp_RightTopStories'}, 
-        {headline: "What's happening in tech?", url: 'http://online.wsj.com/articles/apple-ibm-in-deal-to-create-apps-sell-phones-1405456933?mod=WSJ_hpp_MIDDLENexttoWhatsNewsThird'}, 
-        {headline: '', url: 'http://www.buzzfeed.com/richardhjames/stunning-images-that-show-how-the-tide-transforms-the-bri'},
-        { headline: '', 
-          url: 'http://www.nytimes.com/2014/07/19/world/europe/malaysia-airlines-plane-ukraine.html?hp&action=click&pgtype=Homepage&version=BannerSubHedSumLargeMedia&module=a-lede-package-region&region=lede-package&WT.nav=lede-package', 
-          title: 'Obama Points to Pro-Russia Separatists in Downing of Malaysia Airlines Plane', 
-          image: 'http://static01.nyt.com/images/2014/07/19/world/19jet4/19jet4-jumbo.jpg'
-        }
-      ]
+        {leadIn: 'Want to learn more about smoking in America?', url: 'http://online.wsj.com/articles/americas-smokers-still-40-million-strong-1405468491?mod=WSJ_hp_RightTopStories'}, 
+        {leadIn: "What's happening in tech?", url: 'http://online.wsj.com/articles/apple-ibm-in-deal-to-create-apps-sell-phones-1405456933?mod=WSJ_hpp_MIDDLENexttoWhatsNewsThird'}, 
+        {leadIn: '', url: 'http://www.buzzfeed.com/richardhjames/stunning-images-that-show-how-the-tide-transforms-the-bri'},
+        {leadIn: '', url: 'http://www.nytimes.com/2014/07/19/world/europe/malaysia-airlines-plane-ukraine.html?hp&action=click&pgtype=Homepage&version=BannerSubHedSumLargeMedia&module=a-lede-package-region&region=lede-package&WT.nav=lede-package'
+        }      ]
     });
   </script>
 </polymer-element>

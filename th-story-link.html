@@ -72,7 +72,7 @@
 
       <template if="{{storytitle}}">
         <a href={{url}} target="_blank">
-          <li style="background: url({{image}}) center center no-repeat; background-size: cover;"> 
+          <li style=" background: url({{image}}) center center no-repeat; background-size: cover;"> 
             <div class="layer">
               <content></content>
               <p class="title headline">{{storytitle}}</p>
@@ -107,22 +107,25 @@
 
           // Set styles based on light or dark theme
           self.color = self.theme == "light" ? "black" : "white";
-          self.bgcolor = self.theme == "light" ? "rgba(255,255,255,0.5)" : "rgba(0,0,0,0.5)";
-          self.bordercolor = self.theme == "light" ? "rgba(0,0,0,0.5)" : "rgba(255,255,255,0.5)";
+          self.bgcolor = self.theme == "light" ? "rgba(255,255,255,0.5)" : "rgba(0,0,0,0.4)";
+          self.bordercolor = self.theme == "light" ? "rgba(0,0,0,0.4)" : "rgba(255,255,255,0.5)";
 
-          
           // Set up listeners for data events from firebase
           self.firebase.addEventListener('th-data-ready', function(response) {
+            // Data found in firebase, so load into component
             console.log("data received, now loading");
             self.loadData(response.detail);
           });
           self.firebase.addEventListener('th-data-error', function(response) {
+            // No data in firebase for that URL, so call parse
             console.log(response.detail);
-            self.parseData();
+            self.parseData(); 
           });
          
-          // If there is no title or image specified for the url, request data from firebase
-          if(!self.storytitle || !self.image){
+          // If an image and title are given, save it to firebase; otherwise, request it from firebase.
+          if(self.storytitle && self.image){
+            self.saveData();
+          } else {
             self.requestData();
           }
   
@@ -136,14 +139,15 @@
         // After data is received, set the component's attributes
         loadData: function(d){
           var self = this;
-          self.storytitle = d.storytitle; // TODO: add validation
-          self.image = d.image; // TODO: add validation
+          self.storytitle = self.storytitle || d.storytitle; 
+          self.image = self.image || d.image; 
           console.log("data loaded");
         },
         // If no data is received, send an ajax request to parse the html
         parseData: function(){
           var self = this;
           self.$.parse.go();
+
           console.log("data parsed");
         },
         // Parse the ajax response for title and image
@@ -154,24 +158,24 @@
               titleMatch = response.match(/"twitter:title"\s*content=\s*"(.*)"/) || response.match(/"og:title"\s*content=\s*"(.*)"/), 
               imgMatch = response.match(/"twitter:image"\s*content=\s*"(.*)"/) || response.match(/"og:image"\s*content=\s*"(.*)"/);
               // descMatch = response.match(/"twitter:description"\s*content=\s*"(.*)"/) || response.match(/"og:description"\s*content=\s*"(.*)"/),
-          console.log(event);
-          console.log(r);
+
           self.storytitle = titleMatch ? titleMatch[1] : "";
           self.image = imgMatch ? imgMatch[1] : "";
           // self.description = descMatch ? descMatch[1] : "";
 
-          if(self.storytitle && self.image){
+          if(self.storytitle){ // Does not require image, in case it does not exist for story
             self.saveData();
           } else if (r.response == ""){
-            while(self.requests < 100){
-              self.parseData();
-              console.log(self.requests);
+            // Since ajax request is occasionally sometimes denied, try up to 10 times to account for error.
+            if(self.requests < 10){
               self.requests++;
-            } 
+              self.parseData();
+              console.log(self.requests);             
+            } else if (!self.storytitle){
+              // If no data is parsed, throw an error to enter data manually.
+              self.fire('th-error', {msg: "Could not retrieve story data. Please enter it manually."});
+            }
           }
-          // TODO: Create a loop to try again a few times if an error is received? 
-                  // If it is still not found, throw an error to enter data in manually
-                  // If data is entered manually, save it to firebase.
         },
         // After parsing html, saved the data to firebase with unique reference of the hash
         saveData: function(){
