@@ -184,7 +184,8 @@ Element providing a 3D carousel for either text or images.
        * @property transformProp
        * @type string
        */
-      transformProp: Modernizr.prefixed('transform'),
+      // transformProp: Modernizr.prefixed('transform'),
+      transformProp: "-webkit-transform",
 
       init: function() {
         var element = this;
