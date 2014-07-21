@@ -1,0 +1,192 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="thelma_core.html">
+<link rel="import" href="../core-ajax/core-ajax.html">
+
+<polymer-element name="th-story-link" attributes="width url storytitle image themecolor">
+  <template>
+      <core-style ref="theme"></core-style>
+      <style>
+        :host{
+          width: {{width}}
+        }
+
+        a {
+          text-decoration: none;
+        }
+
+        li {
+          list-style: none;
+          font-size: 0.8em;
+          font-weight: 300;
+          -webkit-background-size: cover;
+          -moz-background-size: cover;
+          -o-background-size: cover;
+          background-size: cover;
+          color: {{color}};
+          border-bottom: 2px solid {{bordercolor}};
+         }
+
+        .layer {
+          background-color: {{bgcolor}};
+          width: 100%;
+          height: 100%;
+          padding: 8px;
+          box-sizing: border-box;
+        }
+
+        .title {
+          margin: 4px 0px 0px 0px;
+          display: -webkit-box;
+          -webkit-box-orient: vertical;    
+          -webkit-line-clamp: 2;
+          overflow: hidden;        
+        }
+
+        .favicon {
+          display: inline-block;
+          position: absolute;
+          bottom: 7px;
+          right: 5px;
+          width: 16px;
+          height: 16px;
+          border-radius: 8px;
+          text-align: center;
+          padding-top: 0.15em;
+          box-sizing: border-box;
+        }
+
+        .favicon:before {
+          content: "\0074"; /* replace with correct thelma unicode symbol */
+        }
+
+      </style>
+      <core-ajax id="parse"
+        url={{requestUrl}}
+        handleAs="text"  
+        on-core-response="{{parseResponse}}">
+      </core-ajax>
+
+      <th-firebase id="firebase" directory="stories/"></th-firebase>
+
+      <!-- DON'T KNOW WHY BUT IF THIS IS NOT HERE, IT BREAKS -->
+      <div style="display:none;">{{image}}</div>
+      <!-- -->
+
+      <template if="{{storytitle}}">
+        <a href={{url}} target="_blank">
+          <li style=" background: url({{image}}) center center no-repeat; background-size: cover;"> 
+            <div class="layer">
+              <content></content>
+              <p class="title headline">{{storytitle}}</p>
+              <template if={{thelma}}> <span class="favicon"></span> </template>
+            </div>
+          </li>
+        </a>
+      </template>
+  </template>
+
+  <script>
+      Polymer('th-story-link', {
+        ready: function(){
+          var self = this;
+          self.requestUrl = self.url.replace(/(ftp|http|https):\/\//,'http://www.corsproxy.com/');
+          self.firebase = this.$.firebase;
+          self.requests = 0;
+          
+          // Create unique hash for each URL as a reference to saved object
+          self.hash = 0;
+          var i, chr, len;
+            if (self.url.length == 0) return self.hash;
+            for (i = 0, len = self.url.length; i < len; i++) {
+              chr   = self.url.charCodeAt(i);
+              self.hash  = ((self.hash << 5) - self.hash) + chr;
+              self.hash |= 0; // Convert to 32bit integer
+            }
+         
+          // Check if it's a thelma story for favicon
+          self.thelma = /.*thelma.*/.test(self.url);
+          console.log(self.thelma);
+
+          // Set styles based on light or dark theme
+          self.color = self.themecolor == "light" ? "black" : "white";
+          self.bgcolor = self.themecolor == "light" ? "rgba(255,255,255,0.5)" : "rgba(0,0,0,0.4)";
+          self.bordercolor = self.themecolor == "light" ? "rgba(0,0,0,0.4)" : "rgba(255,255,255,0.5)";
+
+          // Set up listeners for data events from firebase
+          self.firebase.addEventListener('th-data-ready', function(response) {
+            // Data found in firebase, so load into component
+            console.log("data received, now loading");
+            self.loadData(response.detail);
+          });
+          self.firebase.addEventListener('th-data-error', function(response) {
+            // No data in firebase for that URL, so call parse
+            console.log(response.detail);
+            self.parseData(); 
+          });
+         
+          // If an image and title are given, save it to firebase; otherwise, request it from firebase.
+          if(self.storytitle && self.image){
+            self.saveData();
+          } else {
+            self.requestData();
+          }
+  
+        },
+        // Request data from firebase, which will trigger either a data-ready or data-error event
+        requestData: function(){
+          var self = this;
+          self.firebase.load(self.hash); 
+          console.log("data requested");
+        },
+        // After data is received, set the component's attributes
+        loadData: function(d){
+          var self = this;
+          self.storytitle = self.storytitle || d.storytitle; 
+          self.image = self.image || d.image; 
+          console.log("data loaded");
+        },
+        // If no data is received, send an ajax request to parse the html
+        parseData: function(){
+          var self = this;
+          self.$.parse.go();
+
+          console.log("data parsed");
+        },
+        // Parse the ajax response for title and image
+        parseResponse: function(event, r) {
+          var self = this,
+              response = r.response,
+              // These matches work when content is listed after the name in the meta tag only.
+              titleMatch = response.match(/"twitter:title"\s*content=\s*"(.*)"/) || response.match(/"og:title"\s*content=\s*"(.*)"/), 
+              imgMatch = response.match(/"twitter:image"\s*content=\s*"(.*)"/) || response.match(/"og:image"\s*content=\s*"(.*)"/);
+              // descMatch = response.match(/"twitter:description"\s*content=\s*"(.*)"/) || response.match(/"og:description"\s*content=\s*"(.*)"/),
+
+          self.storytitle = titleMatch ? titleMatch[1] : "";
+          self.image = imgMatch ? imgMatch[1] : "";
+          // self.description = descMatch ? descMatch[1] : "";
+
+          if(self.storytitle){ // Does not require image, in case it does not exist for story
+            self.saveData();
+          } else if (r.response == ""){
+            // Since ajax request is occasionally sometimes denied, try up to 10 times to account for error.
+            if(self.requests < 10){
+              self.requests++;
+              self.parseData();
+              console.log(self.requests);             
+            } else if (!self.storytitle){
+              // If no data is parsed, throw an error to enter data manually.
+              self.fire('th-error', {msg: "Could not retrieve story data. Please enter it manually."});
+            }
+          }
+        },
+        // After parsing html, saved the data to firebase with unique reference of the hash
+        saveData: function(){
+          var self = this;
+          self.firebase.save({'url': self.url, 'storytitle': self.storytitle, 'image':self.image}, self.hash );
+          console.log("data saved");
+        }
+      });
+
+  </script>
+</polymer-element>
+
