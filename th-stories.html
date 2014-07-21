@@ -2,6 +2,11 @@
 <link rel="import" href="thelma_core.html">
 <link rel="import" href="th-story-link.html">
 
+<!-- 
+  The th-stories component serves as a container for th-story-links. 
+  It allows you to pass story-link data as an array of objects and groups them together, 
+  but th-story-link is not dependent on this; it can also be used in a <ul> or standalone.
+-->
 <polymer-element name="th-stories" attributes="width links themecolor">
   <template>
       <core-style ref="theme"></core-style>
