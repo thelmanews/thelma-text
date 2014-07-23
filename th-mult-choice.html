@@ -209,6 +209,7 @@
           console.log("Please press and hold.");
           var self = this;
           if (e.type="tap" && self.numTaps < 1){
+            // BUG: This is still getting called when hold is released.
             self.tapped = true;
             self.numTaps++;
           }
