@@ -24,6 +24,7 @@
           background-size: cover;
           color: {{color}};
           border-bottom: 4px solid {{bordercolor}};
+          cursor: pointer;
          }
 
         .layer {
@@ -73,15 +74,13 @@
       <!-- -->
 
       <template if="{{storytitle}}">
-        <a href={{url}} target="_blank">
-          <li style=" background: url({{image}}) center center no-repeat; background-size: cover;"> 
+          <li style="background: url({{image}}) center center no-repeat; background-size: cover;" on-down="{{tapDown}}" on-up="{{tapRelease}}"> 
             <div class="layer">
               <content></content>
               <p class="title headline">{{storytitle}}</p>
               <template if={{thelma}}> <span class="favicon"></span> </template>
             </div>
           </li>
-        </a>
       </template>
   </template>
 
@@ -184,6 +183,16 @@
           var self = this;
           self.firebase.save({'url': self.url, 'storytitle': self.storytitle, 'image':self.image}, self.hash );
           console.log("data saved");
+        },
+        // Use tap events to prevent navigating to links on hold event (preventing default for hold event does not work).
+        tapDown: function(e){
+          var self = this;
+          self.timeDown = e.timeStamp;
+        },
+        tapRelease: function(e){
+          var self = this,
+              holdTime = e.timeStamp - self.timeDown;
+          if (holdTime < 400){ window.open(self.url, '_blank');}
         }
       });
 
