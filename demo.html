@@ -8,7 +8,10 @@
 
   <link rel="import" href="../thelma-utils/th-theme.html">
 
-  <link rel="import" href="../thelma-charts/th-donut-chart.html">
+  <link rel="import" href="../thelma-text/th-text.html">
+  <link rel="import" href="../thelma-text/th-countup-num.html">
+  <link rel="import" href="../thelma-text/th-countdown-reveal.html">
+  <link rel="import" href="../thelma-text/th-stories.html">
 
   <style>
     body {
@@ -23,8 +26,17 @@
 
   <p>thelma-components looks like this:</p>
 
+  <th-text>Text component</th-text>
 
-  <th-donut-chart animateOnInit="true" style="margin: 20px;"></th-donut-chart>
+
+  <th-countup-num type="headline" animateOnInit="true" width="350px" numberSize="80px" growNumber="true"> Count to 479 </th-countup-num>
+
+  <th-countdown-reveal animateOnInit="true" startFrom="3" width="270px" height="200px" style="margin: 20px"> 5 million low-income Americans still can't get health insurance under Obamacare.</th-countdown-reveal>
+
+  <th-stories width="300px" style="margin: 20px"></th-stories>
+
+
+
 
 
 </body>
