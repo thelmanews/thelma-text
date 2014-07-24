@@ -148,7 +148,7 @@
             <p class="headline">{{question}}</p>
             <template if="{{tapped}}"> <p class="flash">Please press and hold</p> </template>
             <template repeat="{{choice in choices}}">
-              <li on-tap={{tap}} on-holdpulse={{hold}} on-release={{release}} id="{{choice.id}}">
+              <li on-tap={{tap}} on-holdpulse={{hold}} on-release={{release}} >
                   <div class="img-choice release"  style="background-image: url('{{choice.image}}');">
                     <div class="overlay"></div>
                   </div>
@@ -177,8 +177,8 @@
       Polymer('th-mult-choice', {
         question: "Which one would you choose?",
         choices: [
-          {'id': 1, 'text': 'Twitter', 'image':'images/twitter.jpg', 'answer': false},
-          {'id': 2, 'text': 'Person', 'image':'images/person.jpg', 'answer': true}
+          {'text': 'Twitter', 'image':'images/twitter.jpg', 'answer': false},
+          {'text': 'Person', 'image':'images/person.jpg', 'answer': true}
         ],
         afterText: "The correct answer is:",
         ready: function(){
@@ -190,6 +190,8 @@
           var self = this;
           self.foreground = window.CoreStyle.g.theme.foreground1;
           self.themecolor = window.CoreStyle.g.theme.accent1;
+          
+          // Convert theme hexcode to RGB to be used as semi-transparent inset shadow
           self.rgb = (function(){
             var result =  /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(self.themecolor);
               return result ? 
