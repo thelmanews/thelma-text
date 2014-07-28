@@ -86,7 +86,7 @@
 
   <script>
       Polymer('th-story-link', {
-        ready: function(){
+        domReady: function(){
           var self = this;
           self.requestUrl = self.url.replace(/(ftp|http|https):\/\//,'http://www.corsproxy.com/');
           self.firebase = this.$.firebase;
