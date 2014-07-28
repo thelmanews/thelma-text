@@ -75,7 +75,7 @@
 
       <template if="{{storytitle}}">
           <li style="background: url({{image}}) center center no-repeat; background-size: cover;" on-down="{{tapDown}}" on-up="{{tapRelease}}"> 
-            <div class="layer">
+            <div class="layer" style="background-color: {{bgcolor}}">
               <content></content>
               <p class="title headline">{{storytitle}}</p>
               <template if={{thelma}}> <span class="favicon"></span> </template>
