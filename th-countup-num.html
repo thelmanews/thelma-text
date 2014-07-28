@@ -11,11 +11,11 @@
         :host {
           display: inline-block;
           position: relative;
-          width: {{width}};
+          width: {{width + "px"}};
         }
 
         #container {
-          width: {{width}};
+          width: {{width + "px"}};
         }
 
         span {
@@ -24,14 +24,14 @@
         }
 
         #num, #unit_before, #unit_after {
-          font-size: {{numberSizeCurrent}};
+          font-size: {{numberSizeCurrent + "px"}};
           color: {{color}};
         }
 
       </style>
       <div id="container">
         <th-text markdown="false" type="{{type}}">
-          <span id="before_num"></span><span id="unit_before"></span><span style="font-size: {{numberSizeCurrent}};" id="num"></span><span id="unit_after"></span><span id="after_num"></span>
+          <span id="before_num"></span><span id="unit_before"></span><span style="font-size: {{numberSizeCurrent + "px"}};" id="num"></span><span id="unit_after"></span><span id="after_num"></span>
         </th-text>
       </div>
   </template>
@@ -102,11 +102,10 @@
           
           if (self.growNumber == "true"){
             self.fontsize = 12;
-            self.numberSize = parseInt(self.numberSize);
             var count = setInterval(function(){               
                if (self.fontsize < self.numberSize){
                  self.fontsize++;
-                 self.numberSizeCurrent = self.fontsize + "px";
+                 self.numberSizeCurrent = self.fontsize;
                } else {
                  clearInterval(count);
                }
