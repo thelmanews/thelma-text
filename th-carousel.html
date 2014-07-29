@@ -22,7 +22,7 @@ Element providing a 3D carousel for either text or images.
 @status alpha
 @homepage http://aendrew.github.io/th-carousel
 -->
-<polymer-element name="th-carousel" extends="th-animated" attributes="isHorizontal backfaces width fontSize">
+<polymer-element name="th-carousel" extends="th-animated" attributes="animateOn interval isHorizontal backfaces width height fontSize">
 
   <template>
 
@@ -30,16 +30,16 @@ Element providing a 3D carousel for either text or images.
 
     <style type="text/css">
       :host section.container {
-        width: 210px;
-        height: 140px;
+        width: {{width + "px"}};
+        height: {{height + "px"}};
         position: relative;
         margin: 0 auto 40px;
        /* border: 1px solid #CCC;*/
         display: block;
-        -webkit-perspective: 1100px;
+       /* -webkit-perspective: 1100px; 
            -moz-perspective: 1100px;
              -o-perspective: 1100px;
-                perspective: 1100px;
+                perspective: 1100px;*/
       }
 
 
@@ -70,14 +70,11 @@ Element providing a 3D carousel for either text or images.
       ::content > * {
         display: block;
         position: absolute;
-        width: 186px;
-        height: 116px;
+        width: {{width + "px"}};
         left: 10px;
         top: 10px;
         vertical-align: middle;
-        font-size: {{fontSize}};
-        
-        
+        font-size: {{fontSize + "px"}};
         text-align: center;
         margin: 0;
       }
@@ -92,7 +89,7 @@ Element providing a 3D carousel for either text or images.
     </style>
 
     <section class="container">
-      <div id="carousel">
+      <div id="carousel" class="panels-backface-invisible">
         <content></content>
       </div>
     </section>
@@ -131,6 +128,23 @@ Element providing a 3D carousel for either text or images.
       rotation: 0,
 
       /**
+       * The `animateOn` property stores the event trigger for panel transitions
+       *
+       * @property rotation
+       * @type string
+       * @options 'tap', 'interval', 'none'
+       */
+      animateOn: "tap",
+
+      /**
+       * The `interval` property stores interval time between panel transitions.
+       *
+       * @property interval
+       * @type integer
+       */
+      interval: 3000,
+
+      /**
        * The `radius` property stores radius of the carousel.
        *
        * @property radius
@@ -147,20 +161,20 @@ Element providing a 3D carousel for either text or images.
       panelCount: 0,
 
       /**
-       * The `width` property specifies width of the component.
+       * The `width` property specifies width of the component in pixels.
        *
        * @attribute width
-       * @type css width
+       * @type integer
        */
-      width: '300px',
+      width: '300',
 
       /**
-       * The `fontSize` property specifies fontSize.
+       * The `fontSize` property specifies fontSize in pixels.
        *
        * @attribute fontSize
-       * @type css fontSize
+       * @type integer
        */
-      fontSize: '18px',
+      fontSize: '18',
 
       /**
        * The `totalPanelCount` property specifies the total number of panels.
@@ -201,8 +215,8 @@ Element providing a 3D carousel for either text or images.
 
         this.totalPanelCount = this.children;
 
-        if(!element.backfaces) {
-          carousel.classList.add('panels-backface-invisible');
+        if(element.backfaces) {
+          carousel.classList.remove('panels-backface-invisible');
         }
 
         // populate on startup
@@ -237,9 +251,12 @@ Element providing a 3D carousel for either text or images.
 
         for ( i = 0; i < this.panelCount; i++ ) {
           panel = elements[i];
-          panel.addEventListener('click' ,function() {
-            element.animate();
-          });
+          if (this.animateOn == "tap"){
+            panel.addEventListener('tap' ,function() {
+              element.animate();
+            });
+          } 
+
 
           angle = this.theta * i;
           panel.style.opacity = 1;
@@ -247,6 +264,12 @@ Element providing a 3D carousel for either text or images.
           //panel.style.backgroundColor = 'hsla(' + angle + ', 100%, 50%, 0.8)';
           // rotate panel, then push it out in 3D space
           panel.style[ this.transformProp ] = this.rotateFn + '(' + angle + 'deg) translateZ(' + this.radius + 'px)';
+        }
+
+        if (this.animateOn == "interval"){
+         setInterval(function(){
+          element.animate();
+         }, this.interval)
         }
 
         // hide other panels
