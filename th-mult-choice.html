@@ -2,6 +2,15 @@
 <link rel="import" href="../thelma-core/thelma_core.html">
 <link rel="import" href="th-carousel.html">
 
+<!--
+Element providing a multiple choice quiz, animated via th-carousel
+
+@element th-mult-choice
+@blurb Element providing a multiple choice quiz, animated via th-carousel.
+@status alpha
+@homepage http://github.com/thelmanews/thelma-text/blob/master/th-mult-choice.html
+-->
+
 <polymer-element name="th-mult-choice" attributes="width height question answerText choices">
   <template>
       <core-style ref="theme"></core-style>
@@ -118,13 +127,37 @@
 
   <script>
       Polymer('th-mult-choice', {
+        /**
+         * The 'question' attribute stores the question text.
+         * @type {String}
+         */
         question: "Which one would you choose?",
+
+        /**
+         * The 'choices' attribute specifies all the answer choices
+         * @type {Array}
+         */
         choices: [
           {'text': 'Twitter', 'image':'images/twitter.jpg', 'answer': false},
           {'text': 'Facebook', 'image':'images/person.jpg', 'answer': true}
         ],
+
+        /** 
+         * The 'width' attribute specifies the width of the component in pixels.
+         * @type {Number}
+         */
         width: 280,
+
+        /** 
+         * The 'height' attribute specifies the height of the component in pixels.
+         * @type {Number}
+         */
         height: 280,
+
+        /**
+         * The 'answerText' attribute specifies the text that prefaces the correct answer(s).
+         * @type {String}
+         */
         answerText: "The correct answer is:",
         domReady: function(){
           var self = this;
@@ -137,6 +170,9 @@
             return choice.answer;
           }).length;
         },
+        /**
+         * The 'setColors' method detects the theme and chooses the correct colors. It also converts the theme color into RGB format to be applied in RGBA format in CSS
+         */
         setColors: function(){
           var self = this;
           self.foreground = window.CoreStyle.g.theme.foreground1;
@@ -149,8 +185,13 @@
                 (parseInt(result[1], 16)+","+parseInt(result[2], 16)+","+parseInt(result[3], 16)) : "0,0,0";
           })();
         },
+        /**
+         * The 'tap' method is called when user attempts to tap an answer choice, and displays a flash message for 4 seconds instructing user to hold selection.
+         * @param  {object} e         e is the event object.
+         * @param  {object} detail    detail is event detail.
+         * @param  {object} selection selection is the node tapped.
+         */
         tap: function(e, detail, selection){
-          console.log("Please press and hold.");
           var self = this;
           if ((selection.className != "selected") && (self.numTaps < 1)){
             self.tapped = true;
@@ -160,11 +201,23 @@
             self.tapped = false;
           }, 4000)
         },
+        /**
+         * The 'hold' method is called when user holds down a selection and records the holdTime.
+         * @param  {object} e         e is the event object.
+         * @param  {object} detail    detail is event detail.
+         * @param  {object} selection selection is the node tapped.
+         */
         hold: function(e, detail, selection){
           var self = this;
-          selection.className = "hold";
+          selection.className = "hold"; // This triggers the fill styling.
           self.holdTime = e.holdTime;
         },
+        /**
+         * The 'release' method is called when user releases the selection. If an answer was selected, it calls the 'selectAnswer' method.
+         * @param  {object} e         e is the event object.
+         * @param  {object} detail    detail is event detail.
+         * @param  {object} selection selection is the node tapped.
+         */
         release: function(e, detail, selection){
           var self = this;
           selection.className = "release";
@@ -172,17 +225,23 @@
           if (self.holdTime > 1200) {
             self.answersSelected++;
             self.selectAnswer(selection);
-            
           }
         },
+        /**
+         * The 'selectAnswer' method displays the check mark on the choice and calls showAnswer if the correct number of answers have been chosen.
+         * @param  {object} selection selection is the node selected.
+         */
         selectAnswer: function(selection){
           var self = this;
           selection.className = "selected";
           if (self.answersSelected == self.numAnswers){
             self.showAnswer();
           }
-          // TODO: darken the other choices?
         },
+        /**
+         * The 'showAnswer' method calls the animate method on the carousel to display the answer panel.
+         * @return {[type]} [description]
+         */
         showAnswer: function(){
           var self = this;
 
@@ -191,24 +250,26 @@
             self.answered = true;
           }, 2000)
         },
+        /**
+         * The 'answerFilter' method called from the template filters out only the choices marked 'answer: true' to be displayed in answer div.
+         * @param  {Array} value  passed from template
+         * @return {Object}       returns answers, an array of choices  with answer: true
+         */
         answerFilter: function(value){
-          var answer = value.filter(function(choice){
+          var answers = value.filter(function(choice){
             return choice.answer == true;
           })
-          return answer;
+          return answers;
         },
+        /**
+         * The 'reset' method checks to see if the answer panel is showing, and if so, animates the carousel to return to the question panel.
+         */
         reset: function(){
           var self = this;
           if (self.answered){
             self.$.carousel.animate();
           }
-        },
-        blockDefault: function(e, detail, selection){
-          console.log(e);
-          // e.preventDefault();
-          e.stopPropagation();
         }
-        // TODO: fix positioning of component / and make more dynamic to size changes.
       });
   </script>
 </polymer-element>
