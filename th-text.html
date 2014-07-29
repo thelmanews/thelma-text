@@ -7,11 +7,14 @@
     <core-style ref="theme"></core-style>
     <style>
       :host {
+        width: {{width}};
+        color:{{color}};
+      }
+
+      #container > * {
         margin: 0;
         -webkit-margin-before: 0;
         -webkit-margin-after: 0;
-        width: {{width}};
-        color:{{color}};
       }
 
       strong {
@@ -29,6 +32,7 @@
       ol {
         list-style-type: decimal;
       }
+
     </style>
     <div id="container" class="{{type}}" style="color:{{color}};"><content></content></div>
   </template>
@@ -39,7 +43,7 @@
       Polymer('th-text', {
         type: "mainpoint",  // options: headline, mainpoint, submainpoint, subpoint, chart, label, caps
         markdown: true, // set false if other components are embedded (i.e. countup)
-        ready: function() {
+        domReady: function() {
           this.$.container.className = this.type;
           if (this.markdown) {
             this.text = this.trim(this.textContent);
