@@ -71,7 +71,6 @@ Element providing a 3D carousel for either text or images.
         display: block;
         position: absolute;
         width: {{width + "px"}};
-        /*height: 116px;*/
         left: 10px;
         top: 10px;
         vertical-align: middle;
@@ -90,7 +89,7 @@ Element providing a 3D carousel for either text or images.
     </style>
 
     <section class="container">
-      <div id="carousel">
+      <div id="carousel" class="panels-backface-invisible">
         <content></content>
       </div>
     </section>
@@ -216,8 +215,8 @@ Element providing a 3D carousel for either text or images.
 
         this.totalPanelCount = this.children;
 
-        if(!element.backfaces) {
-          carousel.classList.add('panels-backface-invisible');
+        if(element.backfaces) {
+          carousel.classList.remove('panels-backface-invisible');
         }
 
         // populate on startup
