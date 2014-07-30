@@ -1,52 +1,36 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../thelma-core/thelma_core.html">
+<link rel="import" href="th-carousel.html">
 
-<polymer-element name="th-mult-choice" attributes="width question afterText choices">
+<!--
+Element providing a multiple choice quiz, animated via th-carousel
+
+@element th-mult-choice
+@blurb Element providing a multiple choice quiz, animated via th-carousel.
+@status alpha
+@homepage http://github.com/thelmanews/thelma-text/blob/master/th-mult-choice.html
+-->
+
+<polymer-element name="th-mult-choice" attributes="width height question answerText choices">
   <template>
       <core-style ref="theme"></core-style>
       <style>
         :host {
+          position: relative;
+          display: inline-block;
           width: {{width + "px"}};
-        }
-
-        .info {
-          position: absolute;
-          width: 100%;
-          height: 100%;
-          -webkit-transform-style: preserve-3d;
-          -moz-transform-style: preserve-3d;
-          -o-transform-style: preserve-3d;
-          -ms-transform-style: preserve-3d;
-          transform-style: preserve-3d;
+          height: {{height + "px"}};
         }
 
         .img-choice {
-          height: 90px;
-          width: 90px;
+          height: {{choiceSize + "px"}};
+          width: {{choiceSize + "px"}};
           margin: 0 auto;
-          border-radius: 45px;
+          border-radius: {{choiceSize/2 + "px"}};
           background-size: cover;
-          margin-bottom: 12px;
-          padding-top: 20px;
+          padding-top: 12%;
           box-sizing: border-box;
-          font-size: 0px;
           border: 4px solid {{foreground1}};
-        }
-
-        .info > div {
-          width: 100%;
-          height: 100%;
-          background-position: center center;
-          -webkit-transition: all 0.8s linear 2s;
-          -moz-transition: all 0.8s linear 2s;
-          -o-transition: all 0.8s linear 2s;
-          -ms-transition: all 0.8s linear 2s;
-          transition: all 0.8s linear 2s;
-          -webkit-transform-origin: 50% 0%;
-          -moz-transform-origin: 50% 0%;
-          -o-transform-origin: 50% 0%;
-          -ms-transform-origin: 50% 0%;
-          transform-origin: 50% 0%;
         }
 
         .selected .img-choice {
@@ -54,49 +38,17 @@
         }
 
         .selected .img-choice:before {
-          font-size: 40px;
+          font-size: {{choiceSize/2 + "px"}};
           content: '\2714';
           color: {{foreground}};
-        }
-
-        .question-hide {
-          -webkit-transform: translate3d(0,0,-220px) rotate3d(1,0,0,90deg);
-          -moz-transform: translate3d(0,0,-220px) rotate3d(1,0,0,90deg);
-          -o-transform: translate3d(0,0,-220px) rotate3d(1,0,0,90deg);
-          -ms-transform: translate3d(0,0,-220px) rotate3d(1,0,0,90deg);
-          transform: translate3d(0,0,-220px) rotate3d(1,0,0,90deg);
-          opacity: 0;
-        }
-
-        .answer-show {
-          -webkit-transform: rotate3d(1,0,0,0deg);
-          -moz-transform: rotate3d(1,0,0,0deg);
-          -o-transform: rotate3d(1,0,0,0deg);
-          -ms-transform: rotate3d(1,0,0,0deg);
-          transform: rotate3d(1,0,0,0deg);
-          opacity: 1;
-        }
-
-        .answer {
-          -webkit-transform: translate3d(0,280px,0) rotate3d(1,0,0,-90deg);
-          -moz-transform: translate3d(0,280px,0) rotate3d(1,0,0,-90deg);
-          -o-transform: translate3d(0,280px,0) rotate3d(1,0,0,-90deg);
-          -ms-transform: translate3d(0,280px,0) rotate3d(1,0,0,-90deg);
-          transform: translate3d(0,280px,0) rotate3d(1,0,0,-90deg);
-          opacity: 0;
         }
 
         li {
           display: inline-block;
           list-style: none;
-          width: 49%;
           margin: 0;
           padding: 0;
           text-align: center;
-        }
-
-        li.show {
-          width: 100%;
         }
 
         .release .img-choice {
@@ -126,7 +78,7 @@
           opacity: 0;
           text-align: center;
           position: absolute;
-          bottom: -195px;
+          bottom: {{choiceSize * 0.8 + "px"}};
           display: block;
           width: 100%;
           text-shadow: 0px 0px 30px rgba(0, 0, 0,1);
@@ -138,54 +90,89 @@
            60% {-webkit-transform: scale(1,1); opacity: 1.0; }
            100% {-webkit-transform: scale(1, 1); opacity: 0.0;}
         }
-
-
     
       </style>
       <div id="container">
-        <div class="info">
-          <div id="question" class="question">
-            <p class="headline">{{question}}</p>
-            <template if="{{tapped}}"> <p class="flash">Please press and hold</p> </template>
-            <template repeat="{{choice in choices}}">
-              <li on-tap={{tap}} on-holdpulse={{hold}} on-release={{release}} >
-                  <div class="img-choice release"  style="background-image: url('{{choice.image}}');">
-                    <div class="overlay"></div>
-                  </div>
-                  <template if="{{choice.text}}">
-                    <p class="label">{{choice.text}}</p>
-                  </template>
-              </li>
-            </template>
-          </div>
-          <div id="answer" class="answer">
-            <p class="headline fadein">{{afterText}}</p>
-            <template repeat="{{ choice in choices | answerFilter }}">
-            <li class="show">
-              <div class="img-choice" style="background-image: url('{{choice.image}}');">
-                <div class="overlay"></div>
+          <th-carousel id="carousel" animateOn="none" width="{{width}}" height="{{height}}" on-tap="{{blockDefault}}">
+            <div id="question">
+              <p class="headline">{{question}}</p>
+              <template if="{{tapped}}"> <p class="flash">Please press and hold</p> </template>
+              <div class="choices" horizontal layout>
+              <template repeat="{{choice in choices}}">
+                <li on-tap={{tap}} on-holdpulse={{hold}} on-release={{release}} flex>
+                    <div class="img-choice release"  style="background-image: url('{{choice.image}}');">
+                      <div class="overlay"></div>
+                    </div>
+                    <template if="{{choice.text}}">
+                      <p class="label">{{choice.text}}</p>
+                    </template>
+                </li>
+              </template>
               </div>
-              <p class="label">{{choice.text}}</p>
-            </li>
-            </template>
-          </div>
-        </div>
+            </div>
+            <div id="answer">
+              <p class="headline fadein">{{answerText}}</p>
+              <template repeat="{{ choice in choices | answerFilter }}">
+              <li class="show">
+                <div class="img-choice" style="background-image: url('{{choice.image}}');">
+                  <div class="overlay"></div>
+                </div>
+                <p class="label">{{choice.text}}</p>
+              </li>
+              </template>
+            </div>
+          </th-carousel>
       </div>
   </template>
 
   <script>
       Polymer('th-mult-choice', {
+        /**
+         * The 'question' attribute stores the question text.
+         * @type {String}
+         */
         question: "Which one would you choose?",
+
+        /**
+         * The 'choices' attribute specifies all the answer choices
+         * @type {Array}
+         */
         choices: [
           {'text': 'Twitter', 'image':'images/twitter.jpg', 'answer': false},
-          {'text': 'Person', 'image':'images/person.jpg', 'answer': true}
+          {'text': 'Facebook', 'image':'images/person.jpg', 'answer': true}
         ],
-        afterText: "The correct answer is:",
+
+        /** 
+         * The 'width' attribute specifies the width of the component in pixels.
+         * @type {Number}
+         */
+        width: 280,
+
+        /** 
+         * The 'height' attribute specifies the height of the component in pixels.
+         * @type {Number}
+         */
+        height: 280,
+
+        /**
+         * The 'answerText' attribute specifies the text that prefaces the correct answer(s).
+         * @type {String}
+         */
+        answerText: "The correct answer is:",
         domReady: function(){
           var self = this;
           self.numTaps = 0;
           self.setColors();
+          self.answered = false;
+          self.choiceSize = Math.round((self.width / self.choices.length ) * 0.65);
+          self.answersSelected = 0;
+          self.numAnswers = self.choices.filter(function(choice){
+            return choice.answer;
+          }).length;
         },
+        /**
+         * The 'setColors' method detects the theme and chooses the correct colors. It also converts the theme color into RGB format to be applied in RGBA format in CSS
+         */
         setColors: function(){
           var self = this;
           self.foreground = window.CoreStyle.g.theme.foreground1;
@@ -198,8 +185,13 @@
                 (parseInt(result[1], 16)+","+parseInt(result[2], 16)+","+parseInt(result[3], 16)) : "0,0,0";
           })();
         },
+        /**
+         * The 'tap' method is called when user attempts to tap an answer choice, and displays a flash message for 4 seconds instructing user to hold selection.
+         * @param  {object} e         e is the event object.
+         * @param  {object} detail    detail is event detail.
+         * @param  {object} selection selection is the node tapped.
+         */
         tap: function(e, detail, selection){
-          console.log("Please press and hold.");
           var self = this;
           if ((selection.className != "selected") && (self.numTaps < 1)){
             self.tapped = true;
@@ -209,40 +201,75 @@
             self.tapped = false;
           }, 4000)
         },
+        /**
+         * The 'hold' method is called when user holds down a selection and records the holdTime.
+         * @param  {object} e         e is the event object.
+         * @param  {object} detail    detail is event detail.
+         * @param  {object} selection selection is the node tapped.
+         */
         hold: function(e, detail, selection){
           var self = this;
-          selection.className = "hold";
+          selection.className = "hold"; // This triggers the fill styling.
           self.holdTime = e.holdTime;
         },
+        /**
+         * The 'release' method is called when user releases the selection. If an answer was selected, it calls the 'selectAnswer' method.
+         * @param  {object} e         e is the event object.
+         * @param  {object} detail    detail is event detail.
+         * @param  {object} selection selection is the node tapped.
+         */
         release: function(e, detail, selection){
           var self = this;
           selection.className = "release";
           
           if (self.holdTime > 1200) {
+            self.answersSelected++;
             self.selectAnswer(selection);
           }
         },
+        /**
+         * The 'selectAnswer' method displays the check mark on the choice and calls showAnswer if the correct number of answers have been chosen.
+         * @param  {object} selection selection is the node selected.
+         */
         selectAnswer: function(selection){
           var self = this;
           selection.className = "selected";
-          self.showAnswer();
-          // TODO: darken the other choices
+          if (self.answersSelected == self.numAnswers){
+            self.showAnswer();
+          }
         },
+        /**
+         * The 'showAnswer' method calls the animate method on the carousel to display the answer panel.
+         * @return {[type]} [description]
+         */
         showAnswer: function(){
           var self = this;
-          self.$.question.className = "question-hide";
-          self.$.answer.className = "answer-show";
+
+          setTimeout(function(){
+            self.$.carousel.animate(); 
+            self.answered = true;
+          }, 2000)
         },
+        /**
+         * The 'answerFilter' method called from the template filters out only the choices marked 'answer: true' to be displayed in answer div.
+         * @param  {Array} value  passed from template
+         * @return {Object}       returns answers, an array of choices  with answer: true
+         */
         answerFilter: function(value){
-          var answer = value.filter(function(choice){
+          var answers = value.filter(function(choice){
             return choice.answer == true;
           })
-          return answer;
+          return answers;
         },
+        /**
+         * The 'reset' method checks to see if the answer panel is showing, and if so, animates the carousel to return to the question panel.
+         */
         reset: function(){
-          // TODO
+          var self = this;
+          if (self.answered){
+            self.$.carousel.animate();
+          }
         }
-        // TODO: fix positioning of component / and make more dynamic to size changes.
       });
   </script>
 </polymer-element>
