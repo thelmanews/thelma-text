@@ -2,7 +2,7 @@
 <link rel="import" href="../thelma-core/thelma_core.html">
 
 
-<polymer-element name="th-text" extends="th-animated" attributes="align type markdown text width">
+<polymer-element name="th-text" extends="th-animated" attributes="align type markdown text width highlighting">
   <template>
     <core-style ref="theme"></core-style>
     <style>
@@ -16,6 +16,12 @@
         -webkit-margin-before: 0;
         -webkit-margin-after: 0;
         text-align: {{align}};
+      }
+
+      #container.highlighting > * {
+        background-color: {{highlighting}};
+        display: inline;
+        box-shadow: 10px 0 0 {{highlighting}}, -10px 0 0 {{highlighting}};
       }
 
       strong {
@@ -46,8 +52,13 @@
         type: "mainpoint",  // options: headline, mainpoint, submainpoint, subpoint, chart, label, caps
         align: "left",  // options: left, right, center, justify
         markdown: true, // set false if other components are embedded (i.e. countup)
+        highlighting: '', // enter a color for text highlights
         domReady: function() {
-          this.$.container.className = this.type;
+          
+          if(this.highlighting){
+            this.$.container.classList.add("highlighting");
+          }
+
           if (this.markdown) {
             this.text = this.trim(this.textContent);
           }
