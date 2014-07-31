@@ -67,7 +67,7 @@
           // container.className = this.type; // don't need this with text component included
 
           if(beforeAfter && beforeAfter.length>0) {
-            var splitUnitsBefore = beforeAfter[0].match(/(.*)(#|%|\$)$/); // matches 1) everything else 2) symbol at the end of the line
+            var splitUnitsBefore = beforeAfter[0].match(/(.*)(#|%|\+|-|\$)$/); // matches 1) everything else 2) symbol at the end of the line
             if (splitUnitsBefore) {
               beforeEl.innerText = splitUnitsBefore[1];
               unitBefore.innerText = splitUnitsBefore[2];
@@ -77,7 +77,7 @@
           }
 
           if(beforeAfter && beforeAfter.length>1) {
-            var splitUnitsAfter = beforeAfter[1].match(/^(#|%|\$)(.*)/); // matches 1) symbol at beginning of line 2) everything else
+            var splitUnitsAfter = beforeAfter[1].match(/^(#|%|\+|-|\$)(.*)/); // matches 1) symbol at beginning of line 2) everything else
             if (splitUnitsAfter) {
               afterEl.innerText = splitUnitsAfter[2];
               unitAfter.innerText = splitUnitsAfter[1];
