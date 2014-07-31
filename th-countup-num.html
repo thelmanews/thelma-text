@@ -31,7 +31,11 @@
       </style>
       <div id="container">
         <th-text markdown="false" type="{{type}}">
-          <span id="before_num"></span><span id="unit_before"></span><span style="font-size: {{numberSizeCurrent}}px; color:{{color}}" id="num"></span><span id="unit_after"></span><span id="after_num"></span>
+          <span id="before_num"></span>
+          <span id="unit_before" style="font-size: {{numberSizeCurrent}}px; color:{{color}}"></span>
+          <span id="num" style="font-size: {{numberSizeCurrent}}px; color:{{color}}" ></span>
+          <span id="unit_after" style="font-size: {{numberSizeCurrent}}px; color:{{color}}"></span>
+          <span id="after_num"></span>
         </th-text>
       </div>
   </template>
