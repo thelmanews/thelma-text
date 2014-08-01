@@ -11,7 +11,8 @@
     "core-ajax": "Polymer/core-ajax#~0.3.3",
     "modernizr": "~2.8.3",
     "thelma-core": "https://github.com/thelmanews/thelma-core.git",
-    "thelma-utils": "https://github.com/thelmanews/thelma-utils.git"
-
+    "thelma-utils": "https://github.com/thelmanews/thelma-utils.git",
+    "google-youtube": "GoogleWebComponents/google-youtube#master",
+    "google-apis": "GoogleWebComponents/google-apis#master"
   }
 }
