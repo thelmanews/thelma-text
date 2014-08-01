@@ -1,0 +1,42 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../thelma-core/thelma_core.html">
+<link rel="import" href="../core-ajax/core-ajax.html">
+
+<polymer-element name="th-instagram" attributes="url tag clientId count">
+  <template>
+      <core-style ref="theme"></core-style>
+      <style>
+        :host{
+          
+        }        
+
+      </style>
+      <core-ajax id="ajax" auto
+        url="{{requestUrl}}"
+        handleAs="json"  
+        on-core-response="{{parseResponse}}">
+      </core-ajax>
+  </template>
+
+  <script>
+      Polymer('th-instagram', {
+        domReady: function(){
+          var self = this;
+          
+          self.requestUrl = self.url.replace(/(ftp|http|https):\/\//,'http://www.corsproxy.com/');
+          
+
+  
+        },
+
+        // Parse the ajax response for title and image
+        parseResponse: function(event, r) {
+          var self = this;
+          console.log("***");
+          console.log(r);
+        }
+      });
+
+  </script>
+</polymer-element>
+
