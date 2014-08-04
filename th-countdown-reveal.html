@@ -82,9 +82,11 @@
       </style>
 
       <div id="container" class="headline"> 
-        <span id="countdown" class="animate">{{number}}</span>
-        <div id="countdownImg" class="hidden" style="background: url({{image}}) center center no-repeat; background-size: cover;">
-          <div id="content" class="hidden"><content></content></div>
+        <span id="countdown" class="animate" style="text-align: center;
+          font-size: {{fontSize}};">{{number}}</span>
+        <div id="countdownImg" class="hidden" style="background: url({{image}}) center center no-repeat; background-size: cover;  ">
+          <div id="content" class="hidden" style="display: table-cell; 
+         vertical-align: middle;"><content></content></div>
         </div>
       </div>
 
