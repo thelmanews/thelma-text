@@ -95,7 +95,7 @@ Element providing a multiple choice quiz, animated via th-carousel
       <div id="container">
           <th-carousel id="carousel" animateOn="none" width="{{width}}" height="{{height}}" on-tap="{{blockDefault}}">
             <div id="question">
-              <p class="headline">{{question}}</p>
+              <p class="mainpoint">{{question}}</p>
               <template if="{{tapped}}"> <p class="flash">Please press and hold</p> </template>
               <div class="choices" horizontal layout>
               <template repeat="{{choice in choices}}">
