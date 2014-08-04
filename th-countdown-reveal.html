@@ -81,10 +81,16 @@
         }
       </style>
 
+      <!-- Inline styles are for mobile support --> 
       <div id="container" class="headline"> 
-        <span id="countdown" class="animate">{{number}}</span>
+        <span id="countdown" class="animate" style="text-align: center; font-size: {{fontSize}};">
+          {{number}}
+        </span>
         <div id="countdownImg" class="hidden" style="background: url({{image}}) center center no-repeat; background-size: cover;">
-          <div id="content" class="hidden"><content></content></div>
+          <div id="content" class="hidden" style="display: table-cell; 
+         vertical-align: middle;">
+            <content></content>
+          </div>
         </div>
       </div>
 
