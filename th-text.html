@@ -21,8 +21,8 @@
       #container.highlighting > * {
         line-height: 1.2;
         display: inline;
-        background-color: {{highlighting}};
-        box-shadow: 0.3em 0 0 {{highlighting}}, -0.3em 0 0 {{highlighting}};
+        background-color: {{highlighting}}; /* Not supported in mobile */
+        box-shadow: 0.3em 0 0 {{highlighting}}, -0.3em 0 0 {{highlighting}}; /* Not supported in mobile */
       }
 
       strong {
@@ -43,7 +43,9 @@
 
 
     </style>
-    <div id="container" class="{{type}}" style="color:{{color}};"><content></content></div>
+
+    <!-- Add inline styles for mobile --> 
+    <div id="container" class="{{type}}" style="color:{{color}}; width:{{width}}px; text-align: {{align}};"><content></content></div>
   </template>
   <script src="../marked/lib/marked.js"></script>
 
@@ -57,12 +59,20 @@
         domReady: function() {
           
           if(this.highlighting){
+            // Styles inherited from class work well for desktop browsers
             this.$.container.classList.add("highlighting");
+
+            // Inline styles for mobile version while Polymer does not support use of 
+            // variables in style tags on mobile devices
+            this.$.container.style.backgroundColor = this.highlighting;
+            this.$.container.style.boxShadow = "0.3em 0 0 "+this.highlighting+", -0.3em 0 0 "+this.highlighting;
           }
 
           if (this.markdown) {
             this.text = this.trim(this.textContent);
           }
+
+
         },
         textChanged: function() {
           this.$.container.innerHTML = this.markdown ? marked(this.text.toString()) : this.textContent;
