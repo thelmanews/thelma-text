@@ -57,32 +57,27 @@
         markdown: true, // set false if other components are embedded (i.e. countup)
         highlighting: '', // enter a color for text highlights
         domReady: function() {
-          
+          if (this.markdown) {
+            this.text = this.trim(this.textContent);
+          }
+
+        },
+        textChanged: function() {
+          this.$.container.innerHTML = this.markdown ? marked(this.text.toString()) : this.textContent;
+
           if(this.highlighting){
             // Styles inherited from class work well for desktop browsers
             this.$.container.classList.add("highlighting");
 
             // Inline styles for mobile version while Polymer does not support use of 
             // variables in style tags on mobile devices
-            // var contentNodes = this.$.container.childNodes;
             var contentNodes = this.$.container.children;
-
             for (var i=0; i<contentNodes.length; i++){
               contentNodes[i].style.backgroundColor = this.highlighting;
               contentNodes[i].style.boxShadow = "0.3em 0 0 "+this.highlighting+", -0.3em 0 0 "+this.highlighting;
             }
-            // this.$.container.style.backgroundColor = this.highlighting;
-            // this.$.container.style.boxShadow = "0.3em 0 0 "+this.highlighting+", -0.3em 0 0 "+this.highlighting;
           }
 
-          if (this.markdown) {
-            this.text = this.trim(this.textContent);
-          }
-
-
-        },
-        textChanged: function() {
-          this.$.container.innerHTML = this.markdown ? marked(this.text.toString()) : this.textContent;
         },
         trim: function(str) { 
           return str.replace(/^[^\S\n]+/gm,'');
