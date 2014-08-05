@@ -1,17 +1,17 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../thelma-core/thelma_core.html">
-<script src="../web-animations-js/web-animations.js"></script> 
+<link rel="import" href="th-carousel.html">
 
 <!--
-Element providing a multiple choice quiz
+Element providing a multiple choice quiz, animated via th-carousel
 
-@element th-mult-choice
-@blurb Element providing a multiple choice quiz
+@element th-mult-choice-carousel
+@blurb Element providing a multiple choice quiz, animated via th-carousel.
 @status alpha
-@homepage http://github.com/thelmanews/thelma-text/blob/master/th-mult-choice.html
+@homepage http://github.com/thelmanews/thelma-text/blob/master/th-mult-choice-carousel.html
 -->
 
-<polymer-element name="th-mult-choice" attributes="width height question answerText choices">
+<polymer-element name="th-mult-choice-carousel" attributes="width height question answerText choices">
   <template>
       <core-style ref="theme"></core-style>
       <style>
@@ -28,7 +28,7 @@ Element providing a multiple choice quiz
           margin: 0 auto;
           border-radius: {{choiceSize/2 + "px"}};
           background-size: cover;
-          padding-top: 5%;
+          padding-top: 12%;
           box-sizing: border-box;
           border: 4px solid {{foreground1}};
         }
@@ -49,8 +49,6 @@ Element providing a multiple choice quiz
           margin: 0;
           padding: 0;
           text-align: center;
-          position: relative;
-          float: left;
         }
 
         .release .img-choice {
@@ -95,13 +93,13 @@ Element providing a multiple choice quiz
     
       </style>
       <div id="container">
-          
-            <div id="question" style="z-index: 2; position: absolute;">
+          <th-carousel id="carousel" animateOn="none" width="{{width}}" height="{{height}}" on-tap="{{blockDefault}}">
+            <div id="question">
               <p class="headline">{{question}}</p>
               <template if="{{tapped}}"> <p class="flash">Please press and hold</p> </template>
-              <div class="choices">
+              <div class="choices" horizontal layout>
               <template repeat="{{choice in choices}}">
-                <li on-tap={{tap}} on-holdpulse={{hold}} on-release={{release}} style="width:{{_choiceWidth}}px">
+                <li on-tap={{tap}} on-holdpulse={{hold}} on-release={{release}} flex>
                     <div class="img-choice release"  style="background-image: url('{{choice.image}}');">
                       <div class="overlay"></div>
                     </div>
@@ -112,11 +110,10 @@ Element providing a multiple choice quiz
               </template>
               </div>
             </div>
-
-            <div id="answer" style="opacity:0; position: absolute; z-index: 1;">
-              <p class="headline">{{answerText}}</p>
+            <div id="answer">
+              <p class="headline fadein">{{answerText}}</p>
               <template repeat="{{ choice in choices | answerFilter }}">
-              <li class="show" style="width:{{width/numAnswers}}px">
+              <li class="show">
                 <div class="img-choice" style="background-image: url('{{choice.image}}');">
                   <div class="overlay"></div>
                 </div>
@@ -124,19 +121,17 @@ Element providing a multiple choice quiz
               </li>
               </template>
             </div>
+          </th-carousel>
       </div>
   </template>
 
-
-
-
   <script>
-      Polymer('th-mult-choice', {
+      Polymer('th-mult-choice-carousel', {
         /**
          * The 'question' attribute stores the question text.
          * @type {String}
          */
-        question: "Which asd asd ad ad ada done would you choose?",
+        question: "Which one would you choose?",
 
         /**
          * The 'choices' attribute specifies all the answer choices
@@ -144,10 +139,9 @@ Element providing a multiple choice quiz
          */
         choices: [
           {'text': 'Twitter', 'image':'images/twitter.jpg', 'answer': false},
-          {'text': 'Facebook', 'image':'images/person.jpg', 'answer': true},
-          {'text': 'Facebook', 'image':'images/person.jpg', 'answer': false},
-          {'text': 'Facebook', 'image':'images/person.jpg', 'answer': false}
+          {'text': 'Facebook', 'image':'images/person.jpg', 'answer': true}
         ],
+
         /** 
          * The 'width' attribute specifies the width of the component in pixels.
          * @type {Number}
@@ -165,30 +159,16 @@ Element providing a multiple choice quiz
          * @type {String}
          */
         answerText: "The correct answer is:",
-        /**
-         * The 'choicesPerRow' attribute specifies the number of choices to be displayed in each row
-         * @type {Number}
-         */
-        choicesPerRow: 2,
-        ready: function(){
-          var self = this;
-          self._choiceWidth = self.width / self.choicesPerRow;
-
-        },
         domReady: function(){
           var self = this;
           self.numTaps = 0;
           self.setColors();
-          self.createAnimations();
           self.answered = false;
-          self.choiceSize = Math.round((self.width / self.choicesPerRow ) * 0.7);
+          self.choiceSize = Math.round((self.width / self.choices.length ) * 0.65);
           self.answersSelected = 0;
           self.numAnswers = self.choices.filter(function(choice){
             return choice.answer;
           }).length;
-
-
-         
         },
         /**
          * The 'setColors' method detects the theme and chooses the correct colors. It also converts the theme color into RGB format to be applied in RGBA format in CSS
@@ -204,28 +184,6 @@ Element providing a multiple choice quiz
               return result ? 
                 (parseInt(result[1], 16)+","+parseInt(result[2], 16)+","+parseInt(result[3], 16)) : "0,0,0";
           })();
-        },
-        createAnimations: function(){
-          var self = this;
-
-
-          var question = self.$.question;
-          var answer = self.$.answer;
-          var fade = [{opacity: "1", opacity:"0"}];
-          var forward = { duration: 2000, delay: 1000, fill: "forwards" });
-          var backward = { duration: 2000, delay: 1000, fill: "forwards" });
-
-          self._fadeOut = new Animation(question, [
-                {opacity: "1"}, 
-                {opacity: "0"}
-              ],
-              { duration: 2000, delay: 1000, fill: "forwards" });
-          self._fadeIn = new Animation(answer, [
-                {opacity: "0"}, 
-                {opacity: "1"}
-              ],
-              { duration: 2000, fill: "forwards" });
-
         },
         /**
          * The 'tap' method is called when user attempts to tap an answer choice, and displays a flash message for 4 seconds instructing user to hold selection.
@@ -287,8 +245,10 @@ Element providing a multiple choice quiz
         showAnswer: function(){
           var self = this;
 
-          document.timeline.play(new AnimationSequence([self._fadeOut, self._fadeIn]))
-         
+          setTimeout(function(){
+            self.$.carousel.animate(); 
+            self.answered = true;
+          }, 2000)
         },
         /**
          * The 'answerFilter' method called from the template filters out only the choices marked 'answer: true' to be displayed in answer div.
