@@ -74,7 +74,7 @@
           self.content = self.$.content;
           self.countdown = self.$.countdown; 
           self.img = self.$.countdownImg;              
-          document.timeline.play(self.zoomAnimation(self.countdown, self.animationSpeed*1000));
+          
         },
         zoomAnimation: function(elem, duration){
           return new Animation(elem, [
@@ -100,7 +100,7 @@
         },
         animate: function() {
           var self = this;
-
+          document.timeline.play(self.zoomAnimation(self.countdown, self.animationSpeed*1000));
           var countdown = setInterval(function(){
             if (self.number > 1){
               document.timeline.play(self.zoomAnimation(self.countdown, self.animationSpeed*1000));
