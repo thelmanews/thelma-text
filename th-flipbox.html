@@ -1,0 +1,82 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../thelma-core/thelma_core.html">
+
+<polymer-element name="th-flipbox" extends="th-animated" attributes="width height">
+
+  <template>
+      <core-style ref="theme"></core-style>
+      <style>
+        :host {
+          width: {{width + "px"}};
+          height: {{height + "px"}};
+        }
+
+        #container {
+          height: 100%;
+          width: 100%;
+          perspective: 1000;
+          
+        }
+
+        #box {
+          width: 100%;
+          height: 100%;
+          position: absolute;
+          transform-style: preserve-3d;
+          transition: transform 1s;
+        }
+
+        #box > ::content > * {
+           display: block;
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          -webkit-backface-visibility: hidden;
+        }
+
+        ::content .front {
+          background-color: red;
+        }
+
+        ::content .back {
+          background-color: blue;
+          -webkit-transform: rotateY( 180deg );
+        }
+        #box.flipped {
+          /*-webkit-transform: rotateY( 180deg );*/
+        }
+
+      </style>
+
+      <!-- Inline styles are for mobile support --> 
+      <div id="container" on-tap="{{flip}}"> 
+        <div id="box">
+          <content></content>
+        </div>
+      </div>
+
+  </template>
+  <link rel="import" href="dependencies/web_animations.html">
+  <script>
+
+      Polymer('th-flipbox', {
+
+        flip: function(e, detail, selection){
+          var box = selection.querySelector('#box'),
+              boxState = box.classList[0];
+          
+          if (boxState == "flipped"){
+            box.classList.remove('flipped');
+            document.timeline.play(new Animation(box, { transform: "rotateY( 0deg )"}, {duration: 500, fill: "forwards"}));
+          } else {
+            box.classList.add('flipped');
+            document.timeline.play(new Animation(box, { transform: "rotateY( 180deg )"}, {duration: 500, fill: "forwards"}));
+            
+          }
+        }
+      });
+
+  </script>
+
+
+</polymer-element>

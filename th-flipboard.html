@@ -1,0 +1,102 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../thelma-core/thelma_core.html">
+
+<polymer-element name="th-flipboard" extends="th-animated" attributes="width height itemsPerRow items">
+
+  <template>
+      <core-style ref="theme"></core-style>
+      <style>
+        :host {
+          width: {{width + "px"}};
+          height: {{height + "px"}};
+        }
+
+        #container {
+          height: 100%;
+          width: 100%;
+        }
+
+        ul {
+          list-style: none;
+          position: relative;
+          padding: 0;
+          margin: 0;
+        }
+
+        li {
+          display: table;
+          position: relative;
+          float: left;
+          cursor: pointer;
+          list-style: none;
+          margin: 2px;
+          padding: 10px;
+          box-sizing: border-box;
+          background-size: 100%;
+          overflow: hidden;
+          height: {{height/(items.length / itemsPerRow) - 4 + "px"}}; /* subtract margins */
+          width: {{ width / itemsPerRow - 4 + "px"}}; /* subtract margins */
+        }
+
+        li > p {
+          vertical-align: middle;
+          display: table-cell;
+          text-align: center;
+        }
+
+      </style>
+
+      <!-- Inline styles are for mobile support --> 
+      <div id="container"> 
+        <ul>
+          <template repeat="{{item in items}}">
+            
+            <li style="background: {{item.background}} no-repeat" on-tap={{flip}}>
+              <p class="mainpoint" >{{item.text}}</p>
+            </li>
+          </template>
+        </ul>
+      </div>
+
+  </template>
+  <link rel="import" href="dependencies/web_animations.html">
+  <script>
+
+      Polymer('th-flipboard', {
+        items: [ {text: "first card", background: "#0198E1", color:""},
+                 {text: "second card", background: "#0198E1", color:""},
+                  {text: "third card", background: "#0198E1", color:""},
+                  {text: "fourth card", background: "#0198E1", color:""}
+                ],
+        itemsPerRow: 2,
+        init: function() {
+          var self = this;
+          
+        },
+        flip: function(e, detail, selection){
+          var self = this;
+          console.log("flip");
+        },
+        
+        fadeOut: function(elem, duration){
+          return new Animation(elem, { opacity: 0}, {duration: duration, fill: "forwards"});
+        },
+        fadeIn: function(elem, duration){
+          return new Animation(elem, { opacity: 1}, {duration: duration, fill: "forwards"});
+        },
+        reset: function() {
+          var self = this;
+          self.number = self.startFrom;
+          
+        },
+        animate: function() {
+          var self = this;
+          document.timeline.play(self.zoomAnimation(self.countdown, self.animationSpeed*1000));
+          
+        }
+      });
+
+  </script>
+
+
+</polymer-element>

@@ -15,6 +15,8 @@
   <link rel="import" href="th-quote-box.html">
   <link rel="import" href="th-tweet.html">
   <link rel="import" href="th-youtube.html">
+  <link rel="import" href="th-flipboard.html">
+  <link rel="import" href="th-flipbox.html">
 
   <style>
     body {
@@ -28,7 +30,14 @@
 <body unresolved>
 
   <p>thelma-components looks like this:</p>
-    <th-text highlighting="pink" width="100">asd asd adad adasdadadad adasdas d ad a d ad</th-text>
+
+    <th-flipboard width="300" height="200"></th-flipboard>
+
+    <th-flipbox width="300" height="200">
+      <div class="front">front</div>
+      <div class="back">back</div>
+    </th-flipbox>
+
     <th-text width="200px" style="margin: 20px">
       # Level one header #
       ### Level three header ###
