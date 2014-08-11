@@ -1,7 +1,7 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../thelma-core/thelma_core.html">
 
-<polymer-element name="th-flipbox" extends="th-animated" attributes="width height">
+<polymer-element name="th-flipbox" extends="th-animated" attributes="width height index animateAfter">
 
   <template>
       <core-style ref="theme"></core-style>
@@ -15,7 +15,6 @@
           height: 100%;
           width: 100%;
           perspective: 1000;
-          
         }
 
         #box {
@@ -23,37 +22,41 @@
           height: 100%;
           position: absolute;
           transform-style: preserve-3d;
-          transition: transform 1s;
-
+          opacity: 0;
         }
 
         #box > ::content > * {
-          display: block;
-          padding: 10px;
+          /*display: block;*/
+          /*padding: 10px;*/
           box-sizing: border-box;
           position: absolute;
           width: 100%;
           height: 100%;
-          -webkit-backface-visibility: hidden;
+          /*-webkit-backface-visibility: hidden;*/
         }
 
         ::content .front {
-          background-color: red;
+          /*position: absolute;*/
+          /*margin: 0;
+          -webkit-margin-before: 0;
+          -webkit-margin-after: 0;
+*/
         }
 
         ::content .back {
-          background-color: blue;
-          -webkit-transform: rotateY( 180deg );
-        }
-        #box.flipped {
+          /*position: absolute;*/
           /*-webkit-transform: rotateY( 180deg );*/
+       /*    margin: 0;
+          -webkit-margin-before: 0;
+          -webkit-margin-after: 0;*/
+          /*-webkit-backface-visibility: hidden;*/
         }
 
       </style>
 
-      <!-- Inline styles are for mobile support --> 
-      <div id="container" on-tap="{{flip}}"> 
-        <div id="box">
+      <!-- Inline styles are for Safari and mobile support --> 
+      <div id="container" on-tap="{{flip}}" style="width: {{width}}px; height: {{height}}px"> 
+        <div id="box" style="width: 100%; height: 100%;" >
           <content></content>
         </div>
       </div>
@@ -63,19 +66,25 @@
   <script>
 
       Polymer('th-flipbox', {
-
+        index: 1,
+        animateAfter: 400,
+        _flipped: false,
+        animate: function(){
+          var self =  this;
+          document.timeline.play(new Animation(self.$.box, [{ opacity: 0},{ opacity: 1}], {duration: 500, delay: self.index*self.animateAfter, fill: "forwards"}));
+        },
         flip: function(e, detail, selection){
-          var box = selection.querySelector('#box'),
-              boxState = box.classList[0];
-          
-          if (boxState == "flipped"){
-            box.classList.remove('flipped');
-            document.timeline.play(new Animation(box, { transform: "rotateY( 0deg )"}, {duration: 500, fill: "forwards"}));
+          var self = this,
+              box = selection.querySelector('#box');
+    
+          if (self._flipped){
+            document.timeline.play(new Animation(box, { transform: "rotateY( 0deg )"}, {duration: 750, fill: "forwards"}));
+            self._flipped = false;
           } else {
-            box.classList.add('flipped');
-            document.timeline.play(new Animation(box, { transform: "rotateY( 180deg )"}, {duration: 500, fill: "forwards"}));
-            
+            document.timeline.play(new Animation(box, { transform: "rotateY( 180deg )"}, {duration: 750, fill: "forwards"}));
+            self._flipped = true;
           }
+            
         }
       });
 
