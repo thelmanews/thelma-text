@@ -1,5 +1,6 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../thelma-core/thelma_core.html">
+<link rel="import" href="th-flipbox.html">
 
 <polymer-element name="th-flipboard" extends="th-animated" attributes="width height itemsPerRow items">
 
@@ -30,12 +31,11 @@
           cursor: pointer;
           list-style: none;
           margin: 2px;
-          padding: 10px;
           box-sizing: border-box;
           background-size: 100%;
           overflow: hidden;
-          height: {{height/(items.length / itemsPerRow) - 4 + "px"}}; /* subtract margins */
-          width: {{ width / itemsPerRow - 4 + "px"}}; /* subtract margins */
+          height: {{itemHeight + "px"}}; /* subtract margins */
+          width: {{ itemWidth + "px"}}; /* subtract margins */
         }
 
         li > p {
@@ -51,8 +51,11 @@
         <ul>
           <template repeat="{{item in items}}">
             
-            <li style="background: {{item.background}} no-repeat" on-tap={{flip}}>
-              <p class="mainpoint" >{{item.text}}</p>
+            <li>
+              <th-flipbox width="{{itemWidth}}" height="{{itemHeight}}">
+                <div class="front" style="background: {{item.background}} no-repeat">{{item.text}}</div>
+                <div class="back" style="background: {{item.background}} no-repeat">{{item.text}}</div>
+              </th-flipbox>
             </li>
           </template>
         </ul>
@@ -69,6 +72,11 @@
                   {text: "fourth card", background: "#0198E1", color:""}
                 ],
         itemsPerRow: 2,
+        ready: function(){
+          var self = this;
+          self.itemWidth = self.width / self.itemsPerRow - 4;
+          self.itemHeight = self.height/(self.items.length / self.itemsPerRow) - 4;
+        },
         init: function() {
           var self = this;
           
