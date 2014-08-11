@@ -1,7 +1,7 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../thelma-core/thelma_core.html">
 
-<polymer-element name="th-flipbox" extends="th-animated" attributes="width height index animateAfter">
+<polymer-element name="th-flipbox" extends="th-animated" attributes="width height index animateAfter flippable">
 
   <template>
       <core-style ref="theme"></core-style>
@@ -68,6 +68,7 @@
       Polymer('th-flipbox', {
         index: 1,
         animateAfter: 400,
+        flippable: true,
         _flipped: false,
         animate: function(){
           var self =  this;
@@ -76,15 +77,16 @@
         flip: function(e, detail, selection){
           var self = this,
               box = selection.querySelector('#box');
-    
-          if (self._flipped){
-            document.timeline.play(new Animation(box, { transform: "rotateY( 0deg )"}, {duration: 750, fill: "forwards"}));
-            self._flipped = false;
-          } else {
-            document.timeline.play(new Animation(box, { transform: "rotateY( 180deg )"}, {duration: 750, fill: "forwards"}));
-            self._flipped = true;
+        
+          if (self.flippable){
+            if (self._flipped){
+              document.timeline.play(new Animation(box, { transform: "rotateY( 0deg )"}, {duration: 750, fill: "forwards"}));
+              self._flipped = false;
+            } else {
+              document.timeline.play(new Animation(box, { transform: "rotateY( 180deg )"}, {duration: 750, fill: "forwards"}));
+              self._flipped = true;
+            }
           }
-            
         }
       });
 

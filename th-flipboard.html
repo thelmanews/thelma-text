@@ -2,7 +2,7 @@
 <link rel="import" href="../thelma-core/thelma_core.html">
 <link rel="import" href="th-flipbox.html">
 
-<polymer-element name="th-flipboard" extends="th-animated" attributes="width height itemsPerRow items">
+<polymer-element name="th-flipboard" extends="th-animated" attributes="width height itemsPerRow items flippable">
 
   <template>
       <core-style ref="theme"></core-style>
@@ -52,7 +52,7 @@
           <ul>
             <template repeat="{{item, itemIndex in items}}">
               <li>
-                <th-flipbox width="{{itemWidth}}" height="{{itemHeight}}" index="{{itemIndex+1}}">
+                <th-flipbox width="{{itemWidth}}" height="{{itemHeight}}" index="{{itemIndex+1}}" flippable="{{flippable}}">
                   
                   <!-- Front side -->
                   <!-- display: table allows for aligning texting in the middle vertically. 
@@ -122,6 +122,7 @@
                  
                 ],
         itemsPerRow: 2,
+        flippable: true,
         ready: function(){
           var self = this;
           self.itemWidth = self.width / self.itemsPerRow - 5; // subtract margins
