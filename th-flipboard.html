@@ -83,7 +83,7 @@
         ready: function(){
           var self = this,
               margin = 2,
-              rows = self.items.length / self.itemsPerRow;  
+              rows = Math.ceil(self.items.length / self.itemsPerRow);
 
           self.itemWidth = (self.width / self.itemsPerRow) - (2 * self.itemsPerRow); // subtract margins
           self.itemHeight = self.height/ rows - 2*rows; // subtract margins (an extra pixel inheriting from browser?)
