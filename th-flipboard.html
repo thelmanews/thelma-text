@@ -14,9 +14,9 @@
 
         li, ul, li > p {
           margin: 0;
-          -webkit-margin-before: 0;
-          -webkit-margin-after: 0;
-          padding: 0;
+          -webkit-margin-before: 0; /* required override browser default */
+          -webkit-margin-after: 0; /* required override browser default */
+          padding: 0; /* required override browser default */
         }
 
         ul {
@@ -36,11 +36,6 @@
           /*overflow: hidden;*/
         }
 
-        li > p {
-          /*vertical-align: middle;
-          display: table-cell;
-          text-align: center;*/
-        }
       </style>
 
       <!-- Inline styles are for Safari and mobile support --> 
@@ -63,6 +58,8 @@
                 </th-flipbox>
               </li>
             </template>
+
+            <!-- TODO: Add alternate data entry using child elements in content instead of {{items}} object --> 
           </ul>
         </div>
 
@@ -71,6 +68,7 @@
   <script>
 
       Polymer('th-flipboard', {
+
         items: [  {textFront: "front", backgroundFront: "#0198E1", colorFront:"", 
                   textBack: "back", backgroundBack: "#0198E1", colorBack:""},
                   {textFront: "front", backgroundFront: "#0198E1", colorFront:"", 
