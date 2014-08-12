@@ -1,0 +1,112 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../thelma-core/thelma_core.html">
+<link rel="import" href="th-flipbox.html">
+
+<polymer-element name="th-flipboard" extends="th-animated" attributes="width height itemsPerRow items flippable">
+
+  <template>
+      <core-style ref="theme"></core-style>
+      <style>
+        :host {
+          width: {{width + "px"}};
+          height: {{height + "px"}};
+        }
+
+        li, ul, li > p {
+          margin: 0;
+          -webkit-margin-before: 0; /* required override browser default */
+          -webkit-margin-after: 0; /* required override browser default */
+          padding: 0; /* required override browser default */
+        }
+
+        ul {
+          list-style: none;
+          position: relative;
+        }
+
+        li {
+          position: relative;
+          float: left;
+          display: inline-block;
+          cursor: pointer;
+          list-style: none;
+          margin: 2px;
+          -webkit-margin-before: 0;
+          -webkit-margin-after: 0;
+          /*overflow: hidden;*/
+        }
+
+      </style>
+
+      <!-- Inline styles are for Safari and mobile support --> 
+        <div id="container" style="width: {{width}}px; height: {{height}}px;">
+          <ul>
+            <template repeat="{{item, itemIndex in items}}">
+              <li>
+                <th-flipbox width="{{itemWidth}}" height="{{itemHeight}}" animateAfter="{{(itemIndex + 1) * 200}}" flippable="{{flippable}}">
+                  
+                  <!-- Front side -->
+                  <div class="front" style="background: {{item.backgroundFront}} no-repeat; background-size: cover;">
+                    <p style="color: {{item.colorFront}};"> {{item.textFront}} </p>
+                  </div>
+                  
+                  <!-- Back side -->
+                  <div class="back" style="background: {{item.backgroundBack}} no-repeat;">
+                    <p style="color: {{item.colorBack}};"> {{item.textBack}} </p>
+                  </div>
+
+                </th-flipbox>
+              </li>
+            </template>
+
+            <!-- TODO: Add alternate data entry using child elements in content instead of {{items}} object --> 
+          </ul>
+        </div>
+
+  </template>
+  <link rel="import" href="dependencies/web_animations.html">
+  <script>
+
+      Polymer('th-flipboard', {
+
+        items: [  {textFront: "front", backgroundFront: "#0198E1", colorFront:"", 
+                  textBack: "back", backgroundBack: "#0198E1", colorBack:""},
+                  {textFront: "front", backgroundFront: "#0198E1", colorFront:"", 
+                  textBack: "back", backgroundBack: "#0198E1", colorBack:""},
+                  {textFront: "front", backgroundFront: "#0198E1", colorFront:"", 
+                  textBack: "back", backgroundBack: "#0198E1", colorBack:""},
+                  {textFront: "front", backgroundFront: "#0198E1", colorFront:"", 
+                  textBack: "back", backgroundBack: "#0198E1", colorBack:""}
+                ],
+        itemsPerRow:2,
+        flippable: true,
+        ready: function(){
+          var self = this,
+              margin = 2,
+              rows = self.items.length / self.itemsPerRow;  
+
+          self.itemWidth = (self.width / self.itemsPerRow) - (2 * self.itemsPerRow); // subtract margins
+          self.itemHeight = self.height/ rows - 2*rows; // subtract margins (an extra pixel inheriting from browser?)
+        },
+        animate: function(){
+
+        },
+        reset: function(){
+
+        }
+      });
+
+  // TODO
+  // - get theme color and set default background color
+  // - fix backside of card on safari/mobile
+  // - fix max-height problem
+  // - animate and reset functions
+  // - remove excess CSS
+  // - documentation
+  // - refactor
+
+  </script>
+
+
+
+</polymer-element>

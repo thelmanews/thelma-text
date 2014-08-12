@@ -1,0 +1,124 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../thelma-core/thelma_core.html">
+
+<polymer-element name="th-flipbox" extends="th-animated" attributes="width height flippable">
+
+  <template>
+      <core-style ref="theme"></core-style>
+      <style>
+        :host {
+          width: {{width + "px"}};
+          height: {{height + "px"}};
+        }
+
+        #container {
+          height: 100%;
+          width: 100%;
+          perspective: 1000;
+        }
+
+        #box {
+          width: 100%;
+          height: 100%;
+          position: absolute;
+          transform-style: preserve-3d;
+          opacity: 0;
+        }
+
+        #box > ::content > * {
+          /*display: block;*/
+          /*padding: 10px;*/
+          box-sizing: border-box;
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          overflow: hidden;
+        }
+
+        ::content .front, ::content .back {
+          display: table;
+          padding: 10px;
+          box-sizing: border-box;
+          width: 100%;
+          height: 100%;
+          -webkit-backface-visibility: hidden;
+          background-size: contain;
+          overflow: hidden;
+         
+        }
+
+        ::content .back {
+          -webkit-transform: rotateY( 180deg );
+        }
+
+        ::content div p {
+          vertical-align: middle; 
+          display: table-cell; 
+          text-align: center; 
+          box-sizing: border-box;
+          text-overflow: hidden;
+        }
+
+      </style>
+
+      <!-- Inline styles are for Safari and mobile support --> 
+      <div id="container" on-tap="{{flip}}" style="width: {{width}}px; height: {{height}}px; perspective: 1000;"> 
+        <div id="box" style="width: 100%; height: 100%; position: absolute;
+          transform-style: preserve-3d;
+          opacity: 0;" >
+          <content></content>
+        </div>
+      </div>
+
+  </template>
+  <link rel="import" href="dependencies/web_animations.html">
+  <script>
+
+      Polymer('th-flipbox', {
+        flippable: true,
+        _flipped: false,
+        init: function(){
+          var self = this;
+          self.animation = document.timeline;
+        },
+        animate: function(){
+          var self =  this;
+
+          self.animation.play(self._fadeEffect(self.$.box, 300, 0, 1));
+          
+        },
+        flip: function(e, detail, selection){
+          var self = this,
+              box = selection.querySelector('#box');
+
+          if (self.flippable){
+            if (self._flipped){
+              self.animation.play(self._flipEffect(box, 750, "rotateY(0deg)"));
+              self._flipped = false;
+            } else {
+              self.animation.play(self._flipEffect(box, 750, "rotateY(180deg)"));
+              self._flipped = true;
+            }
+          }
+        },
+        _fadeEffect: function(element, duration, opacityStart, opacityEnd){
+          return new Animation(element, [{ opacity: opacityStart},{ opacity: opacityEnd}], {duration: duration, fill: "forwards"});
+        },
+        _flipEffect: function(element, duration, transform){
+          return new Animation(element, { transform: transform}, {duration: duration, fill: "forwards"});
+        },
+        reset: function(){
+          var self =  this;
+
+          self.animation.play(self._fadeEffect(self.$.box, 300, 1, 0));
+           
+          if (self._flipped){
+            self.animation.play(self._flipEffect(self.$.box, 750, "rotateY(0deg)"));
+          }
+        }
+      });
+
+  </script>
+
+
+</polymer-element>
