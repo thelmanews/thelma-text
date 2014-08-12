@@ -12,14 +12,16 @@
           height: {{height + "px"}};
         }
 
+        li, ul, li > p {
+          margin: 0;
+          -webkit-margin-before: 0;
+          -webkit-margin-after: 0;
+          padding: 0;
+        }
+
         ul {
           list-style: none;
           position: relative;
-          padding: 0;
-          margin: 0;
-          /*width: 100%;*/
-          -webkit-margin-before: 0;
-          -webkit-margin-after: 0;
         }
 
         li {
@@ -30,20 +32,19 @@
           cursor: pointer;
           list-style: none;
           margin: 2px;
-          /*background-size: 100%;*/
+          -webkit-margin-before: 0;
+          -webkit-margin-after: 0;
           overflow: hidden;
-          /*height: {{itemHeight + "px"}}; /* subtract margins */*/
-          /*width: {{ itemWidth + "px"}}; /* subtract margins */*/
         }
 
         li > p {
           vertical-align: middle;
           display: table-cell;
           text-align: center;
-          margin: 0;
-          -webkit-margin-before: 0;
-          -webkit-margin-after: 0;
+          
         }
+
+
 
       </style>
 
@@ -59,20 +60,11 @@
                        it also causes problems in safari regarding widths and heights... --> 
                   <div class="front" 
 
-                  style="background: {{item.backgroundFront}} no-repeat; 
-                         display: table;
-                         padding: 10px;
-                         box-sizing: border-box;
-                         position: absolute;
-                         width: 100%;
-                         height: 100%;
-                         -webkit-backface-visibility: hidden;">
+                  style="background: {{item.backgroundFront}} no-repeat; background-size: cover;">
                     <p style="color: {{item.colorFront}}; 
                               vertical-align: middle; 
                               display: table-cell; 
                               text-align: center; 
-                              -webkit-margin-before: 0; 
-                              -webkit-margin-after: 0; 
                               box-sizing: border-box;">
                         {{item.textFront}}
                     </p>
@@ -80,21 +72,11 @@
                   
                   <!-- Back side -->
                   <div class="back" 
-                  style="background: {{item.backgroundBack}} no-repeat; 
-                         display: table;
-                         padding: 10px;
-                         box-sizing: border-box;
-                         position: absolute;
-                         width: 100%;
-                         height: 100%;
-                         -webkit-transform: rotateY( 180deg );
-                         -webkit-backface-visibility: hidden;">
+                  style="background: {{item.backgroundBack}} no-repeat;">
                     <p style="color: {{item.colorBack}}; 
                               vertical-align: middle; 
                               display: table-cell; 
                               text-align: center;  
-                              -webkit-margin-before: 0;
-                              -webkit-margin-after: 0; 
                               box-sizing: border-box;">
                         {{item.textBack}}
                     </p>
@@ -121,7 +103,7 @@
                   textBack: "back", backgroundBack: "#0198E1", colorBack:""}
                  
                 ],
-        itemsPerRow: 2,
+        itemsPerRow:2,
         flippable: true,
         ready: function(){
           var self = this;

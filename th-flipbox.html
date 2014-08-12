@@ -35,28 +35,29 @@
           /*-webkit-backface-visibility: hidden;*/
         }
 
-        ::content .front {
-          /*position: absolute;*/
-          /*margin: 0;
-          -webkit-margin-before: 0;
-          -webkit-margin-after: 0;
+        ::content .front, ::content .back {
+          display: table;
+         padding: 10px;
+         box-sizing: border-box;
+         width: 100%;
+         height: 100%;
+         -webkit-backface-visibility: hidden;
+         background-size: contain;
 */
         }
 
         ::content .back {
-          /*position: absolute;*/
-          /*-webkit-transform: rotateY( 180deg );*/
-       /*    margin: 0;
-          -webkit-margin-before: 0;
-          -webkit-margin-after: 0;*/
-          /*-webkit-backface-visibility: hidden;*/
+          -webkit-transform: rotateY( 180deg );
+       
         }
 
       </style>
 
       <!-- Inline styles are for Safari and mobile support --> 
-      <div id="container" on-tap="{{flip}}" style="width: {{width}}px; height: {{height}}px"> 
-        <div id="box" style="width: 100%; height: 100%;" >
+      <div id="container" on-tap="{{flip}}" style="width: {{width}}px; height: {{height}}px; perspective: 1000;"> 
+        <div id="box" style="width: 100%; height: 100%; position: absolute;
+          transform-style: preserve-3d;
+          opacity: 0;" >
           <content></content>
         </div>
       </div>
