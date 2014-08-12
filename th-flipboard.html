@@ -25,7 +25,6 @@
         }
 
         li {
-          /*display: table;*/
           position: relative;
           float: left;
           display: inline-block;
@@ -34,18 +33,14 @@
           margin: 2px;
           -webkit-margin-before: 0;
           -webkit-margin-after: 0;
-          overflow: hidden;
+          /*overflow: hidden;*/
         }
 
         li > p {
-          vertical-align: middle;
+          /*vertical-align: middle;
           display: table-cell;
-          text-align: center;
-          
+          text-align: center;*/
         }
-
-
-
       </style>
 
       <!-- Inline styles are for Safari and mobile support --> 
@@ -53,33 +48,16 @@
           <ul>
             <template repeat="{{item, itemIndex in items}}">
               <li>
-                <th-flipbox width="{{itemWidth}}" height="{{itemHeight}}" index="{{itemIndex+1}}" flippable="{{flippable}}">
+                <th-flipbox width="{{itemWidth}}" height="{{itemHeight}}" animateAfter="{{(itemIndex + 1) * 200}}" flippable="{{flippable}}">
                   
                   <!-- Front side -->
-                  <!-- display: table allows for aligning texting in the middle vertically. 
-                       it also causes problems in safari regarding widths and heights... --> 
-                  <div class="front" 
-
-                  style="background: {{item.backgroundFront}} no-repeat; background-size: cover;">
-                    <p style="color: {{item.colorFront}}; 
-                              vertical-align: middle; 
-                              display: table-cell; 
-                              text-align: center; 
-                              box-sizing: border-box;">
-                        {{item.textFront}}
-                    </p>
+                  <div class="front" style="background: {{item.backgroundFront}} no-repeat; background-size: cover;">
+                    <p style="color: {{item.colorFront}};"> {{item.textFront}} </p>
                   </div>
                   
                   <!-- Back side -->
-                  <div class="back" 
-                  style="background: {{item.backgroundBack}} no-repeat;">
-                    <p style="color: {{item.colorBack}}; 
-                              vertical-align: middle; 
-                              display: table-cell; 
-                              text-align: center;  
-                              box-sizing: border-box;">
-                        {{item.textBack}}
-                    </p>
+                  <div class="back" style="background: {{item.backgroundBack}} no-repeat;">
+                    <p style="color: {{item.colorBack}};"> {{item.textBack}} </p>
                   </div>
 
                 </th-flipbox>
@@ -101,27 +79,36 @@
                   textBack: "back", backgroundBack: "#0198E1", colorBack:""},
                   {textFront: "front", backgroundFront: "#0198E1", colorFront:"", 
                   textBack: "back", backgroundBack: "#0198E1", colorBack:""}
-                 
                 ],
         itemsPerRow:2,
         flippable: true,
         ready: function(){
-          var self = this;
-          self.itemWidth = self.width / self.itemsPerRow - 5; // subtract margins
-          self.itemHeight = self.height/(self.items.length / self.itemsPerRow)- 6; // subtract margins (an extra pixel inheriting from browser?)
+          var self = this,
+              margin = 2,
+              rows = self.items.length / self.itemsPerRow;  
+
+          self.itemWidth = (self.width / self.itemsPerRow) - (2 * self.itemsPerRow); // subtract margins
+          self.itemHeight = self.height/ rows - 2*rows; // subtract margins (an extra pixel inheriting from browser?)
         },
-        reset: function() {
-          var self = this;
-          
+        animate: function(){
+
         },
-        animate: function() {
-          var self = this;
-          document.timeline.play(self.zoomAnimation(self.countdown, self.animationSpeed*1000));
-          
+        reset: function(){
+
         }
       });
 
+  // TODO
+  // - get theme color and set default background color
+  // - fix backside of card on safari/mobile
+  // - fix max-height problem
+  // - animate and reset functions
+  // - remove excess CSS
+  // - documentation
+  // - refactor
+
   </script>
+
 
 
 </polymer-element>

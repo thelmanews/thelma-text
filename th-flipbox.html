@@ -1,7 +1,7 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../thelma-core/thelma_core.html">
 
-<polymer-element name="th-flipbox" extends="th-animated" attributes="width height index animateAfter flippable">
+<polymer-element name="th-flipbox" extends="th-animated" attributes="width height animateAfter flippable">
 
   <template>
       <core-style ref="theme"></core-style>
@@ -33,6 +33,7 @@
           width: 100%;
           height: 100%;
           /*-webkit-backface-visibility: hidden;*/
+          overflow: hidden;
         }
 
         ::content .front, ::content .back {
@@ -43,12 +44,21 @@
          height: 100%;
          -webkit-backface-visibility: hidden;
          background-size: contain;
-*/
+         overflow: hidden;
         }
 
         ::content .back {
           -webkit-transform: rotateY( 180deg );
-       
+        }
+
+        ::content div p {
+          vertical-align: middle; 
+          display: table-cell; 
+          text-align: center; 
+          box-sizing: border-box;
+          text-overflow: hidden;
+          
+
         }
 
       </style>
@@ -67,18 +77,24 @@
   <script>
 
       Polymer('th-flipbox', {
-        index: 1,
-        animateAfter: 400,
         flippable: true,
         _flipped: false,
+        reset: function(){
+          var self =  this;
+            document.timeline.play(new Animation(self.$.box, [{ opacity: 1},{ opacity: 0}], {duration: 300, fill: "forwards"}));
+          if (self._flipped){
+            document.timeline.play(new Animation(box, { transform: "rotateY( 0deg )"}, {duration: 750, fill: "forwards"}));
+          }
+        },
         animate: function(){
           var self =  this;
-          document.timeline.play(new Animation(self.$.box, [{ opacity: 0},{ opacity: 1}], {duration: 500, delay: self.index*self.animateAfter, fill: "forwards"}));
+          document.timeline.play(new Animation(self.$.box, [{ opacity: 0},{ opacity: 1}], {duration: 300, fill: "forwards"}));
+          
         },
         flip: function(e, detail, selection){
           var self = this,
               box = selection.querySelector('#box');
-        
+
           if (self.flippable){
             if (self._flipped){
               document.timeline.play(new Animation(box, { transform: "rotateY( 0deg )"}, {duration: 750, fill: "forwards"}));
@@ -90,6 +106,9 @@
           }
         }
       });
+
+  // TODO
+  // - separate web animations out
 
   </script>
 
