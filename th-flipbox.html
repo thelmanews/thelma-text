@@ -1,6 +1,15 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../thelma-core/thelma_core.html">
 
+<!--
+Element providing a flip box effect, allowing for any content on front and back.
+
+@element th-flipbox
+@blurb Element providing a flip box effect, allowing for any content on front and back.
+@status alpha
+@homepage http://github.com/thelmanews/thelma-text/blob/master/th-flipbox.html
+-->
+
 <polymer-element name="th-flipbox" extends="th-animated" attributes="width height flippable">
 
   <template>
@@ -61,18 +70,36 @@
   <script>
 
       Polymer('th-flipbox', {
+        /**
+         * 'flippable' determines whether or not the box can be flipped, or if it is static.
+         * @type {Boolean}
+         */
         flippable: true,
+        /**
+         * '_flipped' keeps track of the state of the box to determine the rotation angle when tapped.
+         * @type {Boolean}
+         */
         _flipped: false,
+        /**
+         * 'init' constructs the web animation player and saves it as component property
+         */
         init: function(){
           var self = this;
           self.animation = document.timeline;
         },
+        /**
+         * 'animate' method to fade in the box
+         */
         animate: function(){
           var self =  this;
-
           self.animation.play(self._fadeEffect(self.$.box, 300, 0, 1));
-          
         },
+        /**
+         * 'flip' is called when the box is tapped and determines which way to flip the box
+         * @param  {object} e         e is the event object.
+         * @param  {object} detail    detail is event detail.
+         * @param  {object} selection selection is the box tapped.
+         */
         flip: function(e, detail, selection){
           var self = this,
               box = selection.querySelector('#box');
@@ -87,12 +114,30 @@
             }
           }
         },
+        /**
+         * '_fadeEffect' creates a web animation effect that either fades and element in or out
+         * @param  {object} element      the target element to fade
+         * @param  {number} duration     duration of fade (in milleseconds)
+         * @param  {number} opacityStart starting opacity (0 to 1)
+         * @param  {number} opacityEnd   ending opacity (0 to 1)
+         * @return {object}              the animation effect object to be played by the animation player
+         */
         _fadeEffect: function(element, duration, opacityStart, opacityEnd){
           return new Animation(element, [{ opacity: opacityStart},{ opacity: opacityEnd}], {duration: duration, fill: "forwards"});
         },
+        /**
+         * '_flipEffect' creates a web animation effect that flips and element 
+         * @param  {object} element   the target element to flip
+         * @param  {number} duration  duration of flip (in milleseconds)
+         * @param  {string} transform the css value for transform (i.e. 'rotateY(180deg)')
+         * @return {object}           the animation effect object to be played by the animation player
+         */
         _flipEffect: function(element, duration, transform){
           return new Animation(element, { transform: transform}, {duration: duration, fill: "forwards"});
         },
+        /**
+         * 'reset' fades the box back out and returns it to its 'front' state
+         */
         reset: function(){
           var self =  this;
 
