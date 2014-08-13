@@ -45,12 +45,12 @@
                 <th-flipbox width="{{itemWidth}}" height="{{itemHeight}}" animateAfter="{{(itemIndex + 1) * 200}}" flippable="{{flippable}}" style="overflow:hidden; max-height:{{itemHeight}}px;">
                   
                   <!-- Front side -->
-                  <div class="front" style="background: {{item.backgroundFront || colors.accents[itemIndex]}} no-repeat; background-size: cover; ">
+                  <div class="front" style="position: absolute; background: {{item.backgroundFront || colors.accents[itemIndex]}} no-repeat; background-size: cover; top: 0; left: 0; ">
                     <p class="mainpoint" style="color: {{item.colorFront || colors.theme.foreground1}};"> {{item.textFront}} </p>
                   </div>
                   
                   <!-- Back side -->
-                  <div class="back" style="background: {{item.backgroundBack || colors.accents[itemIndex]}} no-repeat;">
+                  <div class="back" style="position: absolute; background: {{item.backgroundBack || colors.accents[itemIndex]}} no-repeat;  top: 0; left: 0;">
                     <p class="mainpoint" style="color: {{item.colorBack || colors.theme.foreground1}};"> {{item.textBack}} </p>
                   </div>
 
@@ -82,7 +82,7 @@
          *   or back, respectively
          * @type {String} => '#000000'  
          */
-        items: [  {textFront: "fasd ad aaasd ad ad ad ad ad asas das da sdada s das sda s dsd aas dads as dasd asd ad ad d asd ada d d ad ad ront", backgroundFront: "", colorFront:"", 
+        items: [  {textFront: "froasda asd asd asd asd as daasd asdadadad sd asd sad ad s d ad ad sa da sd as dnt", backgroundFront: "", colorFront:"", 
                   textBack: "back", backgroundBack: "", colorBack:""},
                   {textFront: "front", backgroundFront: "", colorFront:"", 
                   textBack: "back", backgroundBack: "", colorBack:""},
@@ -113,7 +113,7 @@
           // Calculate height and with of items based on component size, itemsPerRow and margins
           self.itemWidth = (self.width / self.itemsPerRow) - (self.margin * self.itemsPerRow); 
           self.itemHeight = self.height/ rows - self.margin*rows;
-          console.log(self.itemHeight);
+
           // Get theme colors to set default colors for items
           self.colors = self.getColors();
           while (self.items.length > self.colors.count){
@@ -179,9 +179,6 @@
           return self.colors;
         }
       });
-
-  // TODO
-  // - fix backside of card on safari/mobile  
 
   </script>
 

@@ -12,39 +12,27 @@
         }
 
         #container {
-          height: 100%;
-          width: 100%;
           perspective: 1000;
         }
 
         #box {
           width: 100%;
           height: 100%;
-          position: absolute;
-          transform-style: preserve-3d;
+          position: relative;
+          -webkit-transform-style: preserve-3d;
           opacity: 0;
-        }
-
-        #box > ::content > * {
-          /*display: block;*/
-          /*padding: 10px;*/
-          box-sizing: border-box;
-          position: absolute;
-          width: 100%;
-          height: 100%;
-          overflow: hidden;
         }
 
         ::content .front, ::content .back {
           display: table;
-          padding: 10px;
           box-sizing: border-box;
           width: 100%;
           height: 100%;
           -webkit-backface-visibility: hidden;
           background-size: contain;
           overflow: hidden;
-         
+          top: 0;
+          left: 0;
         }
 
         ::content .back {
@@ -55,17 +43,15 @@
           vertical-align: middle; 
           display: table-cell; 
           text-align: center; 
-          box-sizing: border-box;
           text-overflow: hidden;
+          padding: 10px;
         }
 
       </style>
 
       <!-- Inline styles are for Safari and mobile support --> 
-      <div id="container" on-tap="{{flip}}" style="width: {{width}}px; height: {{height}}px; perspective: 1000;"> 
-        <div id="box" style="width: 100%; height: 100%; position: absolute;
-          transform-style: preserve-3d;
-          opacity: 0;" >
+      <div id="container" on-tap="{{flip}}" style="width: {{width}}px; height: {{height}}px;"> 
+        <div id="box">
           <content></content>
         </div>
       </div>
