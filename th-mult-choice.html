@@ -116,8 +116,8 @@ Element providing a multiple choice quiz, animated via th-flipbox
          * @type {Array}
          */
         choices: [
-          {'text': 'This guy', 'image':'../thelma-all/images/person.jpg', 'answer': false},
-          {'text': 'That guy', 'image':'../thelma-all/images/person.jpg', 'answer': true}
+          {'text': 'This guy', 'image':'../thelma-all/images/person.jpg', 'answer': 'false'},
+          {'text': 'That guy', 'image':'../thelma-all/images/person.jpg', 'answer': 'true'}
         ],
 
         /** 
@@ -146,17 +146,21 @@ Element providing a multiple choice quiz, animated via th-flipbox
           self.answersSelected = 0;
           self.numAnswers = self.choices.filter(function(choice){
             console.log(choice.answer);
-            return choice.answer || choice.answer=="true";
+            return choice.answer=="true";
           }).length;
           console.log(self.numAnswers)
+
           self.animation = document.timeline;
         },
         setElementDims: function(){
           var self = this,
               numRows = Math.ceil(self.choices.length / parseInt(self.choicesPerRow)), // Number of rows of choices
               questionHeight = self.$.headline.offsetHeight; // Computed height of question
-          
+          console.log("choices: "+self.choicesPerRow);
+          console.log("choices: "+parseInt(self.choicesPerRow));
+          console.log(numRows);
           self.choiceWidth = self.width / parseInt(self.choicesPerRow); // Width of each choice
+          console.log(self.choiceWidth);
           self.choiceHeight = (self.height - questionHeight) / numRows; // Height of area for choices
           self.imageSize = Math.min(self.choiceHeight, self.choiceWidth) * 0.7;  // Size of image (assumes room for label)
           self.labelSize = Math.min(self.choiceHeight, self.choiceWidth) * 0.15; // Size of label
