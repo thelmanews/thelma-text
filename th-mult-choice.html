@@ -11,7 +11,7 @@ Element providing a multiple choice quiz, animated via th-flipbox
 @homepage http://github.com/thelmanews/thelma-text/blob/master/th-mult-choice.html
 -->
 
-<polymer-element name="th-mult-choice" attributes="width height question answerText choices">
+<polymer-element name="th-mult-choice" extend="th-animated" attributes="width height question answerText choices">
   <template>
       <core-style ref="theme"></core-style>
       <style>
@@ -117,6 +117,8 @@ Element providing a multiple choice quiz, animated via th-flipbox
          */
         choices: [
           {'text': 'This guy', 'image':'../thelma-all/images/person.jpg', 'answer': 'false'},
+          {'text': 'That guy', 'image':'../thelma-all/images/person.jpg', 'answer': 'true'},
+          {'text': 'That guy', 'image':'../thelma-all/images/person.jpg', 'answer': 'true'},
           {'text': 'That guy', 'image':'../thelma-all/images/person.jpg', 'answer': 'true'}
         ],
 
@@ -137,7 +139,7 @@ Element providing a multiple choice quiz, animated via th-flipbox
          * @type {String}
          */
         answerText: "The correct answer is:",
-        choicesPerRow: 2,
+        choicesPerRow: 4,
         domReady: function(){
           var self = this;
           self.setColors();
