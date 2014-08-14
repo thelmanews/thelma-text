@@ -1,12 +1,12 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../thelma-core/thelma_core.html">
-<link rel="import" href="th-carousel.html">
+<link rel="import" href="th-flipbox.html">
 
 <!--
-Element providing a multiple choice quiz, animated via th-carousel
+Element providing a multiple choice quiz, animated via th-flipbox
 
 @element th-mult-choice
-@blurb Element providing a multiple choice quiz, animated via th-carousel.
+@blurb Element providing a multiple choice quiz, animated via th-flipbox
 @status alpha
 @homepage http://github.com/thelmanews/thelma-text/blob/master/th-mult-choice.html
 -->
@@ -23,106 +23,84 @@ Element providing a multiple choice quiz, animated via th-carousel
         }
 
         .img-choice {
-          height: {{choiceSize + "px"}};
-          width: {{choiceSize + "px"}};
           margin: 0 auto;
-          border-radius: {{choiceSize/2 + "px"}};
           background-size: cover;
-          padding-top: 12%;
           box-sizing: border-box;
-          border: 4px solid {{foreground1}};
         }
 
-        .selected .img-choice {
-          box-shadow: {{"inset 0 0 0 45px rgba("+rgb+", 0.5)"}};
+        .checkmark {
+          background-image: url('../thelma-all/images/checkmark.png');
+          background-size: cover;
+          height: 100%;
+          width: 100%;
+          opacity: 0;
         }
 
-        .selected .img-choice:before {
-          font-size: {{choiceSize/2 + "px"}};
-          content: '\2714';
-          color: {{foreground}};
+        .label {
+          text-align: center;
         }
 
         li {
           display: inline-block;
+          position: relative;
+          float: left;
           list-style: none;
           margin: 0;
-          padding: 0;
+          padding: 0px 5px 5px 5px; 
+          box-sizing: border-box;
           text-align: center;
+          -webkit-margin-before: 0;
+          -webkit-margin-after: 0;
         }
 
-        .release .img-choice {
-          -webkit-transition: all 1s ease-in-out 0s;
-          -moz-transition: all 1s ease-in-out 0s;
-          -o-transition: all 1s ease-in-out 0s;
-          -ms-transition: all 1s ease-in-out 0s;
-          transition: all 1s ease-in-out 0s;
-          box-shadow: {{"inset 0 0 0 0 rgba("+rgb+", 0.5)"}};
-        }
-
-        .hold .img-choice { 
-          -webkit-transition: all 1s ease-in-out 0s;
-          -moz-transition: all 1s ease-in-out 0s;
-          -o-transition: all 1s ease-in-out 0s;
-          -ms-transition: all 1s ease-in-out 0s;
-          transition: all 1s ease-in-out 0s;
-          box-shadow: {{"inset 0 0 0 45px rgba("+rgb+", 0.5)"}};
-        }
-
-        .flash {
-          font-size: 20px;
-          -webkit-animation-name: flash;
-          -webkit-animation-duration: 3s;
-          -webkit-animation-timing-function: ease-out; 
-          -webkit-animation-iteration-count: 1; 
-          opacity: 0;
-          text-align: center;
+        .choices {
+          -webkit-backface-visibility: hidden; display: table;
           position: absolute;
-          bottom: {{choiceSize * 0.8 + "px"}};
-          display: block;
-          width: 100%;
-          text-shadow: 0px 0px 30px rgba(0, 0, 0,1);
-        }
-
-        @-webkit-keyframes flash {
-           0% {-webkit-transform: scale(1, 1); opacity: 0.0;}
-           40% {-webkit-transform: scale(1,1); opacity: 1.0; }
-           60% {-webkit-transform: scale(1,1); opacity: 1.0; }
-           100% {-webkit-transform: scale(1, 1); opacity: 0.0;}
         }
     
       </style>
-      <div id="container">
-          <th-carousel id="carousel" animateOn="none" width="{{width}}" height="{{height}}" on-tap="{{blockDefault}}">
-            <div id="question">
-              <p class="headline">{{question}}</p>
-              <template if="{{tapped}}"> <p class="flash">Please press and hold</p> </template>
-              <div class="choices" horizontal layout>
-              <template repeat="{{choice in choices}}">
-                <li on-tap={{tap}} on-holdpulse={{hold}} on-release={{release}} flex>
-                    <div class="img-choice release"  style="background-image: url('{{choice.image}}');">
-                      <div class="overlay"></div>
-                    </div>
-                    <template if="{{choice.text}}">
-                      <p class="label">{{choice.text}}</p>
-                    </template>
-                </li>
-              </template>
+
+          <!-- Inline styles are required for mobile and Safari -->      
+          <th-flipbox id="flipbox" width="{{width}}" height="{{height}}" flippable="false" animateOnInit="true">
+            <div class="front" style="position: absolute; top: 0; left: 0; -webkit-backface-visibility: hidden; display: table;">
+              <div id="question">
+                <p id="headline" class="headline">{{question}}</p>
+                
+                <div class="choices" >
+                  <template repeat="{{choice, choiceIndex in choices}}">
+                    <li on-click={{tap}}  on-release={{release}} style="width:{{choiceWidth}}px; height:{{choiceHeight}}px; ">
+                        <div class="img-choice release" id="{{choiceIndex}}"  style="background: url('{{choice.image}}');  background-size: cover; height: {{imageSize}}px; width: {{imageSize}}px; border-radius: {{imageSize/2}}px; border: 4px solid {{foreground1}}; box-sizing: border-box; color: {{foreground}}; font-size: {{imageSize/2}}px; box-shadow: inset 0 0 0 0px rgba({{rgb}}, 0.5)">
+                          <div class="checkmark"></div>
+                        </div>
+                        <template if="{{choice.text}}">
+                          <p class="label" style="display: block; margin: 0; -webkit-margin-before: 0; -webkit-margin-after:0; padding: 5px 0px;font-size: {{labelSize}}px;">{{choice.text}}</p>
+                        </template>
+                    </li>
+                  </template>
+                </div>
+
               </div>
             </div>
-            <div id="answer">
-              <p class="headline fadein">{{answerText}}</p>
-              <template repeat="{{ choice in choices | answerFilter }}">
-              <li class="show">
-                <div class="img-choice" style="background-image: url('{{choice.image}}');">
-                  <div class="overlay"></div>
+
+            <div class="back" style="position: absolute; top: 0; left: 0; -webkit-backface-visibility: hidden; display: table;">
+              <div id="answer">
+                <p class="headline fadein">{{answerText}}</p>
+                
+                <div class="choices">
+                  <template repeat="{{choice in choices | answerFilter}}">
+                    <li class="show" style="width:{{width / numAnswers}}px; ">
+                        <div class="img-choice"  style="background-image: url('{{choice.image}}'); height: {{imageSize}}px; width: {{imageSize}}px; border-radius: {{imageSize/2}}px; border: 4px solid {{foreground1}}; box-sizing: border-box; color: {{foreground}}; font-size: {{imageSize/2}}px; box-shadow: inset 0 0 0 0px rgba({{rgb}}, 0.5)">
+                        </div>
+                        <template if="{{choice.text}}">
+                          <p class="label" style="display: block; margin: 0; -webkit-margin-before: 0; -webkit-margin-after:0; padding: 0;">{{choice.text}}</p>
+                        </template>
+                    </li>
+                  </template>
                 </div>
-                <p class="label">{{choice.text}}</p>
-              </li>
-              </template>
+
+              </div>
             </div>
-          </th-carousel>
-      </div>
+        </th-flipbox>
   </template>
 
   <script>
@@ -131,44 +109,56 @@ Element providing a multiple choice quiz, animated via th-carousel
          * The 'question' attribute stores the question text.
          * @type {String}
          */
-        question: "Which one would you choose?",
+        question: "Which one is better?",
 
         /**
          * The 'choices' attribute specifies all the answer choices
          * @type {Array}
          */
         choices: [
-          {'text': 'Twitter', 'image':'images/twitter.jpg', 'answer': false},
-          {'text': 'Facebook', 'image':'images/person.jpg', 'answer': true}
+          {'text': 'This guy', 'image':'../thelma-all/images/person.jpg', 'answer': false},
+          {'text': 'That guy', 'image':'../thelma-all/images/person.jpg', 'answer': true}
         ],
 
         /** 
          * The 'width' attribute specifies the width of the component in pixels.
          * @type {Number}
          */
-        width: 280,
+        width: 250,
 
         /** 
          * The 'height' attribute specifies the height of the component in pixels.
          * @type {Number}
          */
-        height: 280,
+        height: 200,
 
         /**
          * The 'answerText' attribute specifies the text that prefaces the correct answer(s).
          * @type {String}
          */
         answerText: "The correct answer is:",
+        choicesPerRow: 2,
         domReady: function(){
           var self = this;
-          self.numTaps = 0;
           self.setColors();
           self.answered = false;
-          self.choiceSize = Math.round((self.width / self.choices.length ) * 0.65);
+          self.setElementDims();
           self.answersSelected = 0;
           self.numAnswers = self.choices.filter(function(choice){
             return choice.answer;
           }).length;
+
+          self.animation = document.timeline;
+        },
+        setElementDims: function(){
+          var self = this,
+              numRows = Math.ceil(self.choices.length / self.choicesPerRow), // Number of rows of choices
+              questionHeight = self.$.headline.offsetHeight; // Computed height of question
+          
+          self.choiceWidth = self.width / self.choicesPerRow; // Width of each choice
+          self.choiceHeight = (self.height - questionHeight) / numRows; // Height of area for choices
+          self.imageSize = Math.min(self.choiceHeight, self.choiceWidth) * 0.7;  // Size of image (assumes room for label)
+          self.labelSize = Math.min(self.choiceHeight, self.choiceWidth) * 0.15; // Size of label
         },
         /**
          * The 'setColors' method detects the theme and chooses the correct colors. It also converts the theme color into RGB format to be applied in RGBA format in CSS
@@ -186,67 +176,55 @@ Element providing a multiple choice quiz, animated via th-carousel
           })();
         },
         /**
-         * The 'tap' method is called when user attempts to tap an answer choice, and displays a flash message for 4 seconds instructing user to hold selection.
+         * The 'tap' method is called when user clicks an answer choice
          * @param  {object} e         e is the event object.
          * @param  {object} detail    detail is event detail.
          * @param  {object} selection selection is the node tapped.
          */
         tap: function(e, detail, selection){
-          var self = this;
-          if ((selection.className != "selected") && (self.numTaps < 1)){
-            self.tapped = true;
-            self.numTaps++;
-          }
-          setTimeout(function(){
-            self.tapped = false;
-          }, 4000)
-        },
-        /**
-         * The 'hold' method is called when user holds down a selection and records the holdTime.
-         * @param  {object} e         e is the event object.
-         * @param  {object} detail    detail is event detail.
-         * @param  {object} selection selection is the node tapped.
-         */
-        hold: function(e, detail, selection){
-          var self = this;
-          selection.className = "hold"; // This triggers the fill styling.
-          self.holdTime = e.holdTime;
-        },
-        /**
-         * The 'release' method is called when user releases the selection. If an answer was selected, it calls the 'selectAnswer' method.
-         * @param  {object} e         e is the event object.
-         * @param  {object} detail    detail is event detail.
-         * @param  {object} selection selection is the node tapped.
-         */
-        release: function(e, detail, selection){
-          var self = this;
-          selection.className = "release";
+          var self = this,
+              imgChoice = selection.querySelector('.img-choice'),
+              checkMark = selection.querySelector('.checkmark');
           
-          if (self.holdTime > 1200) {
+          if (self.answersSelected < self.numAnswers){
+            // Fill chosen circle with transparent color
+            self.animation.play(new Animation(imgChoice, 
+              { boxShadow:"inset 0 0 0 45px rgba("+self.rgb+", 0.5)" },
+              { duration: 1000, fill: "forwards"})
+            )
+
+            // Display checkmark on chosen answer
+            self.animation.play(new Animation(checkMark, [
+                { offset: 0.7, opacity: 0 },
+                { offset: 1, opacity: 1 }
+              ],
+              {duration: 1000, fill: "forwards"})
+            )
+
+            // Keep track of how many answers have been selected
             self.answersSelected++;
+
+            // Call select answer to determine whether to show answer yet
             self.selectAnswer(selection);
           }
         },
         /**
-         * The 'selectAnswer' method displays the check mark on the choice and calls showAnswer if the correct number of answers have been chosen.
+         * The 'selectAnswer' method checks to see if the right number of choices have been selected and if so, calls showAnswer.
          * @param  {object} selection selection is the node selected.
          */
         selectAnswer: function(selection){
           var self = this;
-          selection.className = "selected";
-          if (self.answersSelected == self.numAnswers){
-            self.showAnswer();
-          }
+          self.answersSelected == self.numAnswers ? self.showAnswer(): null;
         },
         /**
-         * The 'showAnswer' method calls the animate method on the carousel to display the answer panel.
-         * @return {[type]} [description]
+         * The 'showAnswer' method calls the flip method in flipbox to display the answer on the back
          */
         showAnswer: function(){
           var self = this;
 
           setTimeout(function(){
-            self.$.carousel.animate(); 
+            self.animation.play(new Animation(self.$.question, {opacity:0}, {duration: 500, fill:"forwards"} ));
+            self.$.flipbox.flip(); 
             self.answered = true;
           }, 2000)
         },
@@ -262,14 +240,15 @@ Element providing a multiple choice quiz, animated via th-carousel
           return answers;
         },
         /**
-         * The 'reset' method checks to see if the answer panel is showing, and if so, animates the carousel to return to the question panel.
+         * The 'reset' method checks to see if the answer is showing, and if so, animates the flipbox to return to the question.
          */
         reset: function(){
           var self = this;
           if (self.answered){
-            self.$.carousel.animate();
+            self.$.flipbox.flip();
           }
         }
       });
+
   </script>
 </polymer-element>
