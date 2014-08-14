@@ -92,7 +92,7 @@ Element providing a multiple choice quiz, animated via th-flipbox
                         <div class="img-choice"  style="background-image: url('{{choice.image}}'); height: {{imageSize}}px; width: {{imageSize}}px; border-radius: {{imageSize/2}}px; border: 4px solid {{foreground1}}; box-sizing: border-box; color: {{foreground}}; font-size: {{imageSize/2}}px; box-shadow: inset 0 0 0 0px rgba({{rgb}}, 0.5)">
                         </div>
                         <template if="{{choice.text}}">
-                          <p class="label" style="display: block; margin: 0; -webkit-margin-before: 0; -webkit-margin-after:0; padding: 0;">{{choice.text}}</p>
+                          <p class="label" style="display: block; margin: 0; -webkit-margin-before: 0; -webkit-margin-after:0; padding: 5px 0px;font-size: {{labelSize}}px;">{{choice.text}}</p>
                         </template>
                     </li>
                   </template>
