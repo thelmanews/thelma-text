@@ -29,7 +29,7 @@ Element providing a multiple choice quiz, animated via th-flipbox
         }
 
         .checkmark {
-          /*background-image: url('../thelma-all/images/checkmark.png');*/
+          background-image: url('/bower_components/thelma-components/images/checkmark.png');
           background-size: cover;
           height: 100%;
           width: 100%;
@@ -70,7 +70,7 @@ Element providing a multiple choice quiz, animated via th-flipbox
                   <template repeat="{{choice, choiceIndex in choices}}">
                     <li on-click={{tap}}  on-release={{release}} style="width:{{choiceWidth}}px; height:{{choiceHeight}}px; ">
                         <div class="img-choice release" id="{{choiceIndex}}"  style="background: url('{{choice.image}}');  background-size: cover; height: {{imageSize}}px; width: {{imageSize}}px; border-radius: {{imageSize/2}}px; border: 4px solid {{foreground1}}; box-sizing: border-box; color: {{foreground}}; font-size: {{imageSize/2}}px; box-shadow: inset 0 0 0 0px rgba({{rgb}}, 0.5)">
-                          <div class="checkmark" style="background-image: url('../thelma-all/images/checkmark.png');"></div>
+                          <div class="checkmark"></div>
                         </div>
                         <template if="{{choice.text}}">
                           <p class="label" style="display: block; margin: 0; -webkit-margin-before: 0; -webkit-margin-after:0; padding: 5px 0px;font-size: {{labelSize}}px;">{{choice.text}}</p>
