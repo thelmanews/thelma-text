@@ -59,11 +59,21 @@ Element providing a flip box effect, allowing for any content on front and back.
       </style>
 
       <!-- Inline styles are for Safari and mobile support --> 
-      <div id="container" on-tap="{{flip}}" style="width: {{width}}px; height: {{height}}px;"> 
-        <div id="box">
-          <content></content>
+      <template if="{{flippable}}">
+        <div id="container" on-tap="{{flip}}" style="width: {{width}}px; height: {{height}}px;"> 
+          <div id="box">
+            <content></content>
+          </div>
         </div>
-      </div>
+      </template>
+
+      <template if="{{!flippable}}">
+        <div id="container" style="width: {{width}}px; height: {{height}}px;"> 
+          <div id="box">
+            <content></content>
+          </div>
+        </div>
+      </template>
 
   </template>
   <link rel="import" href="dependencies/web_animations.html">
@@ -102,9 +112,8 @@ Element providing a flip box effect, allowing for any content on front and back.
          */
         flip: function(e, detail, selection){
           var self = this,
-              box = selection.querySelector('#box');
+              box = self.$.box;
 
-          if (self.flippable){
             if (self._flipped){
               self.animation.play(self._flipEffect(box, 750, "rotateY(0deg)"));
               self._flipped = false;
@@ -112,7 +121,6 @@ Element providing a flip box effect, allowing for any content on front and back.
               self.animation.play(self._flipEffect(box, 750, "rotateY(180deg)"));
               self._flipped = true;
             }
-          }
         },
         /**
          * '_fadeEffect' creates a web animation effect that either fades and element in or out
