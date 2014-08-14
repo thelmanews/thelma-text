@@ -145,7 +145,7 @@ Element providing a multiple choice quiz, animated via th-flipbox
           self.setElementDims();
           self.answersSelected = 0;
           self.numAnswers = self.choices.filter(function(choice){
-            return choice.answer;
+            return choice.answer || choice.answer=="true";
           }).length;
 
           self.animation = document.timeline;
