@@ -257,7 +257,7 @@ Element providing a multiple choice quiz, animated via th-carousel
          */
         answerFilter: function(value){
           var answers = value.filter(function(choice){
-            return choice.answer == true;
+            return choice.answer == "true" || choice.answer == true;
           })
           return answers;
         },
