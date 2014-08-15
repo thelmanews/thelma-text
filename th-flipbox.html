@@ -30,6 +30,7 @@ Element providing a flip box effect, allowing for any content on front and back.
           position: relative;
           -webkit-transform-style: preserve-3d;
           opacity: 0;
+          -webkit-transform: rotateY( 180deg );
         }
 
         ::content .front, ::content .back {
@@ -60,7 +61,7 @@ Element providing a flip box effect, allowing for any content on front and back.
 
       <!-- Inline styles are for Safari and mobile support --> 
       <template if="{{flippable}}">
-        <div id="container" on-tap="{{flip}}" style="width: {{width}}px; height: {{height}}px;"> 
+        <div id="container" on-click="{{flip}}" style="width: {{width}}px; height: {{height}}px;"> 
           <div id="box">
             <content></content>
           </div>
@@ -103,6 +104,7 @@ Element providing a flip box effect, allowing for any content on front and back.
         animate: function(){
           var self =  this;
           self.animation.play(self._fadeEffect(self.$.box, 300, 0, 1));
+          self.animation.play(self._flipEffect(self.$.box, 300,"rotateY(0deg)"));
         },
         /**
          * 'flip' is called when the box is tapped and determines which way to flip the box
