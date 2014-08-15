@@ -30,7 +30,7 @@ Element providing a flip box effect, allowing for any content on front and back.
           position: relative;
           -webkit-transform-style: preserve-3d;
           opacity: 0;
-          -webkit-transform: rotateY( 180deg );
+          
         }
 
         ::content .front, ::content .back {
@@ -62,7 +62,7 @@ Element providing a flip box effect, allowing for any content on front and back.
       <!-- Inline styles are for Safari and mobile support --> 
       <template if="{{flippable}}">
         <div id="container" on-click="{{flip}}" style="width: {{width}}px; height: {{height}}px;"> 
-          <div id="box">
+          <div id="box" style="-webkit-transform: rotateY( 180deg );">
             <content></content>
           </div>
         </div>
@@ -70,7 +70,7 @@ Element providing a flip box effect, allowing for any content on front and back.
 
       <template if="{{!flippable}}">
         <div id="container" style="width: {{width}}px; height: {{height}}px;"> 
-          <div id="box">
+          <div id="box" >
             <content></content>
           </div>
         </div>
