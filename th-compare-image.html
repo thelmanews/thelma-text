@@ -14,13 +14,15 @@
             cursor: ew-resize;
             position:relative;
             overflow:visible;
+
         }
         #photos, #photos .layer {
             height: 100%;
         }
         #separator {
             height: 100%;
-            left: 50%;
+            /*left: 50%;*/
+            left: 0;
             position: absolute;
             width: 3px;
             background-color: rgba(0,0,0,0.5);
@@ -58,19 +60,53 @@
         },
         init: function() {
           var self = this,
-              beforeLayer =  d3.select(self.$.photobefore).node();
+              beforeLayer =  d3.select(self.$.photobefore).node(),
+              separator = d3.select(self.$.separator);
 
-          d3.select(self.$.photos)
-          // change to drag on separator
-            .on('mousemove', function() {
-                var pos = d3.mouse(this);
-                d3.timer.flush();
-                d3.timer(function() {
-                    d3.select(self.$.separator).style("left", pos[0] + 'px');
-                    beforeLayer.style.clip = 'rect(0px ' + pos[0] + 'px 9999999px 0px)';
-                    return true;
-                }, 0);
-            }); 
+
+          beforeLayer.style.clip = 'rect(0px ' + self.width/2 + 'px 99999px 0px)';
+          separator.style("left", self.width/2 + "px");
+
+
+          var drag = d3.behavior.drag()
+                  .origin(function() { 
+                      var t = d3.select(this);
+                      // console.log(t.node().style.left);
+                      return {x: t.style("x"), y: t.attr("y")};
+                  })
+                  .on("drag", dragMove);
+                  // .on('dragend', dragEnd);
+
+          d3.select(self.$.separator)
+            .call(drag);
+          
+          d3.select(self.$.photos).append('rect')
+            .attr('width', '30px')
+            .attr('height', '30px')
+            .attr('fill', 'red')
+            .attr('x', '50px')
+            .attr('y', '50px');
+
+          // d3.select(self.$.photos)
+            // .on('mousemove', function() {
+            //     var pos = d3.mouse(this);
+
+            //     console.log(pos);
+            //     d3.timer.flush();
+            //     d3.timer(function() {
+            //         d3.select(self.$.separator).style("left", pos[0] + 'px');
+                    
+            //         beforeLayer.style.clip = 'rect(0px ' + pos[0] + 'px 99999px 0px)';
+            //         return true;
+            //     }, 0);
+            // }); 
+
+            function dragMove(d){
+              console.log(d3.event.x);
+
+              // console.log(this);
+
+            }
         }
         
       });
