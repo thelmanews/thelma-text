@@ -1,0 +1,79 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../thelma-core/thelma_core.html">
+
+
+<polymer-element name="th-compare-image" extends="th-animated" attributes="width height imageLeft imageRight">
+  <template>
+      <style>
+        :host {
+          display: inline-block;
+          position: relative;
+        }
+
+        #photos {
+            cursor: ew-resize;
+            position:relative;
+            overflow:visible;
+        }
+        #photos, #photos .layer {
+            height: 100%;
+        }
+        #separator {
+            height: 100%;
+            left: 50%;
+            position: absolute;
+            width: 3px;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 10;
+        }
+
+        #photobefore, #photoafter {
+            max-width:100%;
+            min-width:100%;
+            position:absolute;
+        }
+
+      </style>
+      <div id="container">
+        <div id='photos' style="width: {{width}}px; height:{{height}}px;">
+          <div id="separator"></div>
+          <div class='layer' id='photoafter' style="background:url('{{imageRight}}') no-repeat; background-size:100% auto"></div>
+          <div class='layer' id='photobefore' style="background:url('{{imageLeft}}') no-repeat; background-size:100% auto"></div>
+        </div>
+        
+        <!-- TODO: Set up so images can also be included as child elements -->
+        
+      </div>
+  </template>
+  <script src="../d3/d3.min.js"></script> 
+  <script>
+
+      Polymer('th-compare-image', {
+        imageLeft: "",
+        imageRight: "",
+        ready: function() {
+
+          this.init();
+
+        },
+        init: function() {
+          var self = this,
+              beforeLayer =  d3.select(self.$.photobefore).node();
+
+          d3.select(self.$.photos)
+          // change to drag on separator
+            .on('mousemove', function() {
+                var pos = d3.mouse(this);
+                d3.timer.flush();
+                d3.timer(function() {
+                    d3.select(self.$.separator).style("left", pos[0] + 'px');
+                    beforeLayer.style.clip = 'rect(0px ' + pos[0] + 'px 9999999px 0px)';
+                    return true;
+                }, 0);
+            }); 
+        }
+        
+      });
+
+  </script>
+</polymer-element>
