@@ -94,8 +94,8 @@ often used to show 'before' and 'after'
       <div id="container">
         <div id='photos' style="width: {{width}}px; height:{{height}}px;">
           <div id="slider" style="left: {{sliderPos}}"></div>
-          <div id="arrowLeft" class="arrows pulse" style="top: {{height/2}}px; left: {{width / 2 - 16}}px;"></div>
-          <div id="arrowRight" class="arrows pulse"  style="top: {{height/2}}px; left: {{width / 2 + 20}}px;"></div>
+          <div id="arrowLeft" class="arrows pulse" style="top: {{height/2}}px; left: {{lastPos - 16}}px;"></div>
+          <div id="arrowRight" class="arrows pulse"  style="top: {{height/2}}px; left: {{lastPos + 20}}px;"></div>
           <div class='layer' id='photoafter' style="background:url('{{imageRight}}') center center no-repeat; background-size: cover;"></div>
           <div class='layer' id='photobefore' style="background:url('{{imageLeft}}') center center no-repeat; background-size: cover;"></div>
         </div>
@@ -137,11 +137,11 @@ often used to show 'before' and 'after'
           var self = this,
               beforeLayer =  d3.select(self.$.photobefore).node(),
               slider = d3.select(self.$.slider),
-              lastPos = self.width * parseInt(self.sliderPos)/100,
               xPos;
 
           // Initial position of the slider and photo clip
-          beforeLayer.style.clip = 'rect(0px ' + lastPos + 'px 99999px 0px)';
+          self.lastPos = self.width * parseInt(self.sliderPos)/100;
+          beforeLayer.style.clip = 'rect(0px ' + self.lastPos + 'px 99999px 0px)';
           slider.style("left", self.sliderPos);
 
           // Define drag behavior
@@ -158,7 +158,7 @@ often used to show 'before' and 'after'
 
           // Move the slider and photo clip on drag
           function dragMove(d){
-            xPos = Math.max(0,Math.min(self.width,(parseInt(lastPos) + d3.event.x)));
+            xPos = Math.max(0,Math.min(self.width,(parseInt(self.lastPos) + d3.event.x)));
 
             // Remove pulse transition for hinting at slider
             self.$.arrowLeft.classList.remove("pulse");
@@ -174,7 +174,7 @@ often used to show 'before' and 'after'
 
           // Record the end position of the slider
           function dragEnd(d){
-            lastPos = slider.style('left');
+            self.lastPos = slider.style('left');
           }
         }
         
