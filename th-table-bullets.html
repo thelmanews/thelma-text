@@ -46,11 +46,12 @@
   <script>
 
       Polymer('th-table-bullets', { 
+        width: 250,
         tableData: [ // image and bullet(any unicode symbol) are optional
         // User should be given a dropdown of unicode symbols to choose from to avoid typos.
-          { bullet: '\u25CF', text: 'This is the first bullet.', color:''},
-          { bullet: '\u25CF', text: 'This is the second bullet.', color:''},
-          { bullet: '\u25CF', text: 'This is the third bullet.', color:''}
+          { "bullet": "\u25CF", "text": "First bullet.", "color":""},
+          { "bullet": "\u25CF", "text": "Second bullet.", "color":""},
+          { "bullet": "\u25CF", "text": "Third bullet.", "color":""}
          ],
         init: function() {
           var self = this;

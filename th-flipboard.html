@@ -91,14 +91,14 @@ Element providing a flexible layout grid of flippable boxes, dependent on th-fli
          *   or back, respectively
          * @type {String} => '#000000'  
          */
-        items: [  {textFront: "front", backgroundFront: "", colorFront:"", 
-                  textBack: "back", backgroundBack: "", colorBack:""},
-                  {textFront: "front", backgroundFront: "", colorFront:"", 
-                  textBack: "back", backgroundBack: "", colorBack:""},
-                  {textFront: "front", backgroundFront: "", colorFront:"", 
-                  textBack: "back", backgroundBack: "", colorBack:""},
-                  {textFront: "front", backgroundFront: "", colorFront:"", 
-                  textBack: "back", backgroundBack: "", colorBack:""}
+        items: [  {"textFront": "Front", "backgroundFront": "", "colorFront":"", 
+                  "textBack": "Back", "backgroundBack": "", "colorBack":""},
+                  {"textFront": "Front", "backgroundFront": "", "colorFront":"", 
+                  "textBack": "Back", "backgroundBack": "", "colorBack":""},
+                  {"textFront": "Front", "backgroundFront": "", "colorFront":"", 
+                  "textBack": "Back", "backgroundBack": "", "colorBack":""},
+                  {"textFront": "Front", "backgroundFront": "", "colorFront":"", 
+                  "textBack": "Back", "backgroundBack": "", "colorBack":""}
                 ],
         /**
          * 'itemsPerRow' determines the number of items shown in each row. Number
@@ -113,6 +113,8 @@ Element providing a flexible layout grid of flippable boxes, dependent on th-fli
          * @type {Boolean}
          */
         flippable: true,
+        width: 280,
+        height: 280,
         ready: function(){
           var self = this,
               
