@@ -52,6 +52,10 @@
 
   <script>
       Polymer('th-tweet', {
+        width: 250,
+        twitterHandle: "username",
+        tweet: "Enter tweet here.",
+        image: "/bower_components/thelma-components/images/person.jpg",
         ready: function(){
           this.foreground = window.CoreStyle.g.theme.foreground2;
           if (this.twitterHandle && !/^@/.test(this.twitterHandle)){
