@@ -106,14 +106,17 @@
           
           if (self.growNumber == "true"){
             self.fontsize = 12;
+            var intervals = (self.numberSize - self.fontsize),
+                intervalTime = self.duration*1000 / intervals;
+           
             var count = setInterval(function(){               
                if (self.fontsize < self.numberSize){
-                 self.fontsize++;
+                 self.fontsize += 1.75;
                  self.numberSizeCurrent = self.fontsize;
                } else {
                  clearInterval(count);
                }
-             }, self.duration)
+             }, intervalTime)
             }
         }
       });
