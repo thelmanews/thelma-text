@@ -54,12 +54,12 @@ Element providing a flexible layout grid of flippable boxes, dependent on th-fli
                 <th-flipbox width="{{itemWidth}}" height="{{itemHeight}}" animateAfter="{{(itemIndex + 1) * 200}}" flippable="{{flippable}}" style="overflow:hidden; max-height:{{itemHeight}}px;">
                   
                   <!-- Front side -->
-                  <div class="front" style="position: absolute; background: {{(item.backgroundFront || colors.accents[itemIndex]) | formatImageUrl }} no-repeat; background-size: cover; top: 0; left: 0; ">
+                  <div class="front" style="position: absolute; background: {{(item.backgroundFront || colors.accents[itemIndex]) | formatImageUrl }}; background-repeat: no-repeat; background-size: cover; top: 0; left: 0; ">
                     <p class="mainpoint" style="color: {{item.colorFront || colors.theme.foreground1}};"> {{item.textFront}} </p>
                   </div>
                   
                   <!-- Back side -->
-                  <div class="back" style="position: absolute;  background: {{(item.backgroundBack || colors.accents[itemIndex]) | formatImageUrl }} no-repeat; background-size: cover; top: 0; left: 0;">
+                  <div class="back" style="position: absolute;  background: {{(item.backgroundBack || colors.accents[itemIndex]) | formatImageUrl }}; background-repeat: no-repeat; background-size: cover; top: 0; left: 0;">
                     <p class="mainpoint" style="color: {{item.colorBack || colors.theme.foreground1}};"> {{item.textBack}} </p>
                   </div>
 
@@ -130,18 +130,6 @@ Element providing a flexible layout grid of flippable boxes, dependent on th-fli
           while (self.items.length > self.colors.count){
             self.addMoreColors();
           }
-
-          // // Parse the background attribute for image and convert to the correct format for CSS
-          // for (var i=0, items=self.items; i<items.length; i++){
-          //   var back = items[i].backgroundBack,
-          //       front = items[i].backgroundFront;
-          //   if(front.length > 1 && front.substring(0,1) != "#"){
-          //     self.items[i].backgroundFront = "url('" + front + "')";
-          //   }
-          //   if(back.length > 1 && back.substring(0,1) != "#"){
-          //     self.items[i].backgroundBack = "url('" + back + "')";
-          //   }
-          // }
 
         },
         /**
