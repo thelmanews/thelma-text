@@ -91,7 +91,7 @@ Element providing a flexible layout grid of flippable boxes, dependent on th-fli
          *   or back, respectively
          * @type {String} => '#000000'  
          */
-        items: [  {textFront: "front", backgroundFront: "", colorFront:"", 
+        items: [  {textFront: "front", backgroundFront: "../thelma-all/images/person.jpg", colorFront:"", 
                   textBack: "back", backgroundBack: "", colorBack:""},
                   {textFront: "front", backgroundFront: "", colorFront:"", 
                   textBack: "back", backgroundBack: "", colorBack:""},
@@ -124,13 +124,23 @@ Element providing a flexible layout grid of flippable boxes, dependent on th-fli
                             (self.margin/2 * (self.itemsPerRow-1) + self.margin); 
           self.itemHeight =((self.height - self.margin) / rows) - 
                             (self.margin/2 * (rows-1));
-          console.log(self.height);
-          console.log(self.height/rows);
-          console.log(self.itemHeight);
+
           // Get theme colors to set default colors for items
           self.colors = self.getColors();
           while (self.items.length > self.colors.count){
             self.addMoreColors();
+          }
+
+          // Parse the background attribute for image and convert to the correct format for CSS
+          for (var i=0, items=self.items; i<items.length; i++){
+            var back = items[i].backgroundBack,
+                front = items[i].backgroundFront;
+            if(front.length > 1 && front.substring(0,1) != "#"){
+              self.items[i].backgroundFront = "url('" + front + "')";
+            }
+            if(back.length > 1 && back.substring(0,1) != "#"){
+              self.items[i].backgroundBack = "url('" + back + "')";
+            }
           }
 
         },
