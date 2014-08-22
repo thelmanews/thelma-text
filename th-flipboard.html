@@ -49,17 +49,17 @@ Element providing a flexible layout grid of flippable boxes, dependent on th-fli
       <!-- Inline styles are for Safari and mobile support --> 
         <div id="container" style="width: {{width}}px; height: {{height}}px;">
           <ul>
-            <template repeat="{{item, itemIndex in items}}">
+            <template repeat="{{item, itemIndex in items }}">
               <li style="max-height: {{itemHeight}};">
                 <th-flipbox width="{{itemWidth}}" height="{{itemHeight}}" animateAfter="{{(itemIndex + 1) * 200}}" flippable="{{flippable}}" style="overflow:hidden; max-height:{{itemHeight}}px;">
                   
                   <!-- Front side -->
-                  <div class="front" style="position: absolute; background: {{item.backgroundFront || colors.accents[itemIndex]}} no-repeat; background-size: cover; top: 0; left: 0; ">
+                  <div class="front" style="position: absolute; background: {{(item.backgroundFront || colors.accents[itemIndex]) | formatImageUrl }} no-repeat; background-size: cover; top: 0; left: 0; ">
                     <p class="mainpoint" style="color: {{item.colorFront || colors.theme.foreground1}};"> {{item.textFront}} </p>
                   </div>
                   
                   <!-- Back side -->
-                  <div class="back" style="position: absolute; background: {{item.backgroundBack || colors.accents[itemIndex]}} no-repeat;  top: 0; left: 0;">
+                  <div class="back" style="position: absolute;  background: {{(item.backgroundBack || colors.accents[itemIndex]) | formatImageUrl }} no-repeat; background-size: cover; top: 0; left: 0;">
                     <p class="mainpoint" style="color: {{item.colorBack || colors.theme.foreground1}};"> {{item.textBack}} </p>
                   </div>
 
@@ -91,7 +91,7 @@ Element providing a flexible layout grid of flippable boxes, dependent on th-fli
          *   or back, respectively
          * @type {String} => '#000000'  
          */
-        items: [  {textFront: "front", backgroundFront: "../thelma-all/images/person.jpg", colorFront:"", 
+        items: [  {textFront: "front", backgroundFront: "", colorFront:"", 
                   textBack: "back", backgroundBack: "", colorBack:""},
                   {textFront: "front", backgroundFront: "", colorFront:"", 
                   textBack: "back", backgroundBack: "", colorBack:""},
@@ -131,17 +131,17 @@ Element providing a flexible layout grid of flippable boxes, dependent on th-fli
             self.addMoreColors();
           }
 
-          // Parse the background attribute for image and convert to the correct format for CSS
-          for (var i=0, items=self.items; i<items.length; i++){
-            var back = items[i].backgroundBack,
-                front = items[i].backgroundFront;
-            if(front.length > 1 && front.substring(0,1) != "#"){
-              self.items[i].backgroundFront = "url('" + front + "')";
-            }
-            if(back.length > 1 && back.substring(0,1) != "#"){
-              self.items[i].backgroundBack = "url('" + back + "')";
-            }
-          }
+          // // Parse the background attribute for image and convert to the correct format for CSS
+          // for (var i=0, items=self.items; i<items.length; i++){
+          //   var back = items[i].backgroundBack,
+          //       front = items[i].backgroundFront;
+          //   if(front.length > 1 && front.substring(0,1) != "#"){
+          //     self.items[i].backgroundFront = "url('" + front + "')";
+          //   }
+          //   if(back.length > 1 && back.substring(0,1) != "#"){
+          //     self.items[i].backgroundBack = "url('" + back + "')";
+          //   }
+          // }
 
         },
         /**
@@ -160,7 +160,7 @@ Element providing a flexible layout grid of flippable boxes, dependent on th-fli
           }
 
           colors.count = colors.accents.length;
-          console.log(colors);
+          // console.log(colors);
           return colors;
         },
         /**
@@ -200,6 +200,13 @@ Element providing a flexible layout grid of flippable boxes, dependent on th-fli
           self.colors.count = self.colors.accents.length; 
           
           return self.colors;
+        },
+        formatImageUrl: function(value){
+          if(value && value.length > 1 && value.substring(0,1) != "#"){
+            value = "url('" + value + "')";
+          }
+
+          return value;
         }
       });
 
