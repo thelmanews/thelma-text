@@ -68,7 +68,7 @@ Element providing a multiple choice quiz, animated via th-flipbox
                 
                 <div class="choices" >
                   <template repeat="{{choice, choiceIndex in choices}}">
-                    <li on-click={{tap}}  on-release={{release}} style="width:{{choiceWidth}}px; height:{{choiceHeight}}px; ">
+                    <li touch-action="auto" on-click={{tap}}  on-release={{release}} style="width:{{choiceWidth}}px; height:{{choiceHeight}}px; ">
                         <div class="img-choice release" id="{{choiceIndex}}"  style="background: url('{{choice.image}}');  background-size: cover; height: {{imageSize}}px; width: {{imageSize}}px; border-radius: {{imageSize/2}}px; border: 4px solid {{foreground1}}; box-sizing: border-box; color: {{foreground}}; font-size: {{imageSize/2}}px; box-shadow: inset 0 0 0 0px rgba({{rgb}}, 0.5)">
                           <div class="checkmark"></div>
                         </div>
