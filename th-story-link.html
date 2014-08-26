@@ -77,7 +77,7 @@
       <!-- -->
 
       <template if="{{storytitle}}">
-          <li style="background: url({{image}}) center center no-repeat; background-size: cover; border-bottom: 4px solid {{bordercolor}};" on-down="{{tapDown}}" on-up="{{tapRelease}}"> 
+          <li style="background: url({{image}}) center center no-repeat; background-size: cover; border-bottom: 4px solid {{bordercolor}};" on-down="{{tapDown}}" on-up="{{tapRelease}}" on-touchend="{{tapRelease}}"> 
             <div class="layer" style="background-color: {{bgcolor}}">
               <content></content>
               <p class="title headline">{{storytitle}}</p>
