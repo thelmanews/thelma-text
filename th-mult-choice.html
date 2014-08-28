@@ -29,8 +29,8 @@ Element providing a multiple choice quiz, animated via th-flipbox
         }
 
         .checkmark {
-          background-image: url('/bower_components/thelma-components/images/checkmark.png');
-          background-size: cover;
+          /*background-image: url('/bower_components/thelma-components/images/checkmark.png');
+          background-size: cover;*/
           height: 100%;
           width: 100%;
           opacity: 0;
@@ -126,7 +126,7 @@ Element providing a multiple choice quiz, animated via th-flipbox
          * The 'width' attribute specifies the width of the component in pixels.
          * @type {Number}
          */
-        width: 250,
+        width: 250.5,
 
         /** 
          * The 'height' attribute specifies the height of the component in pixels.
@@ -139,7 +139,7 @@ Element providing a multiple choice quiz, animated via th-flipbox
          * @type {String}
          */
         answerText: "The correct answer is:",
-        choicesPerRow: 4,
+        choicesPerRow: 2,
         domReady: function(){
           var self = this;
           self.setColors();
@@ -158,14 +158,12 @@ Element providing a multiple choice quiz, animated via th-flipbox
           var self = this,
               numRows = Math.ceil(self.choices.length / parseInt(self.choicesPerRow)), // Number of rows of choices
               questionHeight = self.$.headline.offsetHeight; // Computed height of question
-          console.log("choices: "+self.choicesPerRow);
-          console.log("choices: "+parseInt(self.choicesPerRow));
-          console.log(numRows);
-          self.choiceWidth = self.width / parseInt(self.choicesPerRow); // Width of each choice
-          console.log(self.choiceWidth);
+          
+          self.choiceWidth = Math.floor(self.width / parseInt(self.choicesPerRow)); // Width of each choice
           self.choiceHeight = (self.height - questionHeight) / numRows; // Height of area for choices
           self.imageSize = Math.min(self.choiceHeight, self.choiceWidth) * 0.7;  // Size of image (assumes room for label)
           self.labelSize = Math.min(self.choiceHeight, self.choiceWidth) * 0.15; // Size of label
+         
         },
         /**
          * The 'setColors' method detects the theme and chooses the correct colors. It also converts the theme color into RGB format to be applied in RGBA format in CSS
