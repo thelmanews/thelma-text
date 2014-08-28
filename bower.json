@@ -14,6 +14,5 @@
     "thelma-core": "https://github.com/thelmanews/thelma-core.git",
     "thelma-utils": "https://github.com/thelmanews/thelma-utils.git",
     "google-apis": "GoogleWebComponents/google-apis#master"
-    // "web-animations-js": "https://github.com/web-animations/web-animations-js.git"
   }
 }
