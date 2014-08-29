@@ -77,7 +77,7 @@
       <!-- -->
 
       <template if="{{storytitle}}">
-          <li style="background: url({{image}}) center center no-repeat; background-size: cover; border-bottom: 4px solid {{bordercolor}};" on-down="{{tapDown}}" on-up="{{tapRelease}}" on-touchend="{{tapRelease}}"> 
+          <li style="background: url({{image}}) center center no-repeat; background-size: cover; border-bottom: 4px solid {{bordercolor}};" on-down="{{tapDown}}" on-up="{{tapRelease}}" on-touchend="{{mobileTap}}"> 
             <div class="layer" style="background-color: {{bgcolor}}">
               <content></content>
               <p class="title headline">{{storytitle}}</p>
@@ -196,6 +196,9 @@
           var self = this,
               holdTime = e.timeStamp - self.timeDown;
           if (holdTime < 400){ window.open(self.url, '_blank');}
+        },
+        mobileTap: function(e){
+          window.open(this.url, '_blank');
         }
       });
 
