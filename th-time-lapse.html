@@ -1,0 +1,44 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../thelma-core/thelma_core.html">
+
+<polymer-element name="th-timelapse" extends="th-animated" attributes="">
+
+  <template>
+      <core-style ref="theme"></core-style>
+      <style>
+        
+      </style>
+
+      <!-- Inline styles are for Safari and mobile support --> 
+      <template>
+        
+      </template>
+
+  </template>
+  
+  <script>
+
+      Polymer('th-timelapse', {
+       
+        init: function(){
+          var self = this;
+
+          // http://www.w3schools.com/jsref/jsref_gettimezoneoffset.asp
+          // http://stackoverflow.com/questions/6939685/get-client-time-zone-from-browser
+          // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/getTimezoneOffset
+        },
+       
+        animate: function(){
+          var self =  this;
+          
+        },
+       
+        reset: function(){
+       
+        }
+      });
+
+  </script>
+
+
+</polymer-element>
