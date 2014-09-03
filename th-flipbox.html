@@ -61,7 +61,7 @@ Element providing a flip box effect, allowing for any content on front and back.
 
       <!-- Inline styles are for Safari and mobile support --> 
       <template if="{{flippable}}">
-        <div id="container" on-click="{{flip}}" on-touch="{{flip}}" on-touchend="{{flip}}" style="width: {{width}}px; height: {{height}}px;"> 
+        <div id="container" on-click="{{flip}}" on-touchend="{{flip}}" style="width: {{width}}px; height: {{height}}px;"> 
           <div id="box" style="-webkit-transform: rotateY( 180deg );">
             <content></content>
           </div>
