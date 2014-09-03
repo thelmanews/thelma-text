@@ -22,7 +22,7 @@ Element providing a 3D carousel for either text or images.
 @status alpha
 @homepage http://aendrew.github.io/th-carousel
 -->
-<polymer-element name="th-carousel" extends="th-animated" attributes="animateOn interval isHorizontal backfaces width height fontSize">
+<polymer-element name="th-carousel" extends="th-animated" attributes="items animateOn interval isHorizontal backfaces width height fontSize">
 
   <template>
 
@@ -64,14 +64,14 @@ Element providing a 3D carousel for either text or images.
       :host #carousel.ready {
       }
       */
-      #carousel.panels-backface-invisible ::content > * {
+      #carousel.panels-backface-invisible ::content > *, #carousel > * {
         -webkit-backface-visibility: hidden;
            -moz-backface-visibility: hidden;
              -o-backface-visibility: hidden;
                 backface-visibility: hidden;
       }
 
-      ::content > * {
+      ::content > *, #carousel > * {
         display: block;
         position: absolute;
         width: {{width + "px"}};
@@ -83,7 +83,7 @@ Element providing a 3D carousel for either text or images.
         margin: 0;
       }
 
-       ::content > * {
+       ::content > *, #carousel > * {
         -webkit-transition: opacity 1s, -webkit-transform 1s;
            -moz-transition: opacity 1s, -moz-transform 1s;
              -o-transition: opacity 1s, -o-transform 1s;
@@ -95,9 +95,13 @@ Element providing a 3D carousel for either text or images.
     <section class="container">
       <div id="carousel" class="panels-backface-invisible">
         <content></content>
-        <div>First Slide</div>
-        <div>Second Slide</div>
-        <div>Third Slide</div>
+        <template if="{{items}}">
+          <template repeat="{{item in items}}">
+            <div class="panel" style="width: 100px; height: 100px; background: {{item.image}} no-repeat cover;"> {{item.text}} </div>
+            <!-- <div class="panel">second item</div> -->
+            <!-- <div class="panel">third item</div> -->
+          </template>
+        </template>
       </div>
     </section>
 
@@ -207,6 +211,12 @@ Element providing a 3D carousel for either text or images.
        */
       // transformProp: Modernizr.prefixed('transform'),
       transformProp: "-webkit-transform",
+      items: [  
+                {text: "first item", image: "../thelma-all/images/person.jpg"},
+                {text: "second item", image: ""},
+                {text: "third item", image: ""},
+                {text: "fourth item", image: ""}  
+              ],
 
       init: function() {
         var element = this;
@@ -220,14 +230,14 @@ Element providing a 3D carousel for either text or images.
               element.transform();
             };
 
-        this._panels = this.children;
+        this._panels = this.children.length > 0 ? this.children : this.shadowRoot.querySelectorAll('.panel');
 
         if(element.backfaces) {
           carousel.classList.remove('panels-backface-invisible');
         }
 
         // populate on startup
-        this._panelCount = this.children.length;
+        this._panelCount = this._panels.length;
         this.modify();
 
 
@@ -254,7 +264,7 @@ Element providing a 3D carousel for either text or images.
         // do some trig to figure out how big the carousel
         // is in 3D space
         this.radius = Math.round( ( this.panelSize / 2) / Math.tan( Math.PI / this._panelCount ) * 0.9 );
-        var elements = this.children;
+        var elements = this.children.length > 0 ? this.children : this.shadowRoot.querySelectorAll('.panel');
 
         for ( i = 0; i < this._panelCount; i++ ) {
           panel = elements[i];
