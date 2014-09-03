@@ -306,18 +306,18 @@ Element providing a 3D carousel for either text or images.
 
         // do some trig to figure out how big the carousel
         // is in 3D space
-        this.radius = Math.round( ( this.panelSize / 2) / Math.tan( Math.PI / this._panelCount ) * 0.9 );
+        this.radius = Math.round( ( this.panelSize / 2) / Math.tan( Math.PI / this._panelCount ));
         var elements = this.children.length > 0 ? this.children : this.shadowRoot.querySelectorAll('.panel');
 
         for ( i = 0; i < this._panelCount; i++ ) {
           panel = elements[i];
-          console.log(this._panelCount);
-          console.log(panel);
 
           if (this.animateOn == "tap"){
+            // For Composer mobile tap events
             panel.addEventListener('touchend' ,function() {
               self.animate();
             });
+            // For normal click and tap events
             panel.addEventListener('tap' ,function() {
               self.animate();
             });
@@ -325,7 +325,7 @@ Element providing a 3D carousel for either text or images.
 
           angle = this.theta * i;
           panel.style.opacity = 1;
-          panel.classList.add('border');
+          // panel.classList.add('border');
           //panel.style.backgroundColor = 'hsla(' + angle + ', 100%, 50%, 0.8)';
           // rotate panel, then push it out in 3D space
           panel.style[ this.transformProp ] = this.rotateFn + '(' + angle + 'deg) translateZ(' + this.radius + 'px)';
@@ -338,7 +338,7 @@ Element providing a 3D carousel for either text or images.
         }
 
         // hide other panels
-        for (  ; i < this._panels; i++ ) {
+        for ( var i=0; i < this._panels; i++ ) {
           panel = elements[i];
           panel.style.opacity = 0;
           panel.style[ this.transformProp ] = 'none';
@@ -348,6 +348,7 @@ Element providing a 3D carousel for either text or images.
         this.rotation = Math.round( this.rotation / this.theta ) * this.theta;
 
         this.transform();
+
       },
 
       /**
@@ -357,12 +358,13 @@ Element providing a 3D carousel for either text or images.
        * @return {Object} Returns undefined.
        */
       transform: function() {
-        this.shadowRoot.getElementById('carousel').style[ this.transformProp ] = 'translateZ(-' + this.radius + 'px) ' + this.rotateFn + '(' + this.rotation + 'deg)';
+        console.log(this.radius);
+        this.$.carousel.style[ this.transformProp ] = 'translateZ(-' + this.radius + 'px) ' + this.rotateFn + '(' + this.rotation + 'deg)';
       },
 
       animate: function() {
-          this.rotation -= this.theta;
-          this.transform();
+        this.rotation -= this.theta;
+        this.transform();
 
       }
 
