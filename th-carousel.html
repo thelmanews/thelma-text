@@ -71,9 +71,6 @@ Element providing a 3D carousel for either text or images.
         vertical-align: middle;
         text-align: center;
         margin: 0;
-      }
-
-      ::content > *, #carousel > * {
         -webkit-transition: opacity 1s, -webkit-transform 1s;
            -moz-transition: opacity 1s, -moz-transform 1s;
              -o-transition: opacity 1s, -o-transform 1s;
@@ -123,7 +120,7 @@ Element providing a 3D carousel for either text or images.
     <!-- Inline styles for mobile and Safari --> 
     <div class="container" style="width: {{width}}px; height: {{height}}px;">
       
-      <div id="carousel" class="panels-backface-invisible">
+      <div id="carousel" class="panels-backface-invisible" style="-webkit-transform-style: preserve-3d; -webkit-transition: -webkit-transform 1s;">
         <content></content>
         <template if="{{items}}">
           <template repeat="{{item in items}}">
@@ -179,7 +176,7 @@ Element providing a 3D carousel for either text or images.
        * @type string
        * @options 'tap', 'interval', 'none'
        */
-      animateOn: 'interval',
+      animateOn: 'tap',
 
       /**
        * The `interval` property stores interval time between panel transitions.
