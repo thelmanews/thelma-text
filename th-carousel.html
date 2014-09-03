@@ -127,15 +127,16 @@ Element providing a 3D carousel for either text or images.
         <content></content>
         <template if="{{items}}">
           <template repeat="{{item in items}}">
-            <div class="panel" style="background: url('{{item.image}}') center center no-repeat; background-size: cover; font-size: {{fontSize}}px; -webkit-backface-visibility: hidden; display: table; position: absolute; width: 100%; height: 100%; left: 0px; top: 0px; vertical-align: middle; margin: 0; text-align: center;"> 
+            <div class="panel" style="background: url('{{item.image}}') center center no-repeat; background-size: cover; font-size: {{fontSize}}px; display: table; position: absolute; width: 100%; height: 100%; left: 0px; top: 0px; vertical-align: middle; margin: 0; text-align: center;"> 
               <p class="mainpoint" style="display: table-cell; vertical-align: middle; text-align: center; -webkit-margin-before: 0; -webkit-margin-after: 0; margin: 0;">{{item.text}} </p>
             </div>
           </template>
         </template>
       </div>
 
-      <template if="{{animateOn}}=='tap'">
-        <div class="flash-msg submaintpoint">Tap to move forward.</div>
+      <template if="{{animateOn=='tap'}}">
+        <div class="flash-msg submaintpoint">
+          Tap to move forward.</div>
       </template>
     </div>
 
@@ -178,7 +179,7 @@ Element providing a 3D carousel for either text or images.
        * @type string
        * @options 'tap', 'interval', 'none'
        */
-      animateOn: "tap",
+      animateOn: 'interval',
 
       /**
        * The `interval` property stores interval time between panel transitions.
@@ -312,7 +313,7 @@ Element providing a 3D carousel for either text or images.
         for ( i = 0; i < this._panelCount; i++ ) {
           panel = elements[i];
 
-          if (this.animateOn == "tap"){
+          if (this.animateOn == 'tap'){
             // For Composer mobile tap events
             panel.addEventListener('touchend' ,function() {
               self.animate();
@@ -331,7 +332,7 @@ Element providing a 3D carousel for either text or images.
           panel.style[ this.transformProp ] = this.rotateFn + '(' + angle + 'deg) translateZ(' + this.radius + 'px)';
         }
 
-        if (this.animateOn == "interval"){
+        if (this.animateOn == 'interval'){
          setInterval(function(){
           self.animate();
          }, this.interval)
