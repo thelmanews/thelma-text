@@ -95,6 +95,7 @@ Element providing a 3D carousel for either text or images.
     <section class="container">
       <div id="carousel" class="panels-backface-invisible">
         <content></content>
+
         <template if="{{items}}">
           <template repeat="{{item in items}}">
             <div class="panel" style="width: 100px; height: 100px; background: {{item.image}} no-repeat cover;"> {{item.text}} </div>
@@ -102,6 +103,7 @@ Element providing a 3D carousel for either text or images.
             <!-- <div class="panel">third item</div> -->
           </template>
         </template>
+
       </div>
     </section>
 
