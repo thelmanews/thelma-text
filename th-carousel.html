@@ -98,9 +98,8 @@ Element providing a 3D carousel for either text or images.
 
         <template if="{{items}}">
           <template repeat="{{item in items}}">
-            <div class="panel" style="width: 100px; height: 100px; background: {{item.image}} no-repeat cover;"> {{item.text}} </div>
-            <!-- <div class="panel">second item</div> -->
-            <!-- <div class="panel">third item</div> -->
+            <div class="panel" style="width: {{width}}px; height: {{height}}; background: {{item.image}} no-repeat cover; background-color: blue; font-size: {{fontSize}}px; -webkit-backface-visibility: hidden; "> {{item.text}} </div>
+            
           </template>
         </template>
 
