@@ -1,7 +1,7 @@
 <link rel="import" href="../polymer/polymer.html">
-
 <link rel="import" href="../thelma-core/thelma_core.html">
 <link rel="import" href="../thelma-utils/th-theme.html">
+<link rel="import" href="th-text.html">
 
 <!--
 Element providing a 3D carousel for either text or images.
@@ -22,19 +22,15 @@ Element providing a 3D carousel for either text or images.
 @status alpha
 @homepage http://aendrew.github.io/th-carousel
 -->
-<polymer-element name="th-carousel" extends="th-animated" attributes="animateOn interval isHorizontal backfaces width height fontSize">
+<polymer-element name="th-carousel" extends="th-animated" attributes="items animateOn interval isHorizontal backfaces width height fontSize">
 
   <template>
 
     <core-style ref="theme"></core-style>
 
     <style type="text/css">
-      :host section.container {
-        width: {{width + "px"}};
-        height: {{height + "px"}};
+      :host .container {
         position: relative;
-        margin: 0 auto 40px;
-       /* border: 1px solid #CCC;*/
         display: block;
         -webkit-perspective: 1100px; 
            -moz-perspective: 1100px;
@@ -46,7 +42,7 @@ Element providing a 3D carousel for either text or images.
       :host #carousel {
         width: 100%;
         height: 100%;
-        position: absolute;
+        /*position: absolute;*/
         -webkit-transform-style: preserve-3d;
            -moz-transform-style: preserve-3d;
              -o-transform-style: preserve-3d;
@@ -56,56 +52,97 @@ Element providing a 3D carousel for either text or images.
            -moz-transition: -moz-transform 1s;
              -o-transition: -o-transform 1s;
                 transition: transform 1s;
+      }
 
-      }
-      /*
-      .ready works only for one component in the page
-       
-      :host #carousel.ready {
-      }
-      */
-      #carousel.panels-backface-invisible ::content > * {
+      #carousel.panels-backface-invisible ::content > *, #carousel > * {
         -webkit-backface-visibility: hidden;
            -moz-backface-visibility: hidden;
              -o-backface-visibility: hidden;
                 backface-visibility: hidden;
       }
 
-      ::content > * {
+      ::content > *, #carousel > * {
         display: block;
         position: absolute;
-        width: {{width + "px"}};
-        left: 10px;
-        top: 10px;
+        width: 100%;
+        height: 100%;
+        left: 0px;
+        top: 0px;
         vertical-align: middle;
-        font-size: {{fontSize + "px"}};
         text-align: center;
         margin: 0;
       }
 
-       ::content > * {
+      ::content > *, #carousel > * {
         -webkit-transition: opacity 1s, -webkit-transform 1s;
            -moz-transition: opacity 1s, -moz-transform 1s;
              -o-transition: opacity 1s, -o-transform 1s;
                 transition: opacity 1s, transform 1s;
       }
 
-    </style>
+      .flash-msg {
+        border-radius: 6px;
+        background-color: white;
+        padding: 10px;
+        box-sizing: border-box;
+        width: 60%;
+        color: black;
+        text-align: center;
+        margin: 0 auto;
+        margin-top: 1rem;
+        opacity: 0;
+        -webkit-animation-name: flash;
+        -webkit-animation-duration: 5s;
+        -webkit-animation-timing-function: ease-out; 
+        -webkit-animation-iteration-count: 1; 
+      }
 
-    <section class="container">
+      .flash-msg:before {
+        width: 0;
+        height: 0;
+        border-left: 1rem solid transparent;
+        border-right: 1rem solid transparent;
+        border-bottom: 1rem solid white;
+        position: fixed;
+        left: 50%;
+        display: block;
+        margin: 0 auto;
+        margin-left: -1rem;
+        margin-top: -1.5rem;
+        content: '';
+      }
+
+       @-webkit-keyframes flash {
+           0% {-webkit-transform: scale(1, 1); opacity: 0.0;}
+           40% {-webkit-transform: scale(1,1); opacity: 1.0; }
+           60% {-webkit-transform: scale(1,1); opacity: 1.0; }
+           100% {-webkit-transform: scale(1, 1); opacity: 0.0;}
+        }
+
+    </style>
+    <!-- Inline styles for mobile and Safari --> 
+    <div class="container" style="width: {{width}}px; height: {{height}}px;">
+      
       <div id="carousel" class="panels-backface-invisible">
         <content></content>
-        <div>First Slide</div>
-        <div>Second Slide</div>
-        <div>Third Slide</div>
+        <template if="{{items}}">
+          <template repeat="{{item in items}}">
+            <div class="panel" style="background: url('{{item.image}}') center center no-repeat; background-size: cover; font-size: {{fontSize}}px; -webkit-backface-visibility: hidden; display: table; position: absolute; width: 100%; height: 100%; left: 0px; top: 0px; vertical-align: middle; margin: 0; text-align: center;"> 
+              <p class="mainpoint" style="display: table-cell; vertical-align: middle; text-align: center; -webkit-margin-before: 0; -webkit-margin-after: 0; margin: 0;">{{item.text}} </p>
+            </div>
+          </template>
+        </template>
       </div>
-    </section>
+
+      <template if="{{animateOn}}=='tap'">
+        <div class="flash-msg submaintpoint">Tap to move forward.</div>
+      </template>
+    </div>
 
 
   </template>
 
   <link rel="import" href="dependencies/modernizr_dep.html">
-
 
   <script>
 
@@ -207,6 +244,22 @@ Element providing a 3D carousel for either text or images.
        */
       // transformProp: Modernizr.prefixed('transform'),
       transformProp: "-webkit-transform",
+      /** ITEMS represent another way to create panels that can contain text or image
+       ** @type {Array} 
+       *
+       ** 'text' is the text displayed on the panel
+       * @type {String}
+       *
+       ** 'image' is the background image of the panel
+       * @type {String} => "#FFFFFF" or "url('/image.jpg')" or "none"
+       *
+       */
+      items: [  
+                {text: "", image: "../thelma-all/images/person.jpg"},
+                {text: "", image: "../thelma-all/images/person-right.jpg"},
+                {text: "", image: "../thelma-all/images/person.jpg"},
+                {text: "", image: "../thelma-all/images/person-right.jpg"}  
+              ],
 
       init: function() {
         var element = this;
@@ -220,14 +273,14 @@ Element providing a 3D carousel for either text or images.
               element.transform();
             };
 
-        this._panels = this.children;
+        this._panels = this.children.length > 0 ? this.children : this.shadowRoot.querySelectorAll('.panel');
 
         if(element.backfaces) {
           carousel.classList.remove('panels-backface-invisible');
         }
 
         // populate on startup
-        this._panelCount = this.children.length;
+        this._panelCount = this._panels.length;
         this.modify();
 
 
@@ -244,7 +297,7 @@ Element providing a 3D carousel for either text or images.
        */
       modify: function() {
         
-        var element = this,
+        var self = this,
             panel, angle, i;
         carousel = this.shadowRoot.getElementById('carousel'),
         this.panelSize = carousel[ this.isHorizontal ? 'offsetWidth' : 'offsetHeight' ];
@@ -253,21 +306,26 @@ Element providing a 3D carousel for either text or images.
 
         // do some trig to figure out how big the carousel
         // is in 3D space
-        this.radius = Math.round( ( this.panelSize / 2) / Math.tan( Math.PI / this._panelCount ) * 0.9 );
-        var elements = this.children;
+        this.radius = Math.round( ( this.panelSize / 2) / Math.tan( Math.PI / this._panelCount ));
+        var elements = this.children.length > 0 ? this.children : this.shadowRoot.querySelectorAll('.panel');
 
         for ( i = 0; i < this._panelCount; i++ ) {
           panel = elements[i];
+
           if (this.animateOn == "tap"){
+            // For Composer mobile tap events
+            panel.addEventListener('touchend' ,function() {
+              self.animate();
+            });
+            // For normal click and tap events
             panel.addEventListener('tap' ,function() {
-              element.animate();
+              self.animate();
             });
           } 
 
-
           angle = this.theta * i;
           panel.style.opacity = 1;
-          panel.classList.add('border');
+          // panel.classList.add('border');
           //panel.style.backgroundColor = 'hsla(' + angle + ', 100%, 50%, 0.8)';
           // rotate panel, then push it out in 3D space
           panel.style[ this.transformProp ] = this.rotateFn + '(' + angle + 'deg) translateZ(' + this.radius + 'px)';
@@ -275,12 +333,12 @@ Element providing a 3D carousel for either text or images.
 
         if (this.animateOn == "interval"){
          setInterval(function(){
-          element.animate();
+          self.animate();
          }, this.interval)
         }
 
         // hide other panels
-        for (  ; i < this._panels; i++ ) {
+        for ( var i=0; i < this._panels; i++ ) {
           panel = elements[i];
           panel.style.opacity = 0;
           panel.style[ this.transformProp ] = 'none';
@@ -290,6 +348,7 @@ Element providing a 3D carousel for either text or images.
         this.rotation = Math.round( this.rotation / this.theta ) * this.theta;
 
         this.transform();
+
       },
 
       /**
@@ -299,12 +358,13 @@ Element providing a 3D carousel for either text or images.
        * @return {Object} Returns undefined.
        */
       transform: function() {
-        this.shadowRoot.getElementById('carousel').style[ this.transformProp ] = 'translateZ(-' + this.radius + 'px) ' + this.rotateFn + '(' + this.rotation + 'deg)';
+        console.log(this.radius);
+        this.$.carousel.style[ this.transformProp ] = 'translateZ(-' + this.radius + 'px) ' + this.rotateFn + '(' + this.rotation + 'deg)';
       },
 
       animate: function() {
-          this.rotation -= this.theta;
-          this.transform();
+        this.rotation -= this.theta;
+        this.transform();
 
       }
 
