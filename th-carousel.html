@@ -297,7 +297,7 @@ Element providing a 3D carousel for either text or images.
         
         var self = this,
             panel, angle, i;
-        carousel = this.shadowRoot.getElementById('carousel'),
+        carousel = this.$.carousel,
         this.panelSize = carousel[ this.isHorizontal ? 'offsetWidth' : 'offsetHeight' ];
         this.rotateFn = this.isHorizontal ? 'rotateY' : 'rotateX';
         this.theta = 360 / this._panelCount;
@@ -327,6 +327,11 @@ Element providing a 3D carousel for either text or images.
           //panel.style.backgroundColor = 'hsla(' + angle + ', 100%, 50%, 0.8)';
           // rotate panel, then push it out in 3D space
           console.log("*****");
+          console.log(this.panelSize);
+          console.log(this.Math.tan(Math.PI / this._panelCount));
+          console.log(carousel);
+          console.log(carousel['offsetWidth'])
+          console.log(carousel['offsetHeight']);
           console.log(this.radius);
           panel.style[ this.transformProp ] = this.rotateFn + '(' + angle + 'deg) translateZ(' + this.radius + 'px)';
         }
