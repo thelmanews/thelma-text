@@ -326,6 +326,8 @@ Element providing a 3D carousel for either text or images.
           // panel.classList.add('border');
           //panel.style.backgroundColor = 'hsla(' + angle + ', 100%, 50%, 0.8)';
           // rotate panel, then push it out in 3D space
+          console.log("*****");
+          console.log(this.radius);
           panel.style[ this.transformProp ] = this.rotateFn + '(' + angle + 'deg) translateZ(' + this.radius + 'px)';
         }
 
