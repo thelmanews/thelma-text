@@ -118,15 +118,15 @@ Element providing a multiple choice quiz, animated via th-flipbox
         choices: [
           {'text': 'This guy', 'image':'../thelma-all/images/person.jpg', 'answer': 'false'},
           {'text': 'That guy', 'image':'../thelma-all/images/person.jpg', 'answer': 'true'},
-          {'text': 'That guy', 'image':'../thelma-all/images/person.jpg', 'answer': 'true'},
-          {'text': 'That guy', 'image':'../thelma-all/images/person.jpg', 'answer': 'true'}
+          {'text': 'That guy', 'image':'../thelma-all/images/person.jpg', 'answer': 'false'},
+          {'text': 'That guy', 'image':'../thelma-all/images/person.jpg', 'answer': 'false'}
         ],
 
         /** 
          * The 'width' attribute specifies the width of the component in pixels.
          * @type {Number}
          */
-        width: 250.5,
+        width: 200,
 
         /** 
          * The 'height' attribute specifies the height of the component in pixels.
@@ -147,23 +147,23 @@ Element providing a multiple choice quiz, animated via th-flipbox
           self.setElementDims();
           self.answersSelected = 0;
           self.numAnswers = self.choices.filter(function(choice){
-            console.log(choice.answer);
             return choice.answer=="true";
           }).length;
-          console.log(self.numAnswers)
-
+          
           self.animation = document.timeline;
         },
         setElementDims: function(){
           var self = this,
               numRows = Math.ceil(self.choices.length / parseInt(self.choicesPerRow)), // Number of rows of choices
-              questionHeight = self.$.headline.offsetHeight; // Computed height of question
+              questionHeight = self.$.headline.offsetHeight,
+              width = self.width - 2,
+              height = self.height - 2; // Computed height of question
           
-          self.choiceWidth = Math.floor(self.width / parseInt(self.choicesPerRow)); // Width of each choice
-          self.choiceHeight = (self.height - questionHeight) / numRows; // Height of area for choices
+          self.choiceWidth = Math.floor(width / parseInt(self.choicesPerRow)); // Width of each choice
+          self.choiceHeight = (height - questionHeight) / numRows; // Height of area for choices
           self.imageSize = Math.min(self.choiceHeight, self.choiceWidth) * 0.7;  // Size of image (assumes room for label)
           self.labelSize = Math.min(self.choiceHeight, self.choiceWidth) * 0.15; // Size of label
-         
+          
         },
         /**
          * The 'setColors' method detects the theme and chooses the correct colors. It also converts the theme color into RGB format to be applied in RGBA format in CSS
@@ -232,6 +232,22 @@ Element providing a multiple choice quiz, animated via th-flipbox
             self.$.flipbox.flip(); 
             self.answered = true;
           }, 2000)
+
+          setTimeout(function(){
+            self.showQuestion();
+          }, 8000)
+        
+        },
+        showQuestion: function(){
+          var self = this;
+
+          setTimeout(function(){
+            self.animation.play(new Animation(self.$.question, {opacity:1}, {duration: 500, fill:"forwards"} ));
+            self.$.flipbox.flip(); 
+            self.answered = false;
+            self.answersSelected = 0;
+            // TODO: unfill the answer choices
+          }, 2000)
         },
         /**
          * The 'answerFilter' method called from the template filters out only the choices marked 'answer: true' to be displayed in answer div.
@@ -250,7 +266,7 @@ Element providing a multiple choice quiz, animated via th-flipbox
         reset: function(){
           var self = this;
           if (self.answered){
-            self.$.flipbox.flip();
+            self.showQuestion();
           }
         }
       });
