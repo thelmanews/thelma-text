@@ -1,0 +1,108 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../thelma-core/thelma_core.html">
+<link rel="import" href="th-text.html">
+
+<polymer-element name="th-clock" extends="th-animated" attributes="height color">
+
+  <template>
+      <core-style ref="theme"></core-style>
+      <style>
+        :host {
+          font-family: arial;
+        }
+        .digit, .divider {
+          position: relative;
+          display: inline-block;
+          margin-right: 0px 3px;
+          border-radius: 4px;
+          padding: 0px 10px;
+          box-sizing: border-box;
+          font-size: {{height - 15 + "px"}};
+        }
+
+        .digit {
+          background: linear-gradient(to bottom, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.4) 50%,rgba(255,255,255,0.3) 51%,rgba(255,255,255,0.2) 100%) {{color}};
+        }
+
+        .digit:after {
+          content: '';
+          position: absolute;
+          left: 0;
+          top: 50%;
+          width: 100%;
+          height: 4px;
+          background: {{color}};
+        }
+
+        .divider {
+          padding: 0px;
+          margin: 0px;
+          background: none;
+        }
+      </style>  
+
+      <!-- Inline styles are for Safari and mobile support --> 
+        <!-- <div>{{currentTime}}</div> -->
+        <div id="container" style="height: {{height}}px;">
+          <span class="digit" style="background: linear-gradient(to bottom, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.4) 50%,rgba(255,255,255,0.3) 51%,rgba(255,255,255,0.2) 100%) {{color}};">{{hour[0]}}</span>
+          <span class="digit">{{hour[1]}}</span>
+          <span class="divider">:</span>
+          <span class="digit">{{minutes[0]}}</span>
+          <span class="digit">{{minutes[1]}}</span> 
+          <span class="divider">:</span>
+          <span class="digit">{{seconds[0]}}</span>
+          <span class="digit">{{seconds[1]}}</span> 
+        </div>
+
+  </template>
+  
+  <script>
+
+      Polymer('th-clock', {
+        init: function(){
+          var self =  this;
+
+          setInterval(function(){
+            
+            // Create a new date object
+            var d = new Date();
+
+            // Obtain local UTC time (GMT) 
+            var localTime = d.getTime();
+
+            // Get hours, minutes and seconds to show clock
+            self.hour = self.formatTimeDigit(self.formatHours(d.getHours())).toString();
+            self.minutes = self.formatTimeDigit(d.getMinutes()).toString();
+            self.seconds = self.formatTimeDigit(d.getSeconds()).toString();
+            // self.currentTime = self.hour + ":" + self.minutes + ":" + self.seconds;
+            
+          }, 10)
+
+        },
+        /**
+         * 'formatTimeDigit' adds a 0 to single digits hours, minutes and seconds for the clock
+         * @param  {Integer} i is a the number of seconds or hours (i.e a number between 0 and 59)
+         * @return {Number}   returns a two digits number, including a 0 if necessary
+         */
+        formatTimeDigit: function(i){
+          if (i<10) {i = "0" + i};  // add zero in front of numbers < 10
+          return i;
+        },
+        /**
+         * 'formatHours' converts military time hours to standard time hours
+         * @param  {Integer} i is the nth hour of the day in military time
+         * @return {Integer}      the nth hour of the day in standard time
+         */
+        formatHours: function(i){
+          if (i>12) {i = i % 12};  // add zero in front of numbers < 10
+          return i;
+        },
+        reset: function(){
+          self.init();
+        }
+      });
+
+  </script>
+
+
+</polymer-element>
