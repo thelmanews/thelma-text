@@ -2,14 +2,14 @@
 <link rel="import" href="../thelma-core/thelma_core.html">
 <link rel="import" href="th-text.html">
 
-<polymer-element name="th-time-lapse" extends="th-animated" attributes="timePeriod rate units altText frequency textType numberSize width height">
+<polymer-element name="th-time-lapse" extends="th-animated" attributes="timePeriod rate units altText frequency textType numberSize width height displayWholeNum">
 
   <template>
       <core-style ref="theme"></core-style>
 
       <!-- Inline styles are for Safari and mobile support --> 
       <th-text markdown="false" type="{{textType}}" width="{{width}}" height="{{height}}">
-        <span style="font-size: {{numberSize}}px;">{{currentCount}}</span> {{units}} {{timePeriodText}}
+        <span style="font-size: {{numberSize}}px;">{{currentCount | wholeNumFilter}}</span> {{units}} {{textDetail}}
       </th-text>
   </template>
   
@@ -25,7 +25,7 @@
          * @type {String}   i.e. 5,000 (rate) births per second (frequency)
          * @options: second, minute, hour, day, week, month, year
          */
-        frequency: "minute", 
+        frequency: "second", 
         /**
          * [units description]
          * @type {String}
@@ -48,6 +48,11 @@
          * @type {Number}
          */
         numberSize: 40,
+        /**
+         * 'displayWholeNum' is an option to only display whole numbers in the count
+         * @type {Boolean}
+         */
+        displayWholeNum: false,
         init: function(){
           var self = this;
           var d = new Date();
@@ -61,16 +66,16 @@
             year: d.setMonth(0,1)
           }
 
-          var getTimePeriodText = {
+          var getTextDetail = {
             minute: "in the last minute.",
-            hour: "in the past hour.",
+            hour: "so far this hour.",
             day: "so far today.",
             month: "so far this month.",
             year: "so far this year."
           };
 
 
-          self.timePeriodText = self.altText ? self.altText : getTimePeriodText[self.timePeriod];
+          self.textDetail = self.altText ? self.altText : getTextDetail[self.timePeriod];
           self.startTime = getStartTime[self.timePeriod];
           self.decimalPlaces = self.getDecimalPlaces(self.rate);
         },
@@ -122,7 +127,7 @@
             // obtain local UTC offset and convert to msec ???
             // var localOffset = d.getTimezoneOffset() * 60000;
             // var localOffset = 0;
-          }, 500)
+          }, 100)
           
         },
         /**
@@ -168,6 +173,13 @@
               // TODO: account for leap year (364 days)
               return milleseconds / 1000 / 60 / 60 / 24 / 365; // 1000 ms / 60 sec / 60 min / 24 hr / 365 days
           }
+        },
+        wholeNumFilter: function(value){
+          var self = this;
+          if (self.displayWholeNum){
+            value = Math.round(value);
+          }
+          return value;
         },
         reset: function(){
           self.init();
