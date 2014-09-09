@@ -2,24 +2,24 @@
 <link rel="import" href="../thelma-core/thelma_core.html">
 <link rel="import" href="th-text.html">
 
-<polymer-element name="th-time-lapse" extends="th-animated" attributes="timePeriod rate units frequency type numberSize">
+<polymer-element name="th-time-lapse" extends="th-animated" attributes="timePeriod rate units altText frequency type numberSize width height">
 
   <template>
       <core-style ref="theme"></core-style>
-      <style>
-        
-      </style>
 
       <!-- Inline styles are for Safari and mobile support --> 
-        <div>{{currentTime}}</div>
-        <th-text markdown="false" type="{{type}}">
-          <span style="font-size: {{numberSize}}px;">{{currentCount}}</span> {{units}} in the past {{timePeriod}}.
-        </th-text>
-
+      <th-text markdown="false" type="{{type}}" width="{{width}}" height="{{height}}">
+        <span style="font-size: {{numberSize}}px;">{{currentCount}}</span> {{units}} 
+        <template if={{!altText}}>
+          in the past {{timePeriod}}.
+        </template>
+        <template if={{altText}}>
+          {{altText}}.
+        </template>
+      </th-text>
   </template>
   
   <script>
-
       Polymer('th-time-lapse', {
         /**
          * 'rate' describes the number that occurs every frequency period
@@ -37,7 +37,6 @@
          * @type {String}
          */
         units: "births",
-
         /**
          * 'timePeriod' is a relative reference to a time for which to begin counting
          * @type {String}   i.e. 5.3 million (rate) births have occured in the past day (timePeriod)
@@ -45,11 +44,15 @@
          */
         timePeriod: "day",
         /**
-         * 'showClock' will display the current time if true
-         * @type {Boolean}
+         * textType refers to the category of th-text
+         * @type {String}
+         * @options: large-headline, headline, mainpoint, submainpoint, subpoint, label
          */
-        showClock: true,
-        type: "mainpoint",
+        textType: "mainpoint",
+        /**
+         * 'numberSize' is the size of the number in pixels
+         * @type {Number}
+         */
         numberSize: 40,
         init: function(){
           var self = this;
@@ -65,9 +68,7 @@
           }
 
           self.startTime = getStartTime[self.timePeriod];
-
           self.decimalPlaces = self.getDecimalPlaces(self.rate);
-
         },
         /**
         * '_decimalPlaces' takes a number and determines how many digits come after the decimal point
@@ -98,10 +99,10 @@
             var localTime = d.getTime();
 
             // Get hours, minutes and seconds to show clock
-            var h = self.formatTimeDigit(self.formatHours(d.getHours())),
-                m = self.formatTimeDigit(d.getMinutes()),
-                s = self.formatTimeDigit(d.getSeconds());
-            self.currentTime = h + ":" + m + ":" + s;
+            // var h = self.formatHours(d.getHours()),
+            //     m = self.formatTimeDigit(d.getMinutes()),
+            //     s = self.formatTimeDigit(d.getSeconds());
+            // self.currentTime = h + ":" + m + ":" + s;
 
             // Calculate total time passed since startTime (milleseconds)
             var timeLapsed = localTime - self.startTime;
@@ -145,7 +146,6 @@
          * @return {[type]}              [description]
          */
         getUnitsLapsed: function(milleseconds, frequency){
-  
           switch (frequency){
             case "second":
               return milleseconds / 1000; // 1000 ms
@@ -164,12 +164,17 @@
               // TODO: account for leap year (364 days)
               return milleseconds / 1000 / 60 / 60 / 24 / 365; // 1000 ms / 60 sec / 60 min / 24 hr / 365 days
           }
-
         },
         reset: function(){
           self.init();
         }
       });
+
+  // TODO:
+  //  - Add commas in large numbers
+  //  - Visualize the statistic?
+  //  - Firm up month and year calcs
+  //  - Refactor
 
   </script>
 
