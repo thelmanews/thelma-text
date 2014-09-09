@@ -2,20 +2,14 @@
 <link rel="import" href="../thelma-core/thelma_core.html">
 <link rel="import" href="th-text.html">
 
-<polymer-element name="th-time-lapse" extends="th-animated" attributes="timePeriod rate units altText frequency type numberSize width height">
+<polymer-element name="th-time-lapse" extends="th-animated" attributes="timePeriod rate units altText frequency textType numberSize width height">
 
   <template>
       <core-style ref="theme"></core-style>
 
       <!-- Inline styles are for Safari and mobile support --> 
-      <th-text markdown="false" type="{{type}}" width="{{width}}" height="{{height}}">
-        <span style="font-size: {{numberSize}}px;">{{currentCount}}</span> {{units}} 
-        <template if={{!altText}}>
-          in the past {{timePeriod}}.
-        </template>
-        <template if={{altText}}>
-          {{altText}}.
-        </template>
+      <th-text markdown="false" type="{{textType}}" width="{{width}}" height="{{height}}">
+        <span style="font-size: {{numberSize}}px;">{{currentCount}}</span> {{units}} {{timePeriodText}}
       </th-text>
   </template>
   
@@ -42,7 +36,7 @@
          * @type {String}   i.e. 5.3 million (rate) births have occured in the past day (timePeriod)
          * @options: minute, hour, day, week, month, year
          */
-        timePeriod: "day",
+        timePeriod: "minute",
         /**
          * textType refers to the category of th-text
          * @type {String}
@@ -67,6 +61,16 @@
             year: d.setMonth(0,1)
           }
 
+          var getTimePeriodText = {
+            minute: "in the last minute.",
+            hour: "in the past hour.",
+            day: "so far today.",
+            month: "so far this month.",
+            year: "so far this year."
+          };
+
+
+          self.timePeriodText = self.altText ? self.altText : getTimePeriodText[self.timePeriod];
           self.startTime = getStartTime[self.timePeriod];
           self.decimalPlaces = self.getDecimalPlaces(self.rate);
         },
