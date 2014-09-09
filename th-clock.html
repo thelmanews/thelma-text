@@ -28,15 +28,16 @@
           width: {{numWidth + "px"}};
           background: linear-gradient(to bottom, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.4) 50%,rgba(255,255,255,0.3) 51%,rgba(255,255,255,0.2) 100%) {{color}};
         }
+        /* data bindings don't work in Safari/mobile and pseudo-class cannot be inlined 
         .digit:after {
           content: '';
           position: absolute;
           left: 0;
           top: 49%;
           width: 100%;
-          height: {{dividerWidth + "px"}}; /* data bindings don't work in Safari/mobile and pseudo-class cannot be inlined */
-          background: {{color}}; /* data bindings don't work in Safari/mobile and pseudo-class cannot be inlined */
-        }
+          height: {{dividerWidth + "px"}}; 
+          background: {{color}}; 
+        }*/
 
         .divider {
           padding: 0px;
