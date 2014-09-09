@@ -81,7 +81,7 @@
       Polymer('th-clock', {
         init: function(){
           var self =  this;
-          self.numWidth = (self.width / 7)-5;
+          self.numWidth = (self.width - 35) / 6.5 ;
           self.dividerWidth = Math.max(1, Math.round(self.numWidth / 15)); 
         },
         /**
